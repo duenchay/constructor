@@ -107,7 +107,7 @@ class Command(BaseCommand):
         for i in range(count3): # 0,1,2,3
             q = MechanicCategory(**{
                 #  "mechanicCategory_id" : int(ws[f'A{30+i}'].value),
-                "mechanicCategory_name" : str(ws[f'A{30+i}'].value),
+                "mechanicCategory_name" : str(ws[f'B{30+i}'].value),
                 }) 
             q.save() 
 
