@@ -1,21 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from api.models import User
-from api.models import Store
-from api.models import Admin
-from api.models import MechanicCategory
-from api.models import Mechanic
-from api.models import ProductCategory
-from api.models import ProductStatus
-from api.models import Products
-from api.models import Status
-from api.models import OrderMechanic
-from api.models import OrderUser
-from api.models import Delivery_options
-from api.models import Payment_options
-from api.models import OrderproductsUser
-from api.models import OrderproductsMechanic
-from api.models import Carts
-from api.models import Storck
+from api.models import *
 from openpyxl import load_workbook
 
 
