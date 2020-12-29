@@ -49,9 +49,9 @@ class Admin(models.Model):
     email = models.CharField(max_length=50,default=' ')
     username = models.CharField(max_length=100,default=' ')
     password = models.CharField(max_length=100,default=' ')
-    store = models.ForeignKey(Store,on_delete=models.CASCADE)
-    def __str__(self):
-        return f'{self.store} '
+    # store = models.ForeignKey(Store,on_delete=models.CASCADE)
+    # def __str__(self):
+    #     return f'{self.store} '
    
 
 #ประเภทช่าง
@@ -95,7 +95,7 @@ class Products(models.Model):
     products_img = models.CharField(max_length=1000,default=' ')
     category = models.ForeignKey(ProductCategory,on_delete=models.CASCADE) #หมวดหมู่สินค้า
     status =  models.ForeignKey(ProductStatus,on_delete=models.CASCADE)  #สถานะสินค้า
-    stock = models.IntegerField() #จำนวนสินค้า
+    stock_number = models.IntegerField() #จำนวนสินค้า
     def __str__(self):
         return f'{self.category} {self.status} '
 
