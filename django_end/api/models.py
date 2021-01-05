@@ -4,8 +4,8 @@ from django.db import models
 from django.db.models.deletion import CASCADE
 
 
-class Role(models.Model):
-    role = models.CharField(max_length=100,default=' ')
+# class Role(models.Model):
+#     role = models.CharField(max_length=100,default=' ')
     # r_user = models.BooleanField(default=True)
     # r_metchanic  = models.BooleanField(default=False)
     # r_mechanic = models.CharField(max_length=100,default=' ')
@@ -20,7 +20,7 @@ class User(models.Model):
     email = models.CharField(max_length=50,default=' ')
     phone =  models.IntegerField()
     avatar = models.CharField(max_length=1000,default=' ')  #รูปผู้ใช้งาน
-    role = models.ForeignKey(Role,on_delete=models.CASCADE) 
+    # role = models.ForeignKey(Role,on_delete=models.CASCADE) 
     lat =  models.CharField(max_length=1000,default=' ')
     lng =  models.CharField(max_length=1000,default=' ')
     # def __str__(self):
