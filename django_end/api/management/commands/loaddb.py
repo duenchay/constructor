@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from api.models import *
-from openpyxl import load_workbook
+from openpyxl import load_workbook 
 
 
 class Command(BaseCommand):
@@ -10,212 +10,101 @@ class Command(BaseCommand):
         #parser.add_argument('poll_ids', nargs='+', type=int)
         pass
 
-    def handle(self, *args, **optiSons):
-        # pass
-       
-        file = "xlsx/data.xlsx"
-        wb = load_workbook(file, read_only=True)
-        # datas = wb.get_sheet_names()[2]
-        # ws = wb.get_sheet_by_name(datas)
-        
-        # ws = wb['Data1']
-        ws = wb['Data']
-        count = int(ws['A1'].value)
-        count1 = int(ws['A15'].value)
-        count2 = int(ws['A20'].value)
-        count3 = int(ws['A28'].value)
-        count4 = int(ws['A35'].value)
-        count5 = int(ws['A49'].value)
-        count6 = int(ws['A57'].value)
-        count7 = int(ws['A63'].value)
-        count8 = int(ws['A74'].value)
-        count9 = int(ws['A80'].value)
-        count10 = int(ws['A91'].value)
-        count11 = int(ws['A102'].value)
-        count12 = int(ws['A108'].value)
-        count13 = int(ws['A114'].value)
-        count14 = int(ws['A125'].value)
-        count15 = int(ws['A136'].value)
-        count16 = int(ws['A147'].value)
-        
-        # count1 = int(ws['A1'].value)
-        # print(f'User count = {count}')
-        # print(count)
-        
-        # for i in range(count):
-        #     print(i)
-        # for r in range(count1):
-        #     print(r)
-            
-        # row4 = [ ws[f'{c}4'].value for c in 'ABCDEFG' ]
-        # print( row4 )
+    def load(self, wb, sheet_name, column_names):
+        print('กำลัง load ... {sheet_name}')
+        ws = wb[sheet_name]
+        count = int(ws['A2'].value)
+        print(f'count = {count}')
+        #row4 = [ ws[f'{c}4'].value for c in 'ABCDEFG' ]
+        #print( row4 )
+        #column_names = ['id', 'rice_type']
+        data = []  
         for i in range(count): # 0,1,2,3
-            q = User(**{
-                "user_name" : str(ws[f'B{3+i}'].value),
-                "user_lastname" : str(ws[f'C{3+i}'].value),
-                "phone" : str(ws[f'D{3+i}'].value),
-                "email" : str(ws[f'E{3+i}'].value),
-                "username" : str(ws[f'F{3+i}'].value),
-                "password" : str(ws[f'G{3+i}'].value),
-                "avatar": str(ws[f'H{3+i}'].value), 
-                "lat"  : str(ws[f'I{3+i}'].value),
-                "lng" : str(ws[f'J{3+i}'].value),
+            print(f'i = {i}')
+            sheet_values = [ ws[f'{chr(65+j)}{4+i}'].value for j in range(len(column_names)) ]
+            data.append( dict( (k,v) for k,v in zip(column_names, sheet_values)) )
 
-                }) 
-            q.save()
+        return data
 
-        for i in range(count1): # 0,1,2,3
-            q = Store(**{
-                "store_name" : str(ws[f'B{17+i}'].value),
-                "store_img" : str(ws[f'C{17+i}'].value),
-                "store_phone" : str(ws[f'D{17+i}'].value),
-                "adddres" : str(ws[f'E{17+i}'].value),
-                "lat" : str(ws[f'F{17+i}'].value),
-                "lng" : str(ws[f'G{17+i}'].value),
-                "time_open": str(ws[f'H{17+i}'].value), 
-                "time_close"  : str(ws[f'I{17+i}'].value),
-                })
-            q.save()
+    def handle(self, *args, **options):
+        # pass
+        from openpyxl import load_workbook
+        filename = "xlsx/data.xlsx"
+        wb = load_workbook(filename, data_only=True)
+        #sheets = [ 'Rice_type', 'Work_status', 'Money_status', 'Work' ]
 
-        for i in range(count2): # 0,1,2,3
-            q = Admin(**{
-                "admin_name" : str(ws[f'B{22+i}'].value),
-                "admin_lastname" : str(ws[f'C{22+i}'].value),
-                "avatar" : str(ws[f'D{22+i}'].value),
-                "email" : str(ws[f'E{22+i}'].value),
-                "username" : str(ws[f'F{22+i}'].value),
-                "password" : str(ws[f'G{22+i}'].value),
-                })
-            q.save()
+        print('กำลัง load ... Role')
+        for d in self.load(wb, 'Role', ['id', 'role']):
+            print(d)
+            Role(**d).save()
 
-        for i in range(count3): # 0,1,2,3
-            q = MechanicCategory(**{
-                #  "mechanicCategory_id" : int(ws[f'A{30+i}'].value),
-                "mechanicCategory_name" : str(ws[f'B{30+i}'].value),
-                }) 
-            q.save() 
+        print('กำลัง load ... User')
+        for d in self.load(wb, 'User', ['id', 'user_name','user_lastname', 'username','password' ,'email', 'phone' ,'avatar' ,'role' ,'lat' ,'lng']):
+            User(**d).save()
 
-        for i in range(count4): # 0,1,2,3
-            q = Mechanic(**{
-                "mechanic_name" : str(ws[f'B{37+i}'].value),
-                "mechanic_lastname" : str(ws[f'C{37+i}'].value),
-                "phone" : str(ws[f'D{37+i}'].value),
-                "email" : str(ws[f'E{37+i}'].value),
-                "username" : str(ws[f'F{37+i}'].value),
-                "password" : str(ws[f'G{37+i}'].value),
-                "avatar": str(ws[f'H{37+i}'].value), 
-                "mechanic_detail"  : str(ws[f'I{37+i}'].value),
-                "mechanic_img" : str(ws[f'J{37+i}'].value),
-                "mechanicCategory" : str(ws[f'K{37+i}'].value),
-                "lat" : str(ws[f'L{37+i}'].value),
-                "lng" : str(ws[f'M{37+i}'].value),
+        print('กำลัง load ... Mechanic_Type')
+        for d in self.load(wb, 'Mechanic_Type', ['id', 'mechanic_type']):
+            Mechanic_Type(**d).save()
 
-                }) 
-            q.save()
+        print('กำลัง load ... Mechanic')
+        for d in self.load(wb, 'Mechanic', ['id', 'mechanic_detail','mechanic_img', 'mechanic_type']):
+            Mechanic(**d).save()
 
-        for i in range(count5): # 0,1,2,3
-            q = ProductCategory(**{
-                "category_name" : str(ws[f'B{51+i}'].value),
-                }) 
-            q.save()
+        print('กำลัง load ... Store')
+        for d in self.load(wb, 'Store', ['id', 'store_name','store_img', 'store_phone','adddres','lat','lng','time_open','time_close']):
+            Store(**d).save()
 
-        for i in range(count6): # 0,1,2,3
-            q = ProductStatus(**{
-                "status_name" : str(ws[f'B{59+i}'].value),
-                }) 
-            q.save()
+        print('กำลัง load ... Admin')
+        for d in self.load(wb, 'Admin', ['id', 'admin_name','admin_lastname', 'avatar','email','username','password']):
+            Admin(**d).save()
 
-        for i in range(count7): # 0,1,2,3
-            q = Products(**{
-                "products_name" : str(ws[f'B{65+i}'].value),
-                "products_price" : int(ws[f'C{65+i}'].value),
-                "products_detail" : str(ws[f'D{65+i}'].value),
-                "products_img" : str(ws[f'E{65+i}'].value),
-                "category" : str(ws[f'F{65+i}'].value),
-                "status_number" : str(ws[f'G{65+i}'].value),
-                "stock_number": int(ws[f'H{65+i}'].value), 
-                }) 
-            q.save()
-        
-        for i in range(count8): # 0,1,2,3
-            q = Status(**{
-                "name" : str(ws[f'B{76+i}'].value), 
-                }) 
-            q.save()
+        print('กำลัง load ... Product_Type')
+        for d in self.load(wb, 'Product_Type', ['id', 'product_type']):
+            Product_Type(**d).save()
+
+        print('กำลัง load ... Product_Status')
+        for d in self.load(wb, 'Product_Status', ['id', 'product_status']):
+            Product_Status(**d).save()
+
+        print('กำลัง load ... Product')
+        for d in self.load(wb, 'Product', ['id', 'product_name','product_price', 'product_detail','product_img','product_type','product_status','amount']):
+            Product(**d).save()
+
+        print('กำลัง load ... Money_Status')
+        for d in self.load(wb, 'Money_Status', ['id', 'money_status']):
+            Money_Status(**d).save()
             
-        for i in range(count9): # 0,1,2,3
-            q = OrderMechanic(**{
-                "date" : str(ws[f'B{82+i}'].value),
-                "shopping_date" : str(ws[f'C{82+i}'].value),
-                "buyer" : str(ws[f'D{82+i}'].value),
-                "seller" : str(ws[f'E{82+i}'].value),
-                "all_price" : int(ws[f'F{82+i}'].value),
-                "lat" : str(ws[f'G{82+i}'].value),
-                "lng": str(ws[f'H{82+i}'].value), 
-                "status": str(ws[f'I{82+i}'].value), 
-                }) 
-            q.save()
-        
-        for i in range(count10): # 0,1,2,3
-            q = OrderUser(**{
-                "date" : str(ws[f'B{93+i}'].value),
-                "shopping_date" : str(ws[f'C{93+i}'].value),
-                "buyer" : str(ws[f'D{93+i}'].value),
-                "seller" : str(ws[f'E{93+i}'].value),
-                "all_price" : int(ws[f'F{93+i}'].value),
-                "lat" : str(ws[f'G{93+i}'].value),
-                "lng": str(ws[f'H{93+i}'].value), 
-                "status": str(ws[f'I{93+i}'].value), 
-                }) 
-            q.save()
+        print('กำลัง load ... Delivery_Options')
+        for d in self.load(wb, 'Delivery_Options', ['id', 'delivery_options']):
+            Delivery_Options(**d).save()
 
-        for i in range(count11): # 0,1,2,3
-            q = Delivery_options(**{
-                "by_yourself" : str(ws[f'B{104+i}'].value),
-                "by_store" : str(ws[f'C{104+i}'].value),
-            }) 
-            q.save()
+        print('กำลัง load ... Payment_Options')
+        for d in self.load(wb, 'Payment_Options', ['id', 'payment_options']):
+            Payment_Options(**d).save()
 
-        for i in range(count12): # 0,1,2,3
-            q = Payment_options(**{
-                "by_cash" : str(ws[f'B{110+i}'].value),
-                "by_bank" : str(ws[f'C{110+i}'].value),
-            }) 
-            q.save()
-        
-        for i in range(count13): # 0,1,2,3
-            q = OrderproductsUser(**{
-                "order" : str(ws[f'B{116+i}'].value),
-                "orderproducts" : str(ws[f'C{116+i}'].value),
-                "orderproducts_storck" : int(ws[f'D{116+i}'].value),
-                "delivery_options" : str(ws[f'E{116+i}'].value),
-                "payment_options" : int(ws[f'F{116+i}'].value), 
-                }) 
-            q.save()
+        print('กำลัง load ... Order')
+        for d in self.load(wb, 'Order', ['id', 'date','user', 'admin','all_price','lat','lng','money_status','delivery_options','payment_options']):
+            Order(**d).save()
 
-        for i in range(count14): # 0,1,2,3
-            q = OrderproductsMechanic(**{
-                "order" : str(ws[f'B{127+i}'].value),
-                "orderproducts" : str(ws[f'C{127+i}'].value),
-                "orderproducts_storck" : int(ws[f'D{127+i}'].value),
-                "delivery_options" : str(ws[f'E{127+i}'].value),
-                "payment_options" : int(ws[f'F{127+i}'].value), 
-                }) 
-            q.save()
+        print('กำลัง load ... Payment')
+        for d in self.load(wb, 'Payment', ['id', 'user','order', 'img','payment_options']):
+            Payment(**d).save()
 
-        for i in range(count15): # 0,1,2,3
-            q = Carts(**{
-                "user_id" : str(ws[f'B{138+i}'].value),
-                "products_id" : str(ws[f'C{138+i}'].value),
-                
-                }) 
-            q.save()
-        
-        for i in range(count16): # 0,1,2,3
-            q = Storck(**{
-                "all_products" : str(ws[f'B{149+i}'].value),
-                "Sold" : str(ws[f'C{149+i}'].value),
-                "inventories" : int(ws[f'D{149+i}'].value),
-                
-                }) 
-            q.save()
+        print('กำลัง load ... Orderproduct')
+        for d in self.load(wb, 'Orderproduct', ['id', 'order','orderproducts', 'amount']):
+            Orderproduct(**d).save()
+
+        print('กำลัง load ... Carts')
+        for d in self.load(wb, 'Carts', ['id', 'user','product', 'amount']):
+            Carts(**d).save()
+
+        print('กำลัง load ... Conversations')
+        for d in self.load(wb, 'Conversations', ['id', 'user','message', 'date','time']):
+            Conversations(**d).save()
+
+        print('กำลัง load ... Storck')
+        for d in self.load(wb, 'Storck', ['id', 'all_products','Sold', 'inventories']):
+            Storck(**d).save()
+
+
+      

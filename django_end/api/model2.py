@@ -3,33 +3,6 @@ from django.contrib.admin.sites import DefaultAdminSite
 from django.db import models
 from django.db.models.deletion import CASCADE
 
-
-class Role(models.Model):
-    role = models.CharField(max_length=100,default=' ')
-    # r_user = models.BooleanField(default=True)
-    # r_metchanic  = models.BooleanField(default=False)
-    # r_mechanic = models.CharField(max_length=100,default=' ')
-    # r_mechanic = models.CharField(max_length=100,default=' ')
-
-class User(models.Model):
-    # user_id = models.AutoField(primary_key=True)
-    user_name = models.CharField(max_length=100,default=' ')
-    user_lastname = models.CharField(max_length=100,default=' ')
-    username = models.CharField(max_length=100,default=' ')
-    password = models.CharField(max_length=100,default=' ')
-    email = models.CharField(max_length=50,default=' ')
-    phone =  models.IntegerField()
-    avatar = models.CharField(max_length=1000,default=' ')  #รูปผู้ใช้งาน
-    role = models.ForeignKey(Role,on_delete=models.CASCADE) 
-    lat =  models.CharField(max_length=1000,default=' ')
-    lng =  models.CharField(max_length=1000,default=' ')
-    # def __str__(self):
-    #     return f'{self.role} '
-
-# class Customer (models.Model):
-#     user_name = models.CharField(max_length=100,default=' ')
-#     user_lastname = models.CharField(max_length=100,default=' ')
-
 class Mechanic_Type (models.Model):
     # mechanicCategory_id = models.AutoField(primary_key=True)
     mechanic_type= models.CharField(max_length=100,default=' ')
@@ -43,6 +16,29 @@ class Mechanic(models.Model):
 
     def __str__(self):
         return f'{self.mechanic_type} '
+
+
+class Role(models.Model):
+    user = models.BooleanField('user', default=False)
+    mechanic = models.BooleanField('mechanic', default=False)
+
+class User(models.Model):
+    # user_id = models.AutoField(primary_key=True)
+    user_name = models.CharField(max_length=100,default=' ')
+    user_lastname = models.CharField(max_length=100,default=' ')
+    phone =  models.IntegerField()
+    email = models.CharField(max_length=50,default=' ')
+    username = models.CharField(max_length=100,default=' ')
+    password = models.CharField(max_length=100,default=' ')
+    avatar = models.CharField(max_length=1000,default=' ')  #รูปผู้ใช้งาน
+    role = models.ForeignKey(Role,on_delete=models.CASCADE) 
+    # lat =  models.CharField(max_length=1000,default=' ')
+    # lng =  models.CharField(max_length=1000,default=' ')
+    def __str__(self):
+        return f'{self.role} '
+
+# class Role (models.Model):
+#     name = models.ForeignKey(Mechanic,on_delete=models.CASCADE) #ประเภทช่าง
 
 class Store (models.Model):
     store_name = models.CharField(max_length=100,default=' ')
@@ -66,14 +62,14 @@ class Admin(models.Model):
 
 
 # หมวดหมู่สินค้า
-class Product_Type (models.Model):
+class ProductType (models.Model):
     # category_id = models.AutoField(primary_key=True)
     product_type = models.CharField(max_length=100,default=' ')
     def __str__(self):
         return f'{self.product_type} '
 
 # สถานะสินค้า
-class Product_Status (models.Model):
+class ProductStatus (models.Model):
     product_status= models.CharField(max_length=100,default=' ') #สถานะสินค้า หมดแล้ว /ยังคงเหลือ
     def __str__(self):
         return f'{self.product_status} '
@@ -84,9 +80,9 @@ class Product(models.Model):
     product_price = models.IntegerField()
     product_detail = models.CharField(max_length=1000,default=' ')
     product_img = models.CharField(max_length=1000,default=' ')
-    product_type = models.ForeignKey(Product_Type,on_delete=models.CASCADE) #หมวดหมู่สินค้า
-    product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE)  #สถานะสินค้า
-    amount = models.IntegerField() #จำนวนสินค้า
+    product_type = models.ForeignKey(ProductType,on_delete=models.CASCADE) #หมวดหมู่สินค้า
+    product_status =  models.ForeignKey(ProductStatus,on_delete=models.CASCADE)  #สถานะสินค้า
+    stock_number = models.IntegerField() #จำนวนสินค้า
     def __str__(self):
         return f'{self.product_type} {self.product_status} '
 
@@ -166,7 +162,7 @@ class Carts (models.Model):
 #บทสนทนา  
 class Conversations(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    # admin = models.ForeignKey(Admin,on_delete=models.CASCADE)
+    admin = models.ForeignKey(Admin,on_delete=models.CASCADE)
     message = models.CharField(max_length=1000,default=' ')
     date =   models.DateTimeField(auto_now_add=True)
     time = models.DateTimeField(auto_now_add=True)
