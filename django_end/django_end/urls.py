@@ -18,38 +18,38 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.models import User
-from rest_framework import routers, serializers, viewsets
+# from rest_framework import routers, serializers, viewsets
 from api.models import * 
-# urlpatterns = [
-#     path('admin/', admin.site.urls),
-# ]
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'email', 'is_staff']
-
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-### ----------------- 
-class MoneyStatusSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = Role
-        fields = ['id', 'role']
-
-class MoneyStatusViewSet(viewsets.ModelViewSet):
-    queryset = Role.objects.all()
-    serializer_class = MoneyStatusSerializer
-### ----------------- 
-
-# Routers provide an easy way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'money', MoneyStatusViewSet)
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls')),
 ]
+# class UserSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = User
+#         fields = ['url', 'username', 'email', 'is_staff']
+
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+
+# ### ----------------- 
+# class MoneyStatusSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Role
+#         fields = ['id', 'role']
+
+# class MoneyStatusViewSet(viewsets.ModelViewSet):
+#     queryset = Role.objects.all()
+#     serializer_class = MoneyStatusSerializer
+# ### ----------------- 
+
+# # Routers provide an easy way of automatically determining the URL conf.
+# router = routers.DefaultRouter()
+# router.register(r'users', UserViewSet)
+# router.register(r'money', MoneyStatusViewSet)
+
+# urlpatterns = [
+#     path('admin/', admin.site.urls),
+#     path('api/', include(router.urls)),
+#     path('api-auth/', include('rest_framework.urls')),
+# ]
