@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-from django.utils import translation
+# from django.utils import translation
 from .models import *
 from .serializers import *
 # ViewSets define the view behavior.
@@ -106,5 +106,5 @@ router.register(r'Storck', StorckViewSet)
 
 # Create your views here.
 def index(request):
-    translation.activate('th')
+    # translation.activate('th')
     return HttpResponse("<h1>Constructor<h1>")

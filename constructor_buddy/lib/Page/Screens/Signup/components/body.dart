@@ -4,8 +4,10 @@ import 'package:constructor_buddy/Page/components/already_have_an_account_acheck
 import 'package:constructor_buddy/Page/components/rounded_button.dart';
 import 'package:constructor_buddy/Page/components/rounded_input_field.dart';
 import 'package:constructor_buddy/Page/components/rounded_password_field.dart';
+import 'package:constructor_buddy/Page_bar/Home1.dart';
+import 'package:constructor_buddy/bar/navy_bar.dart';
 // import 'package:constructor_buddy/Page_bar/Home.dart';
-import 'package:constructor_buddy/main.dart';
+// import 'package:constructor_buddy/main.dart';
 // import 'package:constructor_buddy/Page_bar/Home.dart';
 // import 'package:constructor_buddy/bar/navy_bar.dart';
 import 'package:flutter/material.dart';
@@ -25,12 +27,30 @@ class Body extends StatelessWidget {
             ),
 
             RoundedInputField(
-              hintText: "UserName",
+              hintText: "ชื่อ-นามสกุล",
+              onChanged: (value) {},
+            ),
+            RoundedInputField(
+              hintText: "ที่อยู่",
+              onChanged: (value) {},
+            ),
+            RoundedInputField(
+              hintText: "เบอร์โทรศัพท์",
+              onChanged: (value) {},
+            ),
+            RoundedInputField(
+              hintText: "อีเมล",
+              onChanged: (value) {},
+            ),
+            RoundedInputField(
+              hintText: "ชื่อผู้ใช้งาน",
               onChanged: (value) {},
             ),
             RoundedPasswordField(
               onChanged: (value) {},
             ),
+
+           
             RoundedButton(
                 text: "เข้าสู่ระบบ",
                 press: () {
@@ -38,7 +58,7 @@ class Body extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return MyAppp();
+                        return BarNavy();
                       },
                     ),
                   );
@@ -51,7 +71,7 @@ class Body extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return MyAppp();
+                      return HomeScreen();
                     },
                   ),
                 );

@@ -1,10 +1,13 @@
 // import 'package:bottom_navy_bar/bottom_navy_bar.dart';
-import 'package:constructor_buddy/Page/body.dart';
+// import 'package:constructor_buddy/Page/body.dart';
 // import 'package:constructor_buddy/Page_bar/Mycart.dart';
+import 'package:constructor_buddy/MyHome.dart';
 import 'package:constructor_buddy/Page_bar/Chat.dart';
 import 'package:constructor_buddy/Page_bar/Home1.dart';
+// import 'package:constructor_buddy/Page_bar/Mycart.dart';
 // import 'package:constructor_buddy/Page_bar/Home.dart';
 import 'package:constructor_buddy/Page_bar/Profile.dart';
+import 'package:constructor_buddy/src/popular_screen.dart';
 // import 'package:constructor_buddy/UI/home.dart';
 // import 'package:constructor_buddy/main.dart';
 import 'package:flutter/material.dart';
@@ -20,8 +23,9 @@ class _BarNavyState extends State<BarNavy> {
   int _selectedIndex = 0;
   final List<Widget> _children = 
   [
-    HomeScreen(),
-    Body(),
+    // HomeScreen(),
+    PopularScreen(),
+    MyHomePage(),
     Chat(),
     Profile()
   ];
