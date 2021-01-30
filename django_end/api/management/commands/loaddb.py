@@ -43,7 +43,7 @@ class Command(BaseCommand):
             Mechanic_Type(**d).save()
         
         print('กำลัง load ... Store')
-        for d in self.load(wb, 'Store', ['id', 'store_name','store_img', 'store_phone','store_detail','lat','lng']):
+        for d in self.load(wb, 'Store', ['id', 'store_name','store_img', 'store_phone','store_address','lat','lng']):
             Store(**d).save()
 
         print('กำลัง load ... Product_Type')

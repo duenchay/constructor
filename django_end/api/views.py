@@ -1,9 +1,148 @@
-from django.shortcuts import render
+from api.forms import *
 from django.http import HttpResponse
 # from django.utils import translation
 from .models import *
 from .serializers import *
-# ViewSets define the view behavior.
+from django.core.checks import messages
+from django.http import request
+from django.http.response import HttpResponseRedirect
+from django.shortcuts import redirect, render
+from django.core.exceptions import ValidationError
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.views.generic import ListView
+# Create your views here.
+def index(req):
+    return render(req, 'api/index.html')
+
+def tables(req):
+    return render(req, 'api/tables.html')
+
+# เพิ่มสินค้า
+def addproduct(request):
+    if request.method == 'POST':
+        form = ProductForm(request.POST ,request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('/product')
+    else:
+        form = ProductForm()
+    return render(request, 'api/addproduct.html',
+                  {
+                      'form': form,
+                      'product_types': Product_Type.objects.all(),
+                      'product_statuss': Product_Status.objects.all(),
+
+                  }) 
+# แก้ไขสินค้า
+def editproduct(request, id=0):
+    product = Product.objects.get(pk=id)
+    product_types = Product_Type.objects.all()
+    product_statuss = Product_Status.objects.all()
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            
+            form.save()
+            # messages.success(request, 'Member was created successfully!')
+            # return redirect('/editproduct/{<int:id>/')
+        else:
+            print("==== form.errors ====")
+            print(form.errors)
+    else:
+        form = ProductForm(product)
+       
+    return render(request, 'api/editproduct.html' ,{ 
+        'form': form,
+        'product': product,
+        'product_types': product_types,
+        'product_statuss': product_statuss,
+    })
+
+# ลบสินค้า
+def deleteproduct(req, id=0):
+    product = Product.objects.get(pk=id)
+    # product_types = Product_Type.objects.all()
+    # product_statuss = Product_Status.objects.all()
+    product.delete()
+    return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+
+
+
+# แสดงสินค้า
+
+# def product(request):
+#     products = Product.objects.all()
+#     paginator = Paginator(products, 5)
+
+#     page_number = request.GET.get('page')
+#     page_obj = paginator.get_page(page_number)
+#     return render(request, 'api/product.html', {'page_obj': page_obj})
+
+# class product(ListView):
+#     model = Product
+#     paginate_by = 2
+def product(request):
+    products_list = Product.objects.all()
+    paginator = Paginator(products_list,5) #1 หน้าแสดง 5รายการ
+    page = request.GET.get('page')
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+    return render(request, 'api/product.html', {'products': products})
+
+# ข้อมูลร้าน
+def store(req):
+    store = Store.objects.get() 
+    return render(req, 'api/store.html', {
+        'store': store,
+    })
+# แก้ไขข้อมูลร้าน
+def editstore(request, id=0):
+    store = Store.objects.get(pk=id)
+    if request.method == 'POST':
+        form = StoreForm(request.POST, request.FILES, instance=store)
+        if form.is_valid():
+            form.save()
+        else:
+            print("==== form.errors ====")
+            print(form.errors)
+    else:
+        form = StoreForm(store)
+    return render(request, 'api/editstore.html' ,{ 
+        'form': form,
+        'store': store,
+    })
+
+def mechanic(request):
+    mechanics = Mechanic.objects.all()
+    # paginator = Paginator(mechanics_list, 100)
+    # page = request.GET.get('page')
+    # try:
+    #     mechanics = paginator.page(page)
+    # except PageNotAnInteger:
+    #     mechanics = paginator.page(1)
+    # except EmptyPage:
+    #     mechanics = paginator.page(paginator.num_pages)
+    return render(request, 'api/mechanic.html', {'mechanics': mechanics})
+
+def searchproduct(req):
+    products = Product.objects.all()
+    if req.method == 'POST':
+        search = req.POST['search']
+        print(f'เขาต้องการค้นหาคำว่า "{search}"')
+        result = [] 
+        for product in products:
+            if search in product.product_name:
+                result.append(product)
+        return render(req, 'api/product.html', { 'products': result })
+
+    return render(req, 'api/product.html', {
+        'products': products,
+        # 'has_store': has_store(req),
+    })
 class RoleViewSet(viewsets.ModelViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer
@@ -105,6 +244,3 @@ router.register(r'Storck', StorckViewSet)
 
 
 # Create your views here.
-def index(request):
-    # translation.activate('th')
-    return HttpResponse("<h1>Constructor<h1>")

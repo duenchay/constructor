@@ -67,7 +67,7 @@ class Mechanic(models.Model):
     mechanic_lname =models.CharField(max_length=100,default=' ',verbose_name = 'นามสกุล')
     mechanic_phone =models.CharField(max_length=100,default=' ',verbose_name = 'เบอร์โทรศัพท์')
     mechanic_email =models.CharField(max_length=100,default=' ',verbose_name = 'อีเมล')
-    avatar = models.ImageField(upload_to='media/', verbose_name = 'รูปโปรไฟล์')
+    avatar = models.ImageField(upload_to='images/mechanic/', default='images/mechanic/no-img.png', verbose_name = 'รูปโปรไฟล์')
     mechanic_img = models.ImageField(upload_to='media/', verbose_name =  'รูปงานช่าง')
     mechanic_detail =models.CharField(max_length=100,default=' ',verbose_name = 'รายละเอียดงานช่าง')
     mechanic_type= models.ForeignKey(Mechanic_Type,on_delete=models.CASCADE) #ประเภทช่าง
@@ -79,9 +79,9 @@ class Mechanic(models.Model):
 
 class Store (models.Model):
     store_name = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อร้าน')
-    store_img = models.ImageField(upload_to='media/', verbose_name = 'รูปร้าน')
+    store_img = models.ImageField(upload_to='images/store/', default='images/store/no-img.png', verbose_name = 'รูปร้าน')
     store_phone = models.CharField(max_length=100,default=' ',verbose_name = 'เบอร์โทรศัพท์ร้าน')
-    store_detail = models.CharField(max_length=100,default=' ',verbose_name = 'รายละเอียดร้าน')
+    store_address = models.CharField(max_length=100,default=' ',verbose_name = 'ที่อยู่ร้าน')
     lat =  models.CharField(max_length=1000,default=' ')
     lng =  models.CharField(max_length=1000,default=' ')
     # time_open =models.CharField(max_length=100,default=' ')
@@ -95,7 +95,7 @@ class Store (models.Model):
 
 # หมวดหมู่สินค้า
 class Product_Type (models.Model):
-    # category_id = models.AutoField(primary_key=True)
+    # id = models.AutoField(primary_key=True)
     product_type = models.CharField(max_length=100,default=' ',verbose_name = 'หมวดหมู่สินค้า')
     def __str__(self):
         return f'{self.product_type} '
@@ -104,6 +104,7 @@ class Product_Type (models.Model):
 
 # สถานะสินค้า
 class Product_Status (models.Model):
+    # id = models.AutoField(primary_key=True)
     product_status= models.CharField(max_length=100,default=' ',verbose_name = 'สถานะสินค้า') #สถานะสินค้า หมดแล้ว /ยังคงเหลือ
     def __str__(self):
         return f'{self.product_status} '
@@ -112,10 +113,11 @@ class Product_Status (models.Model):
 
 #สินค้า
 class Product(models.Model): 
+    # id = models.AutoField(primary_key=True)
     product_name = models.CharField(max_length=1000,default=' ',verbose_name = 'ชื่อสินค้า')
     product_price = models.FloatField(verbose_name = 'ราคาสินค้า')
-    product_detail = models.CharField(max_length=1000,default=' ',verbose_name = 'รายละเอียดสินค้า')
-    product_img = models.ImageField(upload_to='media/', verbose_name = 'รูปสินค้า')
+    product_detail = models.TextField(max_length=10000,default=' ',verbose_name = 'รายละเอียดสินค้า')
+    product_img = models.ImageField(upload_to='images/product/', default='images/product/no-img.png' ,verbose_name = 'รูปสินค้า')
     product_type = models.ForeignKey(Product_Type,on_delete=models.CASCADE,verbose_name = 'หมวดหมู่สินค้า') #หมวดหมู่สินค้า
     product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า')  #สถานะสินค้า
     product_amount = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
