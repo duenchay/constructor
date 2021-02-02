@@ -45,11 +45,16 @@ class Product_StatusSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Product_Status
         fields = '__all__'
+class ProductSerializer(serializers.ModelSerializer):
+    product_type = Product_TypeSerializer(many=False, read_only=True)
 
-class ProductSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Product
         fields = '__all__'
+        model = Product
+# class ProductSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Product
+#         fields = '__all__'
     
 class Money_StatusSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

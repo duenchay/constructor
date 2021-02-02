@@ -29,6 +29,7 @@ class _ProductsState extends State<Products> {
   // var url1 = "https://constructor.pythonanywhere.com/api/Product_Type/1/";
 
   List<Product> _products = <Product>[];
+  List<Product_Type> _productType = <Product_Type>[];
 
 
   @override
@@ -36,9 +37,20 @@ class _ProductsState extends State<Products> {
     super.initState();
     print('fetching data');
     getProducts();
+    getProductType();
   }
 
-  
+   void getProductType() async {
+    print('calling getProducts()');
+    // String url = 'https://constructor.pythonanywhere.com/api/Product/';
+    String url ='https://constructor.pythonanywhere.com/api/Product_Type/';
+    var response =
+        await http.get(url, headers: {'Content-Type': 'application/json'});
+        // await http.get(url1, headers: {'Content-Type': 'application/json'});
+    List<dynamic> result = json.decode(utf8.decode(response.bodyBytes));
+    _productType = result.map<Product_Type>((data) => Product_Type.fromMap(data)).toList();
+    setState(() {});
+  }
 
   void getProducts() async {
     print('calling getProducts()');

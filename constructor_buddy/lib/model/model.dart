@@ -64,7 +64,7 @@ class Product {
       json['product_detail'],
       json['product_img'], 
       json['product_amount'], 
-      json['product.type'],
+      json['product_type'],
       json['product_status'], 
 
       );
