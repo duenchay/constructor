@@ -102,13 +102,22 @@ Widget build(BuildContext context) {
                                     //         )),
                                     
                                   ),
-                                  Text(
-                                    product.product_name,
-                                    style: TextStyle(
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
+                                  Text("${product.product_type}"),
+                                  Text("${product.product_name}"),
+                                  // Text(
+                                  //   product.product_name,
+                                  //   style: TextStyle(
+                                  //     fontSize: 15.0,
+                                  //     fontWeight: FontWeight.bold,
+                                  //   ),
+                                  // ),
+                                  //  Text(
+                                  //   product.product_name,
+                                  //   style: TextStyle(
+                                  //     fontSize: 15.0,
+                                  //     fontWeight: FontWeight.bold,
+                                  //   ),
+                                  // ),
                                   
                                 ],
                               ),

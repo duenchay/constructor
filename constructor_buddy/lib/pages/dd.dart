@@ -211,6 +211,7 @@ class Dd extends StatelessWidget {
                       SizedBox(height: 10),
                       SizedBox(height: 20),
                       Text(
+                        //
                        product.product_name,
                         style: TextStyle(
                           fontFamily: AppTheme.fontText,
