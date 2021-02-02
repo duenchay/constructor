@@ -4,7 +4,7 @@ import 'package:constructor_buddy/Page/components/rounded_button.dart';
 import 'package:constructor_buddy/Page/components/rounded_input_field.dart';
 import 'package:constructor_buddy/Page/components/rounded_password_field.dart';
 // import 'package:constructor_buddy/Page_bar/Home.dart';
-import 'package:constructor_buddy/bar/navy_bar.dart';
+import 'package:constructor_buddy/bar/bar.dart';
 import 'package:flutter/material.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;

@@ -314,25 +314,7 @@ class HomeScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-                        // Positioned(
-                        //   top: 170,
-                        //   left: 92,
-                        //   child: MaterialButton(
-                        //     minWidth: 10,
-                        //     onPressed: () {
-                        //       print('Pressed');
-                        //     },
-                        //     color: Colors.white.withOpacity(0.8),
-                        //     elevation: 0,
-                        //     shape: RoundedRectangleBorder(
-                        //         borderRadius: BorderRadius.only(
-                        //             topRight: Radius.circular(0),
-                        //             bottomRight: Radius.elliptical(40, 60),
-                        //             topLeft: Radius.circular(15),
-                        //             bottomLeft: Radius.circular(15))),
-                        //     child: Icon(Icons.add,color: Colors.green.withAlpha(95),),
-                        //   ),
-                        // ),
+                 
                         
                       ],
                     ),

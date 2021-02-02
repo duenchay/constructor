@@ -1,78 +1,18 @@
-import 'dart:ui';
- 
-import 'package:constructor_buddy/pages/productdetail.dart';
+import 'package:constructor_buddy/Page_bar/Profile.dart';
+import 'package:constructor_buddy/model/model.dart';
 import 'package:constructor_buddy/src/app_theme.dart';
-import 'package:constructor_buddy/src/bloc/home_bloc.dart';
-import 'package:constructor_buddy/src/bottom_dialog.dart';
-// import 'package:constructor_buddy/src/item_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:charts_flutter/flutter.dart' as charts;
- 
-class ItemScreen extends StatefulWidget {
-  ItemScreen({this.itemModel});
+import 'package:flutter_svg/svg.dart';
 
-  final ItemModel itemModel; 
+// import 'models.dart';
 
-  @override
-  _ItemScreenState createState() => _ItemScreenState();
-}
+class Dd extends StatelessWidget {
+  final Product product;
 
-class _ItemScreenState extends State<ItemScreen> {
-  final data = [
-    new SalesData(1, 230),
-    new SalesData(2, 230),
-    new SalesData(3, 230),
-    new SalesData(4, 225),
-    new SalesData(5, 220),
-    new SalesData(6, 218),
-    new SalesData(7, 215),
-    new SalesData(8, 210),
-    new SalesData(9, 205),
-    new SalesData(10, 200),
-    new SalesData(11, 195),
-    new SalesData(12, 190),
-    new SalesData(13, 185),
-    new SalesData(14, 180),
-    new SalesData(15, 175),
-    new SalesData(16, 175),
-    new SalesData(17, 180),
-    new SalesData(18, 185),
-    new SalesData(19, 185),
-    new SalesData(20, 185),
-    new SalesData(21, 185),
-    new SalesData(22, 190),
-    new SalesData(23, 190),
-    new SalesData(24, 190),
-    new SalesData(25, 190),
-    new SalesData(26, 195),
-    new SalesData(27, 195),
-    new SalesData(28, 195),
-    new SalesData(29, 195),
-    new SalesData(30, 200),
-  ];
-
-  // ignore: unused_element
-  _getSeriesData() {
-    List<charts.Series<SalesData, int>> series = [
-      charts.Series(
-        id: "Sales",
-        data: data,
-        domainFn: (SalesData series, _) => series.year,
-        measureFn: (SalesData series, _) => series.sales,
-        colorFn: (SalesData series, _) =>
-            charts.MaterialPalette.blue.shadeDefault,
-      )
-    ];
-    return series;
-  }
- 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      body: NestedScrollView(
+  Dd({this.product});
+  bodyWidget(BuildContext context) => Stack(
+        children: <Widget>[
+         NestedScrollView(
         headerSliverBuilder: (BuildContext context, bool isScrolled) {
           return [
             SliverAppBar(
@@ -135,13 +75,14 @@ class _ItemScreenState extends State<ItemScreen> {
             )
           ];
         },
+                    
         body: ClipRRect(
-          // borderRadius: BorderRadius.only(
-          //   topLeft: Radius.circular(24),
-          //   topRight: Radius.circular(24),
-          // ),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+          ),
+          // child: BackdropFilter(
+            // filter: ImageFilter.blur(sigmaX: 0.0, sigmaY: 0.0),
             child: Container(
                 color: AppTheme.white,
                 width: MediaQuery.of(context).size.width,
@@ -169,7 +110,7 @@ class _ItemScreenState extends State<ItemScreen> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ProductDetail(
+                                    builder: (context) => Profile(
                                           //  product: product,
                                         )));
                           },
@@ -204,7 +145,7 @@ class _ItemScreenState extends State<ItemScreen> {
                                         ),
                                         SizedBox(width: 8.0),
                                         Text(
-                                          "\$${widget.itemModel.price}",
+                                          "\$${product.product_name}",
                                           style: TextStyle(
                                             fontFamily: AppTheme.fontDisplay,
                                             fontStyle: FontStyle.normal,
@@ -257,7 +198,7 @@ class _ItemScreenState extends State<ItemScreen> {
                       ),
                       SizedBox(height: 30),
                       Text(
-                        widget.itemModel.name,
+                      product.product_detail,
                         style: TextStyle(
                           fontFamily: AppTheme.fontDisplay,
                           fontStyle: FontStyle.normal,
@@ -270,7 +211,7 @@ class _ItemScreenState extends State<ItemScreen> {
                       SizedBox(height: 10),
                       SizedBox(height: 20),
                       Text(
-                        "Information",
+                       product.product_name,
                         style: TextStyle(
                           fontFamily: AppTheme.fontText,
                           fontStyle: FontStyle.normal,
@@ -405,26 +346,39 @@ class _ItemScreenState extends State<ItemScreen> {
                                 color: AppTheme.black,
                               ),
                             ),
+                            
                           )
                         ],
                       ),
+                      
 
                       SizedBox(height: 20),
                     ],
                   ),
                 )
                 // child: ,
-                ),
+                )
+                
+
+                
           ),
-        ),
-      ),
-    );
+        
+         )
+        ],
+
+      );
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+     
+      backgroundColor: Colors.purple[100],
+      // appBar: AppBar(
+      //   elevation: 0.0,
+      //   backgroundColor: Colors.purple[100],
+      //   title: Text(product.product_name),
+      // ),
+      body: bodyWidget(context),
+    ); 
   }
-}
-
-class SalesData {
-  final int year;
-  final int sales;
-
-  SalesData(this.year, this.sales);
 }

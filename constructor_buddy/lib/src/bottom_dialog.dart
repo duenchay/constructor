@@ -1,10 +1,11 @@
 import 'package:constructor_buddy/src/app_theme.dart';
 import 'package:constructor_buddy/src/bloc/card_bloc.dart';
+import 'package:constructor_buddy/src/bloc/home_bloc.dart';
 import 'package:constructor_buddy/src/bloc/shopping_block.dart';
 import 'package:constructor_buddy/src/bloc/size_block.dart';
 import 'package:constructor_buddy/src/card_model.dart';
 import 'package:constructor_buddy/src/database_helper_card.dart';
-import 'package:constructor_buddy/src/item_model.dart';
+// import 'package:constructor_buddy/src/item_model.dart';
 import 'package:constructor_buddy/src/size_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

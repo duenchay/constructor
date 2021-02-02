@@ -2,7 +2,7 @@ import 'package:constructor_buddy/Page_bar/Chat.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatelessWidget  {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;

@@ -5,7 +5,7 @@ import 'package:constructor_buddy/Page/components/rounded_button.dart';
 import 'package:constructor_buddy/Page/components/rounded_input_field.dart';
 import 'package:constructor_buddy/Page/components/rounded_password_field.dart';
 import 'package:constructor_buddy/Page_bar/Home1.dart';
-import 'package:constructor_buddy/bar/navy_bar.dart';
+import 'package:constructor_buddy/bar/bar.dart';
 // import 'package:constructor_buddy/Page_bar/Home.dart';
 // import 'package:constructor_buddy/main.dart';
 // import 'package:constructor_buddy/Page_bar/Home.dart';
@@ -71,7 +71,7 @@ class Body extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return HomeScreen();
+                      return BarNavy();
                     },
                   ),
                 );
