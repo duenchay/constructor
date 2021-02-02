@@ -1,0 +1,23 @@
+from django.contrib import admin
+from .models import *
+# Register your models here.
+admin.site.register(Role)
+admin.site.register(User)
+admin.site.register(Customer)
+admin.site.register(Mechanic_Type)
+admin.site.register(Mechanic)
+admin.site.register(Store)
+admin.site.register(Admin)
+admin.site.register(Product_Type)
+admin.site.register(Product_Status)
+admin.site.register(Product)
+admin.site.register(Money_Status)
+admin.site.register(Delivery_Options)
+admin.site.register(Payment_Options)
+admin.site.register(Order)
+admin.site.register(Payment)
+admin.site.register(Order_Product)
+admin.site.register(Carts)
+admin.site.register(Conversations)
+# admin.site.register(Conversations)
+admin.site.register(Storck)
