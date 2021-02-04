@@ -134,8 +134,8 @@ STATIC_URL = '/static/'
 # STATIC_ROOT = '/home/JungQueue/mysite/static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-MEDIA_ROOT = '/home/constructor/django_end/media'
-MEDIA_URL = '/media/'
+ 
+# MEDIA_ROOT = '/home/constructor/django_end/media'
+# MEDIA_URL = '/media/'
 STATIC_ROOT = '/home/constructor/django_end/static'
 STATIC_URL = '/static/'

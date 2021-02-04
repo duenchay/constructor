@@ -122,7 +122,7 @@ class Product(models.Model):
     product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า')  #สถานะสินค้า
     product_amount = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
     def __str__(self):
-        return f'{self.product_type} {self.product_status} '
+        return f'{self.product_name}  '
     class Meta:
         verbose_name = 'สินค้า'
 
@@ -220,7 +220,7 @@ class Conversations(models.Model):
     class Meta:
         verbose_name = 'บทสนทนา'
 
-
+# //Stock
 class Storck(models.Model):
     product= models.ForeignKey(Product,on_delete=models.CASCADE,verbose_name = 'รหัสสินค้า')
     all_products= models.IntegerField(verbose_name = 'จำนวนสินค้าทั้งหมด')

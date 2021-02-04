@@ -38,30 +38,24 @@
 
               <a  class="btn btn-sm btn-success" href="addproduct" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a>
           </div>
-          <!-- <div class="input-group">
-            <div class="form-outline">
-              <input id="search-input" type="search" id="form1" class="form-control" />
-              <label class="form-label" for="form1">Search</label>
-            </div>
-            <button id="search-button" type="button" class="btn btn-primary">
-              <i class="fas fa-search"></i>
-            </button>
-          </div> -->
+
           <nav class="navbar navbar-light bg-light justify-content-between">
             <a class="navbar-brand"></a>
-            <form class="form-inline">
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search">
+  
+              <form class="form-inline" action="/product/" style="font:right;" method="POST">
+              {% csrf_token %}
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="product_name" value="{{ search_product_name }}">
               <button class="btn btn-outline-success my-2 my-sm-0"name="search" type="submit">Search</button>
-            </form>
+            </form> 
           </nav>
+        
           <div class="card-body">
               <!-- {% for message in messages %}
                   <div class="alert alert-{{ message.tags }} alert-dismissible" role="alert">
                       {{ message }}
                   </div> 
               {% endfor %} -->
-              
-              <div class="table-responsive">
+               <div class="table-responsive">
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" align="center">
                       <thead>
                       <tr>
@@ -79,7 +73,7 @@
                       </thead>
                       <tbody>
                         {% csrf_token %} 
-                      {% for product in products %}
+                      {% for product in product %}
                     
                           <tr>
                             <td>{{ product.id }}</td>
@@ -87,25 +81,25 @@
                               <td>{{ product.product_price }}</td>
                               <td>{{ product.product_type }}</td>
                               <td>{{ product.product_detail }}</td>
-                              <td><img src="media/{{product.product_img}}" style="height: 75px;"></td>
+                              <td><img src="/media/{{product.product_img}}" style="height: 75px;"></td>
                               <td>{{ product.product_amount }}</td>
                               <!-- <td>{{ i.created_at  |date:"d-m-Y H:i:s" }}</td> -->
                               <td>                                   
                                   <a class="btn btn-sm btn-warning" href="/editproduct/{{product.id}}"> <span class="fa fa-edit"></span> Edit</a>
                                   
                               </td>
-                              <td><a class="btn btn-sm btn-danger" href="deleteproduct/{{product.id}}"><span class="fa fa-trash"></span> Delete</a></td>
+                              <td><a class="btn btn-sm btn-danger" href="/deleteproduct/{{product.id}}"><span class="fa fa-trash"></span> Delete</a></td>
                           </tr>
                           
                       {% endfor %}
                       </tbody>
                   
                     </table>
-                    {% if products.has_other_pages %}
+                    {% if product.has_other_pages %}
                     <ul class="pagination">
-                      {% if products.has_previous %}
-                        <li><a class="page-link" href="?page={{ products.previous_page_number }}">&laquo;  Previous</a></li>
-                        <li><a class="page-link" href="?page={{ products.previous_page_number }}">{{ products.previous_page_number }} </a></li>
+                      {% if product.has_previous %}
+                        <li><a class="page-link" href="?page={{ product.previous_page_number }}">&laquo;  Previous</a></li>
+                        <li><a class="page-link" href="?page={{ product.previous_page_number }}">{{ product.previous_page_number }} </a></li>
                       {% else %}
                         <li class="disabled page-link"><span>&laquo;Previous</span></li>
                       {% endif %}
@@ -113,15 +107,15 @@
                       <li class="page-item active">
                         <span class="page-link">
                             <span class="current" >
-                                {{ products.number }} 
+                                {{ product.number }} 
                               </span>
                          
                         </span>
                       </li>
                           <!-- หน้าถัดไป -->
-                      {% if products.has_next %}
+                      {% if product.has_next %}
                         
-                        <li><a class="page-link"  href="?page={{ products.next_page_number }}">Next &raquo; </a></li>
+                        <li><a class="page-link"  href="?page={{ product.next_page_number }}">Next &raquo; </a></li>
                       {% else %}
                         <li class="disabled page-link"><span>Next &raquo;</span></li>
                       {% endif %}
@@ -135,4 +129,5 @@
                 </div>
                 </div>
                 </div>
+             
                 {% endblock %}

@@ -17,6 +17,12 @@ def index(req):
 def tables(req):
     return render(req, 'api/tables.html')
 
+def login(req):
+    return render(req, 'api/login.html')
+
+
+def register(req):
+    return render(req, 'api/register.html')
 # เพิ่มสินค้า
 def addproduct(request):
     if request.method == 'POST':
@@ -70,28 +76,57 @@ def deleteproduct(req, id=0):
 
 # แสดงสินค้า
 
-# def product(request):
-#     products = Product.objects.all()
-#     paginator = Paginator(products, 5)
-
-#     page_number = request.GET.get('page')
-#     page_obj = paginator.get_page(page_number)
-#     return render(request, 'api/product.html', {'page_obj': page_obj})
-
-# class product(ListView):
-#     model = Product
-#     paginate_by = 2
+def productpage(request):
+    # list all users.
+    product = Product.objects.all()
+    page_number = request.GET.get('page', 1)
+    paginate_result = do_paginate(product, page_number)
+    product = paginate_result[0]
+    paginator = paginate_result[1]
+    base_url = '/api/product/?'
+    return render(request, 'api/product.html',
+                      {'product': product, 'paginator' : paginator, 'base_url': base_url})
+# @login_required()
 def product(request):
-    products_list = Product.objects.all()
-    paginator = Paginator(products_list,5) #1 หน้าแสดง 5รายการ
-    page = request.GET.get('page')
+    product_name = request.POST.get('product_name', '').strip()
+    if len(product_name) == 0:
+        product_name = request.GET.get('product_name', '').strip()
+    product = Product.objects.filter(product_name__contains=product_name)
+    page_number = request.GET.get('page', 1)
+    paginate_result = do_paginate(product, page_number)
+    product = paginate_result[0]
+    paginator = paginate_result[1]
+    base_url = '/api/user_search/?product_name=' + product_name + "&"
+    return render(request, 'api/product.html',
+                      {'product': product, 'paginator' : paginator, 'base_url': base_url, 'search_product_name': product_name})
+def do_paginate(data_list, page_number):
+    ret_data_list = data_list
+    #  หน้า มี 5รายการ
+    result_per_page = 5
+    # build the paginator object.
+    paginator = Paginator(data_list, result_per_page)
     try:
-        products = paginator.page(page)
-    except PageNotAnInteger:
-        products = paginator.page(1)
+        # get data list for the specified page_number.
+        ret_data_list = paginator.page(page_number)
     except EmptyPage:
-        products = paginator.page(paginator.num_pages)
-    return render(request, 'api/product.html', {'products': products})
+        # get the lat page data if the page_number is bigger than last page number.
+        ret_data_list = paginator.page(paginator.num_pages)
+    except PageNotAnInteger:
+        # if the page_number is not an integer then return the first page data.
+        ret_data_list = paginator.page(1)
+    return [ret_data_list, paginator]
+ 
+# def product(request):
+#     products_list = Product.objects.all()
+#     paginator = Paginator(products_list,5) #1 หน้าแสดง 5รายการ
+#     page = request.GET.get('page')
+#     try:
+#         products = paginator.page(page)
+#     except PageNotAnInteger:
+#         products = paginator.page(1)
+#     except EmptyPage:
+#         products = paginator.page(paginator.num_pages)
+#     return render(request, 'api/product.html', {'products': products})
 
 # ข้อมูลร้าน
 def store(req):
@@ -128,9 +163,11 @@ def mechanic(request):
     #     mechanics = paginator.page(paginator.num_pages)
     return render(request, 'api/mechanic.html', {'mechanics': mechanics})
 
+
+
 def searchproduct(req):
     products = Product.objects.all()
-    if req.method == 'POST':
+    if req.method == 'POST': 
         search = req.POST['search']
         print(f'เขาต้องการค้นหาคำว่า "{search}"')
         result = [] 
@@ -143,6 +180,21 @@ def searchproduct(req):
         'products': products,
         # 'has_store': has_store(req),
     })
+
+
+def storck(request):
+    storcks = Storck.objects.all()
+    # paginator = Paginator(mechanics_list, 100)
+    # page = request.GET.get('page')
+    # try:
+    #     mechanics = paginator.page(page)
+    # except PageNotAnInteger:
+    #     mechanics = paginator.page(1)
+    # except EmptyPage:
+    #     mechanics = paginator.page(paginator.num_pages)
+    return render(request, 'api/storck.html', {'storcks': storcks})
+
+
 class RoleViewSet(viewsets.ModelViewSet):
     queryset = Role.objects.all()
     serializer_class = RoleSerializer

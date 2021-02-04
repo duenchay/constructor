@@ -33,7 +33,7 @@
       <div class="card mb-3">
           <div class="card-header">
               <i class="fas fa-table"></i>
-              รายการสินค้า
+              ข้อมูลช่าง
               <a  class="btn btn-sm btn-success" href="mechanic" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a>
           </div>
           <div class="card-body">
@@ -42,10 +42,11 @@
                       <thead>
                       <tr>
                         <th>id</th>
+                        <th>รูปโปรไฟล์</th>
                           <th>ชื่อ</th>
                           <th>เบอร์โทรศัพท์</th>
                           <th>อีเมล</th>
-                          <th>รูปโปรไฟล์</th>
+                          
                           <th>รายละเอียดงานช่าง</th>
                           <th>รูปงานช่าง</th>
                           <th>ประเภทช่าง</th>
@@ -60,11 +61,12 @@
                     
                           <tr>
                             <td>{{ i.id }}</td>
+                            <td><img src="media/{{i.avatar}}" style="height: 75px;"></td>
                               <td>{{ i.mechanic_fname }}</td>
                               <td>{{ i.mechanic_phone }}</td>
                               <td>{{ i.mechanic_email }}</td>
                               <!-- <td>{{ i.avatar }}</td> -->
-                              <td><img src="media/{{i.avatar}}" style="height: 75px;"></td>
+                              
                               <td>{{ i.mechanic_detail }}</td>
                               <td><img src="media/{{i.mechanic_img}}" style="height: 75px;"></td>
                               <td>{{ i.mechanic_type }}</td>
