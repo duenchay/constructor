@@ -41,9 +41,9 @@ class Product {
   // ignore: non_constant_identifier_names
   int product_amount;
   // ignore: non_constant_identifier_names
-  String product_type;
+  Product_Type product_type;
   // ignore: non_constant_identifier_names
-  String product_status;
+  // String product_status;
 
   Product(
     this.product_name, 
@@ -52,7 +52,7 @@ class Product {
     this.product_img, 
     this.product_amount,
     this.product_type,
-    this.product_status,
+    // this.product_status,
 
     );
 
@@ -64,8 +64,8 @@ class Product {
       json['product_detail'],
       json['product_img'], 
       json['product_amount'], 
-      json['product_type'],
-      json['product_status'], 
+      Product_Type.fromMap(json['product_type']),
+      // json['product_status'], 
 
       );
   }
