@@ -2,7 +2,7 @@
 // import 'package:constructor_buddy/constants.dart';
 // import 'package:constructor_buddy/Page/Screens/Welcome/welcome_screen.dart';
 import 'package:constructor_buddy/Page/Screens/Welcome/welcome_screen.dart';
-import 'package:constructor_buddy/constants.dart';
+// import 'package:constructor_buddy/constants.dart';
 // import 'package:constructor_buddy/src/popular_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: ' Constructor Buddy ',
       theme: ThemeData(
-        primaryColor: kPrimaryColor,
+        // primaryColor: kPrimaryColor,
         scaffoldBackgroundColor: Colors.white,
       ),
       home: WelcomeScreen(),

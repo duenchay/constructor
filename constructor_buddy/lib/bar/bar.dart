@@ -1,14 +1,7 @@
-//  import 'package:constructor_buddy/Page_bar/Mycart.dart';
 
-import 'package:constructor_buddy/Page/type/body.dart';
-// import 'package:constructor_buddy/Page_bar/Home1.dart';
-
-// import 'package:constructor_buddy/Page_bar/Home1.dart';
 import 'package:constructor_buddy/Page_bar/h.dart';
-// import 'package:constructor_buddy/model/model.dart';
+import 'package:constructor_buddy/pages/pp.dart';
 import 'package:constructor_buddy/pages/product.dart';
-// import 'package:constructor_buddy/Page_bar/Profile.dart';
-// import 'package:constructor_buddy/src/new/search_screen.dart';
 import 'package:constructor_buddy/src/popular_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -30,7 +23,8 @@ class _BarNavyState extends State<BarNavy> {
     // MyHomePage(),
     // HomeScreen(),
     // Profile(),
-    Body(),
+    // Body(),
+    Pps(1),
     // SearchScreen()
     // Ho(),
     Products(1),

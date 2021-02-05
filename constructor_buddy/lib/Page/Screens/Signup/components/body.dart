@@ -4,7 +4,7 @@ import 'package:constructor_buddy/Page/components/already_have_an_account_acheck
 import 'package:constructor_buddy/Page/components/rounded_button.dart';
 import 'package:constructor_buddy/Page/components/rounded_input_field.dart';
 import 'package:constructor_buddy/Page/components/rounded_password_field.dart';
-import 'package:constructor_buddy/Page_bar/Home1.dart';
+// import 'package:constructor_buddy/Page_bar/Home1.dart';
 import 'package:constructor_buddy/bar/bar.dart';
 // import 'package:constructor_buddy/Page_bar/Home.dart';
 // import 'package:constructor_buddy/main.dart';

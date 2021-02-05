@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 // import 'models.dart';
 
-class ProductDetail extends StatelessWidget {
+class Ppp extends StatelessWidget {
   final Product product;
 
-  ProductDetail({this.product});
+  Ppp({this.product});
 
   bodyWidget(BuildContext context) => 
       Stack(

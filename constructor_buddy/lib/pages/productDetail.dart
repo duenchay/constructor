@@ -6,10 +6,10 @@ import 'package:flutter_svg/svg.dart';
 
 // import 'models.dart';
 
-class Dd extends StatelessWidget {
+class ProductDetail extends StatelessWidget {
   final Product product;
 
-  Dd({this.product});
+  ProductDetail({this.product});
   bodyWidget(BuildContext context) => Stack(
         children: <Widget>[
          NestedScrollView(
@@ -55,7 +55,7 @@ class Dd extends StatelessWidget {
                             ),
                           ),
                           // Expanded(child: Container()),
-                          // SizedBox(width: 10),
+                          SizedBox(width: 10),
                       
                         ],
                       ),
@@ -65,10 +65,23 @@ class Dd extends StatelessWidget {
                     //   height: 221,
                     //   child: Hero(
                     //     transitionOnUserGestures: true,
-                    //     tag: widget.itemModel,
-                    //     child: Image.asset(widget.itemModel.image),
+                    //     tag: product,
+                    //     child: Image.asset(product.product_img),
                     //   ),
                     // ),
+                    // SizedBox(width: 30),
+                       Container(
+                        //  width: double.infinity,
+                        //   height: 100,
+                          height: MediaQuery.of(context).size.height *
+                              0.40,
+                          width:
+                              MediaQuery.of(context).size.width * 0.80,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(product.product_img))),
+                        ),
                   ],
                 ),
               ),
@@ -131,6 +144,8 @@ class Dd extends StatelessWidget {
                                           CrossAxisAlignment.start,
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
+
+                                          //ปุ่มซื้อ
                                       children: [
                                         Text(
                                           "Buy",
@@ -145,45 +160,13 @@ class Dd extends StatelessWidget {
                                         ),
                                         SizedBox(width: 8.0),
                                         Text(
-                                          "\$${product.product_name}",
+                                          "${product.product_price } บาท",
                                           style: TextStyle(
                                             fontFamily: AppTheme.fontDisplay,
                                             fontStyle: FontStyle.normal,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 20,
                                             height: 1.4,
-                                            color: AppTheme.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          "or Bid",
-                                          style: TextStyle(
-                                            fontFamily: AppTheme.fontText,
-                                            fontStyle: FontStyle.normal,
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 12,
-                                            height: 1.33,
-                                            color:
-                                                AppTheme.white.withOpacity(0.6),
-                                          ),
-                                        ),
-                                        SizedBox(width: 10.0),
-                                        Text(
-                                          "Highest Bid",
-                                          style: TextStyle(
-                                            fontFamily: AppTheme.fontText,
-                                            fontStyle: FontStyle.normal,
-                                            fontWeight: FontWeight.normal,
-                                            fontSize: 12,
-                                            height: 1.33,
                                             color: AppTheme.white,
                                           ),
                                         ),
@@ -197,22 +180,22 @@ class Dd extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 30),
+                      //ชื่อสินค้า
                       Text(
-                      product.product_detail,
+                      product.product_name,
                         style: TextStyle(
                           fontFamily: AppTheme.fontDisplay,
                           fontStyle: FontStyle.normal,
                           fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                          fontSize: 20,
                           height: 1.18,
                           color: AppTheme.black,
                         ),
                       ),
                       SizedBox(height: 10),
                       SizedBox(height: 20),
-                      Text(
-                        //
-                       product.product_name,
+                      
+                      Text("รายละเอียดสินค้า : ",
                         style: TextStyle(
                           fontFamily: AppTheme.fontText,
                           fontStyle: FontStyle.normal,
@@ -223,30 +206,18 @@ class Dd extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 20),
+                      //รายละเอียดสินค้า
                       Row(
                         children: [
-                          Container(
-                            width: 96,
-                            child: Text(
-                              "Style",
-                              style: TextStyle(
-                                fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 12,
-                                height: 1.33,
-                                color: AppTheme.black60,
-                              ),
-                            ),
-                          ),
+                         
                           Expanded(
                             child: Text(
-                              "487471-006",
+                              product.product_detail,
                               style: TextStyle(
                                 fontFamily: AppTheme.fontText,
                                 fontStyle: FontStyle.normal,
                                 fontWeight: FontWeight.normal,
-                                fontSize: 12,
+                                fontSize: 15,
                                 height: 1.33,
                                 color: AppTheme.black,
                               ),
@@ -255,105 +226,7 @@ class Dd extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Container(
-                            width: 96,
-                            child: Text(
-                              "Colorway",
-                              style: TextStyle(
-                                fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 12,
-                                height: 1.33,
-                                color: AppTheme.black60,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              "BLACK WHITE-OFF WHITE-GYM RED",
-                              style: TextStyle(
-                                fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 12,
-                                height: 1.33,
-                                color: AppTheme.black,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Container(
-                            width: 96,
-                            child: Text(
-                              "Retail Price",
-                              style: TextStyle(
-                                fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 12,
-                                height: 1.33,
-                                color: AppTheme.black60,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              "\$190",
-                              style: TextStyle(
-                                fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 12,
-                                height: 1.33,
-                                color: AppTheme.black,
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 20),
-                      Row(
-                        children: [
-                          Container(
-                            width: 96,
-                            child: Text(
-                              "Release Date",
-                              style: TextStyle(
-                                fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 12,
-                                height: 1.33,
-                                color: AppTheme.black60,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              "07/02/2020",
-                              style: TextStyle(
-                                fontFamily: AppTheme.fontText,
-                                fontStyle: FontStyle.normal,
-                                fontWeight: FontWeight.normal,
-                                fontSize: 12,
-                                height: 1.33,
-                                color: AppTheme.black,
-                              ),
-                            ),
-                            
-                          )
-                        ],
-                      ),
-                      
 
-                      SizedBox(height: 20),
                     ],
                   ),
                 )

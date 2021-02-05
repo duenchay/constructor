@@ -1,5 +1,5 @@
 import 'package:constructor_buddy/Page/Screens/Login/login_screen.dart';
-import 'package:constructor_buddy/Page/Screens/Signup/signup_screen.dart';
+// import 'package:constructor_buddy/Page/Screens/Signup/signup_screen.dart';
 import 'package:constructor_buddy/Page/Screens/Welcome/components/background.dart';
 import 'package:constructor_buddy/Page/components/rounded_button.dart';
 import 'package:constructor_buddy/Page/models.dart';

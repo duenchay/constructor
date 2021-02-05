@@ -1,9 +1,10 @@
 import 'dart:ui';
  
-import 'package:constructor_buddy/pages/productdetail.dart';
+import 'package:constructor_buddy/pages/productDetail.dart';
+// import 'package:constructor_buddy/pages/productdetail.dart';
 import 'package:constructor_buddy/src/app_theme.dart';
 import 'package:constructor_buddy/src/bloc/home_bloc.dart';
-import 'package:constructor_buddy/src/bottom_dialog.dart';
+// import 'package:constructor_buddy/src/bottom_dialog.dart';
 // import 'package:constructor_buddy/src/item_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
