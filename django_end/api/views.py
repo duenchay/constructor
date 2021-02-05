@@ -74,8 +74,8 @@ def deleteproduct(req, id=0):
 
 
 
-# แสดงสินค้า
-
+# แสดงสินค้า //
+ 
 def productpage(request):
     # list all users.
     product = Product.objects.all()
