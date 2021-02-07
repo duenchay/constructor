@@ -86,7 +86,7 @@ def productpage(request):
     base_url = '/api/product/?'
     return render(request, 'api/product.html',
                       {'product': product, 'paginator' : paginator, 'base_url': base_url})
-# @login_required()
+#ค้นหาสินค้า
 def product(request):
     product_name = request.POST.get('product_name', '').strip()
     if len(product_name) == 0:
@@ -99,6 +99,7 @@ def product(request):
     base_url = '/api/user_search/?product_name=' + product_name + "&"
     return render(request, 'api/product.html',
                       {'product': product, 'paginator' : paginator, 'base_url': base_url, 'search_product_name': product_name})
+
 def do_paginate(data_list, page_number):
     ret_data_list = data_list
     #  หน้า มี 5รายการ
@@ -150,7 +151,7 @@ def editstore(request, id=0):
         'form': form,
         'store': store,
     })
-
+#ข้อมูลช่าง
 def mechanic(request):
     mechanics = Mechanic.objects.all()
     # paginator = Paginator(mechanics_list, 100)
@@ -163,23 +164,24 @@ def mechanic(request):
     #     mechanics = paginator.page(paginator.num_pages)
     return render(request, 'api/mechanic.html', {'mechanics': mechanics})
 
-
-
-def searchproduct(req):
-    products = Product.objects.all()
-    if req.method == 'POST': 
-        search = req.POST['search']
-        print(f'เขาต้องการค้นหาคำว่า "{search}"')
-        result = [] 
-        for product in products:
-            if search in product.product_name:
-                result.append(product)
-        return render(req, 'api/product.html', { 'products': result })
-
-    return render(req, 'api/product.html', {
-        'products': products,
-        # 'has_store': has_store(req),
+def editmechanic(request, id=0):
+    mechanic = Mechanic.objects.get(pk=id)
+    mechanic_types = Mechanic_Type.objects.all()
+    if request.method == 'POST':
+        form = MechanicForm(request.POST, request.FILES, instance=mechanic)
+        if form.is_valid():
+            form.save()
+        else:
+            print("==== form.errors ====")
+            print(form.errors)
+    else:
+        form = MechanicForm(mechanic)
+    return render(request, 'api/editmechanic.html' ,{ 
+        'form': form,
+        'mechanic': mechanic,
+        'mechanic_types' : mechanic_types,
     })
+
 
 
 def storck(request):

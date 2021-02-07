@@ -1,5 +1,7 @@
 // import 'dart:ffi';
 
+import 'package:flutter/cupertino.dart';
+
 class User {
   String username;
   String email;
@@ -95,5 +97,83 @@ class Product_Type {
 
   String toString() {
     return '${this.product_type} ';
+  }
+}
+
+
+class Mechanic {
+  // ignore: non_constant_identifier_names
+  String mechanic_fname;
+  // ignore: non_constant_identifier_names
+  String mechanic_lname;
+  // ignore: non_constant_identifier_names
+  String mechanic_phone;
+  // ignore: non_constant_identifier_names
+  String mechanic_email;
+  // ignore: non_constant_identifier_names
+  String avatar;
+  // ignore: non_constant_identifier_names
+  String mechanic_img;
+  // ignore: non_constant_identifier_names
+  // String product_status;
+  // ignore: non_constant_identifier_names
+  String mechanic_detail;
+  // ignore: non_constant_identifier_names
+  Mechanic_Type mechanic_type;
+
+  Mechanic(
+    this.mechanic_fname, 
+    this.mechanic_lname, 
+    this.mechanic_phone, 
+    this.mechanic_email, 
+    this.avatar,
+    this.mechanic_img,
+    this.mechanic_detail,
+    this.mechanic_type,
+
+    );
+
+  factory Mechanic.fromMap(Map<String, dynamic> json) {
+    // print('Product.fromJson("$json")');
+    return Mechanic(
+      json['mechanic_fname'], 
+      json['mechanic_lname'], 
+      json['mechanic_phone'],
+      json['mechanic_email'], 
+      json['avatar'], 
+      json['mechanic_img'],
+      json['mechanic_detail'],
+      Mechanic_Type.fromMap(json['mechanic_type']),
+      // json['product_status'], 
+
+      );
+  }
+
+  String toString() {
+    return '${this.mechanic_fname} ';
+  }
+}
+
+
+// ignore: camel_case_types
+class Mechanic_Type {
+  // ignore: non_constant_identifier_names
+  String mechanic_type;
+
+  Mechanic_Type(
+    this.mechanic_type
+    );
+
+  factory Mechanic_Type.fromMap(Map<String, dynamic> json) {
+    // print('Product.fromJson("$json")');
+    return Mechanic_Type(
+      json['mechanic_type'], 
+    
+
+      );
+  }
+
+  String toString() {
+    return '${this.mechanic_type} ';
   }
 }

@@ -1,7 +1,11 @@
 
-import 'package:constructor_buddy/Page_bar/h.dart';
+import 'package:constructor_buddy/Page_bar/MyHome.dart';
+import 'package:constructor_buddy/pages/mechanic.dart';
+import 'package:constructor_buddy/pages/mechanicDetail.dart';
 import 'package:constructor_buddy/pages/pp.dart';
 import 'package:constructor_buddy/pages/product.dart';
+import 'package:constructor_buddy/pages/pros.dart';
+import 'package:constructor_buddy/pages/test.dart';
 import 'package:constructor_buddy/src/popular_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -17,17 +21,16 @@ class _BarNavyState extends State<BarNavy> {
   int _selectedIndex = 0;
   final List<Widget> _children = 
   [
-    // HomeScreen(),
-     Ho(),
-    PopularScreen(),
-    // MyHomePage(),
-    // HomeScreen(),
-    // Profile(),
-    // Body(),
+
+     MyHome(),
+    Test(),
     Pps(1),
     // SearchScreen()
     // Ho(),
     Products(1),
+    HomePage(),
+    Mechanics(1),
+
     
 
   ];
@@ -80,6 +83,16 @@ class _BarNavyState extends State<BarNavy> {
             // ignore: deprecated_member_use
             title: Text('Chat'),
             icon: Icon(Icons.chat_bubble),
+          ),
+          BottomNavigationBarItem(
+            // ignore: deprecated_member_use
+            title: Text('Me'),
+            icon: Icon(Icons.account_circle_rounded),
+          ),
+          BottomNavigationBarItem(
+            // ignore: deprecated_member_use
+            title: Text('Me'),
+            icon: Icon(Icons.account_circle_rounded),
           ),
           BottomNavigationBarItem(
             // ignore: deprecated_member_use

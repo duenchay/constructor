@@ -390,7 +390,7 @@ class _PopularScreenState extends State<PopularScreen>
                     left: 29,
                     right: 29,
                     top: 68,
-                  ),
+                  ), 
                   child: Text(
                     "ช่างรับเหมาก่อสร้าง",
                     style: TextStyle(

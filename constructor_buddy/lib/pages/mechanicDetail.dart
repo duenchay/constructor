@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 
 // import 'models.dart';
 
-class Ppp extends StatelessWidget {
-  final Product product;
+class MechanicDetail extends StatelessWidget {
+  final Mechanic mechanic;
 
-  Ppp({this.product});
+  MechanicDetail({this.mechanic});
 
   bodyWidget(BuildContext context) => 
       Stack(
@@ -31,10 +31,10 @@ class Ppp extends StatelessWidget {
                   // style:
                   //   TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                   // ),
-                  Text("${product.product_name}"),
-                  Text("${product.product_type}"),
+                  Text("${mechanic.mechanic_fname}"),
+                  Text("${mechanic.mechanic_fname}"),
                   
-                  Text("รายละเอียด : ${product.product_detail}"),
+                  Text("รายละเอียด : ${mechanic.mechanic_fname}"),
                   //Text("จำนวนสินค้าที่มี"+ "${pokemon.nextEvolution}"),
                   // Text("${farmer.store}"),
                   // Text("จำนวนสินค้าที่ต้องการซื้อ", style: TextStyle(fontWeight: FontWeight.bold)),

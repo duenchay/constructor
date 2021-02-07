@@ -26,10 +26,17 @@ class Mechanic_TypeSerializer(serializers.HyperlinkedModelSerializer):
         model = Mechanic_Type
         fields = '__all__'
 
-class MechanicSerializer(serializers.HyperlinkedModelSerializer):
+class MechanicSerializer(serializers.ModelSerializer):
+    machanic_type = Mechanic_TypeSerializer(many=False, read_only=True)
+
     class Meta:
-        model = Mechanic
         fields = '__all__'
+        model = Mechanic
+
+# class MechanicSerializer(serializers.HyperlinkedModelSerializer):
+#     class Meta:
+#         model = Mechanic
+#         fields = '__all__'
 
 class StoreSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

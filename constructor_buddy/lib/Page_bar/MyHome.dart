@@ -1,11 +1,12 @@
 // import 'package:constructor_buddy/Page/type/categorries.dart';
 import 'package:constructor_buddy/Page_bar/Chat.dart';
+import 'package:constructor_buddy/pages/pp.dart';
 import 'package:constructor_buddy/src/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Ho extends StatelessWidget {
+class MyHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var width = MediaQuery.of(context).size.width;
@@ -20,12 +21,6 @@ class Ho extends StatelessWidget {
           //  backgroundColor: Colors.indigo[300],
            backgroundColor: Colors.deepPurple[200],
            centerTitle: true, 
-           
-          //  title: Text('วัสดุ 3ก.' , textAlign: TextAlign.center,style: GoogleFonts.montserrat(
-          //         color: Colors.black,
-          //         fontWeight: FontWeight.w400,
-          //         fontSize: 27,
-          //       ),),
            title: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -441,7 +436,65 @@ class Ho extends StatelessWidget {
               //     ),
               //   ],
               // ),
-              Container(
+               // วัสดุก่อสร้าง
+                Container(
+                  margin: EdgeInsets.only(
+                    left: 29,
+                    right: 29,
+                    top: 68,
+                  ),
+                  child: 
+                   Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                    "วัสดุก่อสร้าง",
+                    style: TextStyle(
+                      fontFamily: AppTheme.fontDisplay,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                      height: 1.4,
+                      color: AppTheme.black,
+                    ),
+                  ),
+                   Text(
+                    "See All",
+                    style: TextStyle(
+                      fontFamily: AppTheme.fontDisplay,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      height: 1.4,
+                      color: AppTheme.black,
+                    ),
+                  ),
+                    // Text(
+                    //   'See All',
+                    //   style: GoogleFonts.montserrat(
+                    //     fontWeight: FontWeight.w500,
+                    //     fontSize: 15,
+                    //   ),
+                    // ),
+                  ],
+                ),
+                ),
+              // Pps()
+
+            
+               
+
+
+
+
+
+
+
+
+
+
+
+             Container(
                   margin: EdgeInsets.only(
                     left: 10,
                     right: 29,

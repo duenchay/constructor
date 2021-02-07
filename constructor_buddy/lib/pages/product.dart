@@ -30,7 +30,7 @@ class _ProductsState extends State<Products> {
 
   List<Product> _products = <Product>[];
   // ignore: unused_field
-  List<Product_Type> _productTypes = <Product_Type>[];
+  // List<Product_Type> _productTypes = <Product_Type>[];
 
 
   @override
@@ -41,17 +41,17 @@ class _ProductsState extends State<Products> {
     // getProductType();
   }
 
-   void getProductType() async {
-    print('calling getProducts()');
-    // String url = 'https://constructor.pythonanywhere.com/api/Product/';
-    String url ='https://constructor.pythonanywhere.com/api/Product_Type/';
-    var response =
-        await http.get(url, headers: {'Content-Type': 'application/json'});
-        // await http.get(url1, headers: {'Content-Type': 'application/json'});
-    List<dynamic> result = json.decode(utf8.decode(response.bodyBytes));
-    _productTypes = result.map<Product_Type>((data) => Product_Type.fromMap(data)).toList();
-    setState(() {});
-  }
+  //  void getProductType() async {
+  //   print('calling getProducts()');
+  //   // String url = 'https://constructor.pythonanywhere.com/api/Product/';
+  //   String url ='https://constructor.pythonanywhere.com/api/Product_Type/';
+  //   var response =
+  //       await http.get(url, headers: {'Content-Type': 'application/json'});
+  //       // await http.get(url1, headers: {'Content-Type': 'application/json'});
+  //   List<dynamic> result = json.decode(utf8.decode(response.bodyBytes));
+  //   _productTypes = result.map<Product_Type>((data) => Product_Type.fromMap(data)).toList();
+  //   setState(() {});
+  // }
 
   void getProducts() async {
     print('calling getProducts()');
@@ -78,7 +78,8 @@ Widget build(BuildContext context) {
           : GridView.count(
               crossAxisCount: 2,
               children: _products
-                  .map((product) => Padding(
+                  .map((product) => 
+                  Padding(
                         padding: const EdgeInsets.all(2.0),
                         child: InkWell(
                           onTap: () {

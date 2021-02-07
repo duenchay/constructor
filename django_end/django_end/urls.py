@@ -25,6 +25,7 @@ urlpatterns = [
     path('deleteproduct/<int:id>', views.deleteproduct),
     # path('product_search/', views.product_search, name='product_search'),
     path('mechanic',views.mechanic),
+     path('editmechanic/<int:id>/', views.editmechanic),
     path('storck',views.storck),
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
