@@ -27,7 +27,7 @@ class Mechanic_TypeSerializer(serializers.HyperlinkedModelSerializer):
         fields = '__all__'
 
 class MechanicSerializer(serializers.ModelSerializer):
-    machanic_type = Mechanic_TypeSerializer(many=False, read_only=True)
+    mechanic_type = Mechanic_TypeSerializer(many=False, read_only=True)
 
     class Meta:
         fields = '__all__'
