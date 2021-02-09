@@ -33,55 +33,56 @@
       <div class="card mb-3">
           <div class="card-header">
               <i class="fas fa-table"></i>
-              รายการสั่งซื้อ
-              <!-- <a  class="btn btn-sm btn-success" href="/order" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a> -->
+              รายการสินค้า
+              <a  class="btn btn-sm btn-success" href="/orderproduct" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a>
           </div>
           <div class="card-body">
               <div class="table-responsive">
-                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" align="center" id="sortTable">
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" align="center" >
                       <thead>
                       <tr>
                         <th>id</th>
                         <th>วันที่สั่งซื้อ</th>
-                          <th>ชื่อผู้สั่ง</th>
-                          <th>ชื่อผู้รับออเดอร์</th>
+                          <th>ชื่อสินค้า</th>
                           <th>ราคา</th>
+                          <th>จำนวน</th>
+                          <!-- <th>ราคา</th> -->
                           
-                          <th>สถานะการชำระเงิน</th>
+                          <!-- <th>สถานะการชำระเงิน</th> -->
                           <!-- <th>รูปงานช่าง</th>
                           <th>ประเภทช่าง</th> -->
                           <!-- <th>Created At</th> -->
                           <!-- <th>แก้ไข</th>  -->
-                          <th>รายการสินค้า</th>
+                          <!-- <th>รายการสินค้า</th> -->
                       </tr>
                       </thead>
                       <tbody>
                         {% csrf_token %} 
-                      {% for i in orders %}
-                    
+                      {% for i in orderproducts %}
+                     
                           <tr>
                             <td>{{ i.id }}</td>
                             <!-- <td><img src="media/{{i.avatar}}" style="height: 75px;"></td> -->
-                              <td>{{ i.date }}</td>
-                              <td>{{ i.user }}</td>
-                              <td>{{ i.admin }}</td>
+                              <td>{{ i.order }}</td>
+                              <td>{{ i.product }}</td>
+                              <td>{{ i.amount }}</td>
+                              <td>{{ i.amount }}</td>
                               <!-- <td>{{ i.avatar }}</td> -->
                               
-                              <td>{{ i.all_price }}</td>
+                              <!-- <td>{{ i.all_price }}</td> -->
                               <!-- <td><img src="media/{{i.mechanic_img}}" style="height: 75px;"></td> -->
- 
-                              <td>{{ i.money_status }}</td>
+                              <!-- <td>{{ i.money_status }}</td> -->
                               <!-- <td>{{ i.created_at  |date:"d-m-Y H:i:s" }}</td> -->
-                              <td>                                   
-                                  <a class="btn btn-sm btn-primary" href="/orderproduct/{{i.id}}"> <span></span>รายการสินค้า</a>
+                              <!-- <td>                                   
+                                  <a class="btn btn-sm btn-primary" href="/oder/{{mechanic.id}}"> <span></span> รายการสินค้า</a>
                                   
-                              </td>
-                              <!-- <td><a class="btn btn-sm btn-primary" href="orderproduct/{{order.id}}"><span ></span> รายการสินค้า</a></td> -->
+                              </td>  -->
+                              <!-- <td><a class="btn btn-sm btn-primary" href="oderproduct/{{order.id}}"><span ></span> รายการสินค้า</a></td> -->
                           </tr>
                           
                       {% endfor %}
                       </tbody>
-                  </table><s></s>
+                  </table>
               </div>
           </div>
       </div>

@@ -12,10 +12,10 @@ class MechanicDetail extends StatelessWidget {
       Stack(
         children: <Widget>[
           Positioned(
-            height: MediaQuery.of(context).size.height / 1.5,
+            height: MediaQuery.of(context).size.height / 1.3,
             width: MediaQuery.of(context).size.width - 25,
             left: 10.0,
-            top: MediaQuery.of(context).size.height * 0.13,
+            top: MediaQuery.of(context).size.height * 0.05,
             child: Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(15.0),
@@ -24,17 +24,41 @@ class MechanicDetail extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   SizedBox(
-                    height: 100.0,
+                    height: 2.0,
                   ),
                   //Text(
                   //pokemon.name,
                   // style:
                   //   TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
                   // ),
+             
+            Hero(
+                tag: mechanic.avatar,
+                child: Container(
+                  height: 117.0,
+                  width: 190.0,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          // fit: BoxFit.cover, 
+                          image: NetworkImage(mechanic.avatar))),
+                )),
+                  // Text("${mechanic.avatar}"),
                   Text("${mechanic.mechanic_fname}"),
-                  Text("${mechanic.mechanic_fname}"),
+                  Text("รายละเอียด : ${mechanic.mechanic_lname}"),
+                   Text("รายละเอียด : ${mechanic.mechanic_phone}"),
+                     Text("รายละเอียด : ${mechanic.mechanic_email}"),
+                      Hero(
+                tag: mechanic.mechanic_img,
+                child: Container(
+                  height: 117.0,
+                  width: 190.0,
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          // fit: BoxFit.cover, 
+                          image: NetworkImage(mechanic.mechanic_img))),
+                )),
                   
-                  Text("รายละเอียด : ${mechanic.mechanic_fname}"),
+                  Text("รายละเอียด : ${mechanic.mechanic_detail}"),
                   //Text("จำนวนสินค้าที่มี"+ "${pokemon.nextEvolution}"),
                   // Text("${farmer.store}"),
                   // Text("จำนวนสินค้าที่ต้องการซื้อ", style: TextStyle(fontWeight: FontWeight.bold)),
@@ -89,8 +113,8 @@ class MechanicDetail extends StatelessWidget {
       backgroundColor: Colors.purple[50],
       appBar: AppBar(
         elevation: 0.0,
-        backgroundColor: Colors.orange,
-        // title: Text(farmer.farmerName),
+        backgroundColor: Colors.indigo[300],
+        title: Text(mechanic.mechanic_fname),
       ),
       body: bodyWidget(context),
     );

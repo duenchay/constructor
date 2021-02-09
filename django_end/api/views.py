@@ -78,14 +78,14 @@ def deleteproduct(req, id=0):
  
 def productpage(request):
     # list all users.
-    product = Product.objects.all()
+    products = Product.objects.all()
     page_number = request.GET.get('page', 1)
-    paginate_result = do_paginate(product, page_number)
+    paginate_result = do_paginate(products, page_number)
     product = paginate_result[0]
     paginator = paginate_result[1]
     base_url = '/api/product/?'
     return render(request, 'api/product.html',
-                      {'product': product, 'paginator' : paginator, 'base_url': base_url})
+                      {'products': products, 'paginator' : paginator, 'base_url': base_url})
 #ค้นหาสินค้า
 def product(request):
     product_name = request.POST.get('product_name', '').strip()
@@ -183,6 +183,84 @@ def editmechanic(request, id=0):
     })
 
 
+def order(request):
+    orders = Order.objects.all()
+    # sortid= Order.objects.order_by('id') 
+    
+    # context= {'sortedprice': sortid}
+   
+    # paginator = Paginator(orders_list, 100)
+    # page = request.GET.get('page')
+    # try:
+    #     orders = paginator.page(page)
+    # except PageNotAnInteger:
+    #     orders = paginator.page(1)
+    # except EmptyPage:
+    #     orders = paginator.page(paginator.num_pages)
+    return render(request, 'api/order.html', {'orders': orders})
+
+# def editmechanic(request, id=0):
+#     mechanic = Mechanic.objects.get(pk=id)
+#     mechanic_types = Mechanic_Type.objects.all()
+#     if request.method == 'POST':
+#         form = MechanicForm(request.POST, request.FILES, instance=mechanic)
+#         if form.is_valid():
+#             form.save()
+#         else:
+#             print("==== form.errors ====")
+#             print(form.errors)
+#     else:
+#         form = MechanicForm(mechanic)
+#     return render(request, 'api/editmechanic.html' ,{ 
+#         'form': form,
+#         'mechanic': mechanic,
+#         'mechanic_types' : mechanic_types,
+#     })
+
+
+def orderproduct(request,id=0):
+    # orders = Order.objects.all(pk=id)
+    orderproducts = Order_Product.objects.filter(pk=id)
+
+    return render(request, 'api/orderproduct.html', {'orderproducts': orderproducts})
+ 
+
+# def orderproduct(request, id=0):
+#     orders = Order.objects.all(pk=id)
+#     orderproducts = Order_Product.objects.all()
+#     products = Product.objects.all()
+#     if request.method == 'POST':
+#         form = Order_ProductForm(request.POST, request.FILES, instance=orderproducts)
+#         if form.is_valid():
+#             form.save()
+#         else:
+#             print("==== form.errors ====")
+#             print(form.errors)
+#     else:
+#         form = Order_ProductForm(orderproducts)
+#     return render(request, 'api/orderproduct.html' ,{ 
+#         'form': form,
+#         'orderproducts': orderproducts,
+#         'orders' : orders,
+#         'products' :products,
+#     })
+
+
+def payment(request):
+    payments = Payment.objects.all()
+    # sortid= Order.objects.payment_by('id') 
+    
+    # context= {'sortedprice': sortid}
+   
+    # paginator = Paginator(payments_list, 100)
+    # page = request.GET.get('page')
+    # try:
+    #     payments = paginator.page(page)
+    # except PageNotAnInteger:
+    #     payments = paginator.page(1)
+    # except EmptyPage:
+    #     payments = paginator.page(paginator.num_pages)
+    return render(request, 'api/payment.html', {'payments': payments})
 
 def storck(request):
     storcks = Storck.objects.all()

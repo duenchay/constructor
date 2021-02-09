@@ -75,6 +75,7 @@ class _MechanicsState extends State<Mechanics> {
       home: Scaffold(
         appBar: AppBar(
           title: Text('ช่างรับเหมาก่อสร้าง'),
+          backgroundColor: Colors.indigo[300],
         ),
         body: _mechanics.isEmpty
             ? Center(
@@ -91,8 +92,9 @@ class _MechanicsState extends State<Mechanics> {
                 backgroundColor: Colors.transparent,
               ),
                             title: Text(mechanic.mechanic_fname),
-                            subtitle: Text("${mechanic.mechanic_lname}"),
+                            subtitle: Text("${mechanic.mechanic_type}"),
                             // trailing: Icon(Icons.more_vert),
+                            
                             isThreeLine: true,
                             onTap: () {
                               Navigator.push(

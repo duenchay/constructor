@@ -28,6 +28,12 @@ class MechanicForm(forms.ModelForm):
         model = Mechanic
         fields = '__all__'
 
+
+class Order_ProductForm(forms.ModelForm):
+    class Meta:
+        model = Order_Product
+        fields = '__all__'
+
 class StorckForm(forms.ModelForm):
     class Meta:
         model = Storck

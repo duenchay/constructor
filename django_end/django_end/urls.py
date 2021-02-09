@@ -25,8 +25,11 @@ urlpatterns = [
     path('deleteproduct/<int:id>', views.deleteproduct),
     # path('product_search/', views.product_search, name='product_search'),
     path('mechanic',views.mechanic),
-     path('editmechanic/<int:id>/', views.editmechanic),
+    path('editmechanic/<int:id>/', views.editmechanic),
+    path('order',views.order),
+    path('orderproduct/<int:id>/',views.orderproduct),
     path('storck',views.storck),
+    path('payment',views.payment),  
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))
