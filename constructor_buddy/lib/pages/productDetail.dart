@@ -193,6 +193,16 @@ class ProductDetail extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 10),
+                       Text("${product.product_type}  ",
+                        style: TextStyle(
+                          fontFamily: AppTheme.fontDisplay,
+                          fontStyle: FontStyle.normal,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20,
+                          height: 1.18,
+                          color: AppTheme.black,
+                        ),
+                      ),
                       SizedBox(height: 20),
                       
                       Text("รายละเอียดสินค้า : ",

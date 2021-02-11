@@ -1,6 +1,6 @@
 import 'package:constructor_buddy/src/app_theme.dart';
 import 'package:constructor_buddy/src/bloc/home_bloc.dart';
-import 'package:constructor_buddy/src/home_item_model.dart';
+// import 'package:constructor_buddy/src/home_item_model.dart';
 import 'package:constructor_buddy/src/item_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; 

@@ -4,13 +4,13 @@ import 'package:constructor_buddy/model/model.dart';
 import 'package:constructor_buddy/pages/productDetail.dart';
 // import 'package:constructor_buddy/src/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+// import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 class Pps extends StatefulWidget {
-  final int id;
+  // final int id;
 
-  Pps(this.id);
+  // Pps(this.id);
 
   @override
   _PpsState createState() {
@@ -49,38 +49,38 @@ class _PpsState extends State<Pps> {
     return MaterialApp(
     home:Scaffold(
       backgroundColor: Colors.indigo[100],
-      appBar: AppBar(
-        title: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                  Image.asset(
-                 'assets/icons/repair-tools.png',
-                  fit: BoxFit.contain,
-                  height: 32,
-              ),
-              Container(
-                  padding: const EdgeInsets.all(8.0), 
-                  child: Text('วัสดุ 3ก.',style: GoogleFonts.montserrat(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 27,))),
+      // appBar: AppBar(
+      //   title: Row(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //             Image.asset(
+      //            'assets/icons/repair-tools.png',
+      //             fit: BoxFit.contain,
+      //             height: 32,
+      //         ),
+      //         Container(
+      //             padding: const EdgeInsets.all(8.0), 
+      //             child: Text('วัสดุ 3ก.',style: GoogleFonts.montserrat(
+      //             color: Colors.black,
+      //             fontWeight: FontWeight.w400,
+      //             fontSize: 27,))),
 
               
-            ],
+      //       ],
 
-          ),
-          //  flexibleSpace: FlexibleSpaceBar(
-          //         centerTitle: true,
-          //         title: Text("Contacts"),
-          //       ),
-        // title: Text("วัสดุก่อสร้าง"),
-        // subtitle: 
+      //     ),
+      //     //  flexibleSpace: FlexibleSpaceBar(
+      //     //         centerTitle: true,
+      //     //         title: Text("Contacts"),
+      //     //       ),
+      //   // title: Text("วัสดุก่อสร้าง"),
+      //   // subtitle: 
         
-        backgroundColor: Colors.indigo[300],
+      //   backgroundColor: Colors.indigo[300],
         
         
         
-      ),
+      // ),
       
          
          body: _products.isEmpty

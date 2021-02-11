@@ -1,7 +1,7 @@
 import 'dart:convert';
 // import 'package:constructor_buddy/Page_bar/Profile.dart';
 import 'package:constructor_buddy/model/model.dart';
-import 'package:constructor_buddy/pages/productDetail.dart';
+// import 'package:constructor_buddy/pages/productDetail.dart';
 import 'package:constructor_buddy/pages/mechanicDetail.dart';
 // import 'package:constructor_buddy/pages/detail.dart';
 // import 'package:constructor_buddy/pages/productdetail.dart';
@@ -68,15 +68,17 @@ class _MechanicsState extends State<Mechanics> {
     setState(() {});
   }
   Widget build(BuildContext context) {
-    print('update FarmerPage');
+    
     //print('${_products}');
     return MaterialApp(
-      title: 'First Example',
+      title: 'Constructor Buddy ',
       home: Scaffold(
+         backgroundColor: Colors.grey[50],
         appBar: AppBar(
           title: Text('ช่างรับเหมาก่อสร้าง'),
           backgroundColor: Colors.indigo[300],
         ),
+        
         body: _mechanics.isEmpty
             ? Center(
                 child: CircularProgressIndicator(),
@@ -91,7 +93,7 @@ class _MechanicsState extends State<Mechanics> {
                     NetworkImage("${mechanic.avatar}"),
                 backgroundColor: Colors.transparent,
               ),
-                            title: Text(mechanic.mechanic_fname),
+                            title: Text("${mechanic.mechanic_fname} ${mechanic.mechanic_lname}"),
                             subtitle: Text("${mechanic.mechanic_type}"),
                             // trailing: Icon(Icons.more_vert),
                             

@@ -116,6 +116,7 @@ Widget build(BuildContext context) {
                                     ),
                                   ),
                                    Text("${product.product_price} บาท "),
+                                  //  Text("${product.product_type}  "),
                                 ],
                                 ), 
                               color: Colors.indigo[200],

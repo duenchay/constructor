@@ -1,6 +1,10 @@
 // import 'package:constructor_buddy/Page/type/categorries.dart';
 import 'package:constructor_buddy/Page_bar/Chat.dart';
-import 'package:constructor_buddy/pages/pp.dart';
+import 'package:constructor_buddy/pages/setting.dart';
+// import 'package:constructor_buddy/model/model.dart';
+// import 'package:constructor_buddy/Page_bar/Ha.dart';
+// import 'package:constructor_buddy/pages/pp.dart';
+// import 'package:constructor_buddy/pages/product.dart';
 import 'package:constructor_buddy/src/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -437,52 +441,52 @@ class MyHome extends StatelessWidget {
               //   ],
               // ),
                // วัสดุก่อสร้าง
-                Container(
-                  margin: EdgeInsets.only(
-                    left: 29,
-                    right: 29,
-                    top: 68,
-                  ),
-                  child: 
-                   Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
-                    Text(
-                    "วัสดุก่อสร้าง",
-                    style: TextStyle(
-                      fontFamily: AppTheme.fontDisplay,
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                      height: 1.4,
-                      color: AppTheme.black,
-                    ),
-                  ),
-                   Text(
-                    "See All",
-                    style: TextStyle(
-                      fontFamily: AppTheme.fontDisplay,
-                      fontStyle: FontStyle.normal,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 15,
-                      height: 1.4,
-                      color: AppTheme.black,
-                    ),
-                  ),
-                    // Text(
-                    //   'See All',
-                    //   style: GoogleFonts.montserrat(
-                    //     fontWeight: FontWeight.w500,
-                    //     fontSize: 15,
-                    //   ),
-                    // ),
-                  ],
-                ),
-                ),
+                // Container(
+                //   margin: EdgeInsets.only(
+                //     left: 29,
+                //     right: 29,
+                //     top: 68,
+                //   ),
+                //   child: 
+                //    Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: <Widget>[
+                //     Text(
+                //     "วัสดุก่อสร้าง",
+                //     style: TextStyle(
+                //       fontFamily: AppTheme.fontDisplay,
+                //       fontStyle: FontStyle.normal,
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 20,
+                //       height: 1.4,
+                //       color: AppTheme.black,
+                //     ),
+                //   ),
+                //    Text(
+                //     "See All",
+                //     style: TextStyle(
+                //       fontFamily: AppTheme.fontDisplay,
+                //       fontStyle: FontStyle.normal,
+                //       fontWeight: FontWeight.bold,
+                //       fontSize: 15,
+                //       height: 1.4,
+                //       color: AppTheme.black,
+                //     ),
+                //   ),
+                //     // Text(
+                //     //   'See All',
+                //     //   style: GoogleFonts.montserrat(
+                //     //     fontWeight: FontWeight.w500,
+                //     //     fontSize: 15,
+                //     //   ),
+                //     // ),
+                //   ],
+                // ),
+                // ),
               // Pps()
-
-            
-               
+              // PopularFoodsWidget(),
+            // Pps(),
+              //  Products(1),
 
 
 

@@ -43,10 +43,10 @@ class MechanicDetail extends StatelessWidget {
                           image: NetworkImage(mechanic.avatar))),
                 )),
                   // Text("${mechanic.avatar}"),
-                  Text("${mechanic.mechanic_fname}"),
-                  Text("รายละเอียด : ${mechanic.mechanic_lname}"),
-                   Text("รายละเอียด : ${mechanic.mechanic_phone}"),
-                     Text("รายละเอียด : ${mechanic.mechanic_email}"),
+                  Text("ชื่อ : ${mechanic.mechanic_fname} ${mechanic.mechanic_lname}"),
+                  // Text("รายละเอียด : ${mechanic.mechanic_lname}"),
+                   Text("เบอร์โทรศัพท์ : ${mechanic.mechanic_phone}"),
+                     Text("อีเมล : ${mechanic.mechanic_email}"),
                       Hero(
                 tag: mechanic.mechanic_img,
                 child: Container(
@@ -114,7 +114,7 @@ class MechanicDetail extends StatelessWidget {
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.indigo[300],
-        title: Text(mechanic.mechanic_fname),
+        title: Text("${mechanic.mechanic_fname} ${mechanic.mechanic_lname}"),
       ),
       body: bodyWidget(context),
     );

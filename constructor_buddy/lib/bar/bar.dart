@@ -1,12 +1,22 @@
 
+// import 'package:constructor_buddy/Page_bar/Ha.dart';
 import 'package:constructor_buddy/Page_bar/MyHome.dart';
+import 'package:constructor_buddy/Page_bar/Profile.dart';
+// import 'package:constructor_buddy/Page_bar/Profile.dart';
+// import 'package:constructor_buddy/pages/kkkk.dart';
 import 'package:constructor_buddy/pages/mechanic.dart';
-import 'package:constructor_buddy/pages/mechanicDetail.dart';
-import 'package:constructor_buddy/pages/pp.dart';
+import 'package:constructor_buddy/pages/order.dart';
+import 'package:constructor_buddy/pages/ppp.dart';
+// import 'package:constructor_buddy/pages/mechanicDetail.dart';
+// import 'package:constructor_buddy/pages/pp.dart';
 import 'package:constructor_buddy/pages/product.dart';
-import 'package:constructor_buddy/pages/pros.dart';
-import 'package:constructor_buddy/pages/test.dart';
-import 'package:constructor_buddy/src/popular_screen.dart';
+import 'package:constructor_buddy/pages/profilemechanic.dart';
+import 'package:constructor_buddy/pages/setting.dart';
+// import 'package:constructor_buddy/pages/text.dart';
+// import 'package:constructor_buddy/pages/text1.dart';
+// import 'package:constructor_buddy/pages/pros.dart';
+// import 'package:constructor_buddy/pages/test.dart';
+// import 'package:constructor_buddy/src/popular_screen.dart';
 
 import 'package:flutter/material.dart';
 
@@ -23,17 +33,26 @@ class _BarNavyState extends State<BarNavy> {
   [
 
      MyHome(),
-    Test(),
-    Pps(1),
+    //  PopularFoodsWidget(),
+
+    // Test(),
+    // Pps(1),
     // SearchScreen()
     // Ho(),
     Products(1),
-    HomePage(),
+    // HomePage(),
     Mechanics(1),
+    // Profile(),
+    // SettingsScreen(),
+    // Profile(),
+    // GridViewDemo(),
+    Ppp(1),
+    // HomePagee()
+    Orders()
 
     
 
-  ];
+  ]; 
   PageController _pageController;
   void onTappedBar(int index){
     setState(() {
@@ -69,7 +88,12 @@ class _BarNavyState extends State<BarNavy> {
         unselectedItemColor: Colors.black54,
         onTap: onTappedBar,
         items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
+          // BottomNavigationBarItem(
+          //   // ignore: deprecated_member_use
+          //   title: Text('Home'),
+          //   icon: Icon(Icons.home)
+          // ),
+           BottomNavigationBarItem(
             // ignore: deprecated_member_use
             title: Text('Home'),
             icon: Icon(Icons.home)
@@ -94,11 +118,11 @@ class _BarNavyState extends State<BarNavy> {
             title: Text('Me'),
             icon: Icon(Icons.account_circle_rounded),
           ),
-          BottomNavigationBarItem(
-            // ignore: deprecated_member_use
-            title: Text('Me'),
-            icon: Icon(Icons.account_circle_rounded),
-          ),
+          // BottomNavigationBarItem(
+          //   // ignore: deprecated_member_use
+          //   title: Text('Me'),
+          //   icon: Icon(Icons.account_circle_rounded),
+          // ),
           
         ],
       ),

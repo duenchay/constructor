@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 // import '../navbar.dart';
 
 class SettingsScreen extends StatefulWidget {
-  // static const String id = 'settings_screen';
+  static const String id = 'settings_screen';
 
   @override
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // final formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
 
   // Map data = {'name': String, 'email': String, 'age': int};
 
@@ -24,7 +24,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Container(
         padding: EdgeInsets.symmetric(vertical: 20, horizontal: 30),
         child: Form(
-          // key: formKey,
+          key: formKey,
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,12 +41,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   decoration: InputDecoration(labelText: 'Age'),
                   // onSaved: (input) => data['age'] = input,
                 ),
-                // FlatButton(
-                //   onPressed: () => formKey.currentState.save(),
-                //   child: Text('Submit'),
-                //   color: Colors.blue,
-                //   textColor: Colors.white,
-                // )
+                FlatButton(
+                  onPressed: () => formKey.currentState.save(),
+                  child: Text('Submit'),
+                  color: Colors.blue,
+                  textColor: Colors.white,
+                )
               ]),
         ),
       )),
