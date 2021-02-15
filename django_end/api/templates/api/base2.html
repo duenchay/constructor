@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   {% load static %}
+
 <head>
   
   <meta charset="UTF-8">
@@ -38,10 +39,10 @@
               
               <li class="nav-item active"><a class="nav-link" href="/index">หน้าแรก</a></li>
               <li class="nav-item submenu dropdown">
-                <a href="/product_type" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <a href=" " class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                   aria-expanded="false">วัสดุก่อสร้าง</a>
                 <ul class="dropdown-menu">
-                  <li class="nav-item"><a class="nav-link" href="checkout.html">ทั้งหมด</a></li>
+                  <li class="nav-item"><a class="nav-link" href="/showProductAll">ทั้งหมด</a></li>
                   {% if product_type  %}
 			{% for cat in product_type %}
      
@@ -56,8 +57,16 @@
                 </ul>
 			</li>
             <li class="nav-item"><a class="nav-link" href="/mechanicUser">ช่างรับเหมาก่อสร้าง</a></li>
-              <!-- <li class="nav-item active"><a class="nav-link" href="index.html">ช่างก่อสร้าง</a></li> -->
-            
+              <li class="nav-item "><a class="nav-link" href="/storeUser">contact</a></li>
+              
+              <form class="form-inline my-2 my-lg-0" action="/search">
+                <div class="input-group">
+                <input name="q" type="text" class="form-control" placeholder="search" />
+                <div class="input-group-append">
+                  <button class="btn btn-dark" type="submit" id="button-addon2">Search</button>
+                </div>
+              </div>
+              </form>
 <!-- 
            <li class="nav-item submenu dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -114,8 +123,8 @@
                 </ul>
 			   	</li>
               
-              <!-- <li class="nav-item"><button  href="/cart"><i class="ti-search" href="/cart"></i></button></li>
-              <li class="nav-item"><button><i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span></button> </li>
+              <!-- <li class="nav-item"><button  href="/cart"><i class="ti-search" href="/cart"></i></button></li> -->
+              <!-- <li class="nav-item"><button><i class="ti-shopping-cart"></i><span class="nav-shop__circle">3</span></button> </li>
               <li class="nav-item"><a class="button button-header" href="#">Buy Now</a></li> -->
 
           

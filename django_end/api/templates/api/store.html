@@ -28,7 +28,8 @@
           <div class="card-header">
               <i class="fas fa-table"></i>
               ข้อมูลร้าน
-              <a  class="btn btn-sm btn-warning" href="/editstore/{{store.id}}"" style="padding: 8px; float: right;  color: white;" > <span class="fa fa-edit"></span> Edit</a>
+              <a  class="btn btn-sm btn-warning" href="/editstore/{{store.id}}" style="padding: 8px; float: right;  color: white;" > <span class="fa fa-edit"></span> Edit</a>
+              <a  class="btn btn-sm btn-primary" href="/addstore" style="padding: 8px; float: right;  color: white;" > add</a>
           </div>
           <div class="card-body">
             <form class="form-horizontal" action="/store" method="POST"  enctype="multipart/form-data">
@@ -38,6 +39,7 @@
                       <div class="col-md-12">
                           <div class="form-label-group">
                            <br>
+                           
                            <center> <img src="media/{{store.store_img}}" width="500" height="360"> </center> <br>
                            <center><label for="stores"><b>ชื่อร้าน : </b>{{store.store_name}}</label> </center> 
                            <center><label for="stores"><b>เบอร์โทรศัพท์ : </b>{{store.store_phone}}</label> </center> 

@@ -49,7 +49,11 @@ urlpatterns = [
     path('test',views.test),
     path('cart',views.cart),
     path('profileAdmin',views.profileAdmin),
-
+    path('search',views.search,name='search'),
+    path('addstore',views.addstore,name='addstore'),
+    path('showProductAll',views.showProductAll,name='showProductAll'),
+    
+  
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))

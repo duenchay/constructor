@@ -18,6 +18,39 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.hashers import make_password
 
+def showProductAll(request):
+    product_type=Product_Type.objects.all()
+    product=Product.objects.all()
+    return render(request,'api/showProductAll.html',{
+
+        'product_type':product_type,
+		'product':product,
+})
+
+def addstore(request):
+    adminn = Adminn.objects.get(username=request.user.username)
+    if request.method == 'POST':
+        form = StoreForm(request.POST ,request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('/addstore')
+    else:
+        form = StoreForm()
+    return render(request, 'api/addstore.html',
+                  {
+                      'form': form,
+                    #   'product_types': Product_Type.objects.all(),
+                    #   'product_statuss': Product_Status.objects.all(),
+                      'adminn':adminn
+
+                  })
+
+
+# Search
+def search(request):
+	q=request.GET['q']
+	data=Product.objects.filter(product_name__icontains=q).order_by('id')
+	return render(request,'api/search.html',{'data':data})
 
 def profileAdmin(req):
     adminn = Adminn.objects.get(username=req.user.username)
@@ -52,6 +85,7 @@ def logout(req):
 #     return render(req, 'api/register.html') 
 
 
+
 def login(req):
     if req.method == 'POST':
         print(req.POST)
@@ -62,7 +96,7 @@ def login(req):
             auth_login(req, adminn)
             return redirect('/')
     else:
-        print('เขายังไม่ได้กรอก login/password (ครั้งแรกที่เข้าหน้านี้)')
+        print('ยังไม่ได้กรอก login/password')
     return render(req, 'api/login.html')
 
 def register(req):
@@ -106,28 +140,18 @@ def productUser(req,id=0):
 
     })
 
-# def productTypeUser(request,id=0):
-# 	product_type=Product_Type.objects.get(pk=id)
-#     # adminn = Adminn.objects.get(username=request.user.username)
-# 	product=Product.objects.filter(product_type=product_type).order_by('id')
-#     # adminn = Adminn.objects.get(username=request.user.username)
-# 	return render(request,'api/productTypeUser.html',{
-            
-# 			'product':product,
-#             'product_type' :product,
-#             # 'adminn' : adminn
 
-# 			})
 
 def productTypeUser(request,id=0):
-    product_type=Product_Type.objects.get(pk=id)
-    # product_type=Product_Type.objects.all()
+    type=Product_Type.objects.get(pk=id)
+    product_type=Product_Type.objects.all()
     # adminn = Adminn.objects.get(username=request.user.username)
-    product=Product.objects.filter(product_type=product_type).order_by('id')
+    product=Product.objects.filter(product_type=type).order_by('id')
     # mechanic= Mechanic.objects.all()
     return render(request,'api/productTypeUser.html',{
         'product':product,
-        'product_type' :product,
+        # 'product_type' :product,
+        'product_type':product_type
         # 'adminn' :adminn
         })
 
@@ -143,11 +167,16 @@ def test(req):
     return render(req, 'api/test.html')
 def index(req):
     # adminn = Adminn.objects.get(username=req.user.username)
+    # product=Banner.objects.all().order_by('-id')
+    # data=Product.objects.filter()
     product_type=Product_Type.objects.all()
     return render(req, 'api/index.html',{
         #  'adminn': adminn(req),
+        #  'data':data,
          'product_type' :product_type
     })
+
+
 def home2(req):
     return render(req, 'api/home2.html')
 def mechanicUser(req):
@@ -363,15 +392,16 @@ def do_paginate(data_list, page_number):
 
 # ข้อมูลร้าน
 def store(req):
-    store = Store.objects.all() 
-    # adminn = Adminn.objects.get(username=req.user.username)
+    store = Store.objects.get() 
+    adminn = Adminn.objects.get(username=req.user.username)
     return render(req, 'api/store.html', {
         'store': store,
-        # 'adminn' : adminn
+        'adminn' : adminn
     })
 # แก้ไขข้อมูลร้าน
 def editstore(request, id=0):
     store = Store.objects.get(pk=id)
+    adminn = Adminn.objects.get(username=request.user.username)
     if request.method == 'POST':
         form = StoreForm(request.POST, request.FILES, instance=store)
         if form.is_valid():
@@ -384,6 +414,7 @@ def editstore(request, id=0):
     return render(request, 'api/editstore.html' ,{ 
         'form': form,
         'store': store,
+        'adminn' : adminn
     })
 #ข้อมูลช่าง
 def mechanic(request):

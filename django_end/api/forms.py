@@ -47,3 +47,8 @@ class AdminnForm(forms.ModelForm):
         model = Adminn 
         fields = [ 'first_name' ,'last_name', 'email', 'avatar','username','password', ]
     
+
+class StoreForm(forms.ModelForm):
+    class Meta:
+        model = Store
+        fields = '__all__'
