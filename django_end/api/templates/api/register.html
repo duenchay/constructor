@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+<head>   
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700">
@@ -11,7 +11,7 @@
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
 <style>
-body {
+body { 
 	color: #fff;
 	background: #4c535d;
 	font-family: 'Roboto', sans-serif;
@@ -81,28 +81,41 @@ body {
 </head>
 <body>
 <div class="signup-form">
-    <form action="/examples/actions/confirmation.php" method="post">
+    <form action="/register/" enctype="multipart/form-data" method="post">
+		{% csrf_token %}
+		 
 		<h2>Register</h2>
-		<p>It's free and only takes a minute.</p>
-		<hr>
+		<br>
+			<div class="form-group">
+				<label for="exampleInputFile">เลือกรูปโปร์ไฟล์</label>
+				  <!-- <img src="/media/{{adminn.avatar}}" class="img-rounded"  width="120" height="80" > -->
+				  <input type="file" class="form-control-file" id="exampleInputFile" name="avatar" aria-describedby="fileHelp">
+			  </div>
+		<!-- <hr> -->
         <div class="form-group">
-        	<input type="text" class="form-control" name="username" placeholder="Username" required="required">
+        	<input type="text" class="form-control" name="username"  placeholder="Username" required="required">
         </div>
         <div class="form-group">
-        	<input type="email" class="form-control" name="email" placeholder="Email Address" required="required">
+        	<input type="email" class="form-control" name="email"  placeholder="Email Address" required="required">
         </div>
 		<div class="form-group">
-            <input type="password" class="form-control" name="password" placeholder="Password" required="required">
+            <input type="password" class="form-control" name="password"  placeholder="Password" required="required">
         </div>
 		<div class="form-group">
+        	<input type="text" class="form-control" name="first_name"  placeholder="ชื่อ" required="required">
+        </div>
+		<div class="form-group">
+        	<input type="text" class="form-control" name="last_name"  placeholder="นามสกุล" required="required">
+        </div>
+		<!-- <div class="form-group">
             <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
-        </div>
+        </div> -->
 		<div class="form-group">
             <button type="submit" class="btn btn-primary btn-block btn-lg">Register</button>
         </div>
 		<p class="small text-center">By clicking the Sign Up button, you agree to our <br><a href="#">Terms &amp; Conditions</a>, and <a href="#">Privacy Policy</a>.</p>
     </form>
-	<div class="text-center">Already have an account? <a href="#">Login</a></div>
+	<div class="text-center">Already have an account? <a href="/login">Login</a></div>
 </div>
 </body>
-</html>
+</html>  

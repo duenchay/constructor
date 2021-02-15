@@ -38,3 +38,12 @@ class StorckForm(forms.ModelForm):
     class Meta:
         model = Storck
         fields = '__all__'
+
+
+
+class AdminnForm(forms.ModelForm):
+
+    class Meta:
+        model = Adminn 
+        fields = [ 'first_name' ,'last_name', 'email', 'avatar','username','password', ]
+    

@@ -1,8 +1,29 @@
-# from typing import AbstractSet
-from re import T
+
 from django.contrib.admin.sites import DefaultAdminSite
 from django.db import models
 from django.db.models.deletion import CASCADE
+from django.contrib.auth.models import AbstractUser
+ 
+from django.shortcuts import reverse
+class Adminn(AbstractUser): 
+    # pass
+    # admin = models.AutoField(primary_key=True)
+    # user= models.ForeignKey(User,on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อ')
+    last_name = models.CharField(max_length=100,default=' ',verbose_name = 'นามสกุล')
+    email = models.CharField(max_length=50,default=' ',verbose_name = 'อีเมล')
+    avatar = models.ImageField(upload_to='images/adminn/', default='images/adminn/no-img.png' ,verbose_name = 'รูปโปรไฟล์')
+    # username = models.CharField(max_length=100,default=' ')
+    password = models.CharField(max_length=500,default=' ')
+    # USERNAME_FIELD = "username"
+    def __str__(self):
+        return f'{self.username} '
+
+    # def name(self):
+    #     return self.username    
+   
+    class Meta:
+        verbose_name = 'แอดมิน2' 
 
 
 class Role(models.Model):
@@ -121,14 +142,30 @@ class Product(models.Model):
     product_type = models.ForeignKey(Product_Type,on_delete=models.CASCADE,verbose_name = 'หมวดหมู่สินค้า') #หมวดหมู่สินค้า
     product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า')  #สถานะสินค้า
     product_amount = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
+    slug = models.SlugField()
     def __str__(self):
         return f'{self.product_name}  '
     class Meta:
         verbose_name = 'สินค้า'
 
+    def get_absolute_url(self):
+        return reverse("core:product", kwargs={
+            'slug': self.slug
+        })
+    #เพิ่มสินค้าเข้าตะกร้า
+    def get_add_to_cart_url(self):
+        return reverse("core:add-to-cart", kwargs={
+            'slug': self.slug
+        })
+
+    def get_remove_from_cart_url(self):
+        return reverse("core:remove-from-cart", kwargs={
+            'slug': self.slug
+        }) 
+
 #สถานะการชำระเงิน
 class Money_Status(models.Model):
-    money_status =  models.CharField(max_length=100,default=' ',verbose_name = 'สถานะการรชำระเงิน') 
+    money_status =  models.CharField(max_length=100,default=' ',verbose_name = 'สถานะการชำระเงิน') 
     def __str__(self):
         return f'{self.money_status} '
     class Meta:
@@ -138,7 +175,7 @@ class Money_Status(models.Model):
 #ตัวเลือกการจัดส่ง
 
 class Delivery_Options (models.Model):
-    delivery_options =  models.CharField(max_length=100,verbose_name = 'ตัวเลือกการจัดส่ง') 
+    delivery_options =  models.CharField(max_length=1000,verbose_name = 'ตัวเลือกการจัดส่ง') 
     def __str__(self):
         return f'{self.delivery_options} '
     class Meta:
