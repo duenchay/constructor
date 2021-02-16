@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>3ก.วัสดุ</title>
-  <link rel="short icon" href="{%static 'api/img/drawing.png'%}" >
+  <link rel="short icon" href="{%static 'api/img/drawing.png'%}">
 	<!-- <link rel="icon" href="{% static 'api/img/drawing.png'%}" type="image/png"> -->
   <link rel="stylesheet" href="{% static 'api/fend/vendors/bootstrap/bootstrap.min.css'%}">
   <link rel="stylesheet" href="{% static 'api/fend/vendors/fontawesome/css/all.min.css'%}">
@@ -18,23 +18,65 @@
   <link rel="stylesheet" href="{% static 'api/fend/vendors/owl-carousel/owl.carousel.min.css'%}">
 
   <link rel="stylesheet" href="{% static 'api/fend/css/style.css'%}">
+  <style> 
+		/* Set the border color */ 
+		
+		.custom-toggler.navbar-toggler { 
+			border-color: lightgreen; 
+		} 
+		/* Setting the stroke to green using rgb values (0, 128, 0) */ 
+		
+		.custom-toggler .navbar-toggler-icon { 
+			background-image: url( 
+"data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 128, 0, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E"); 
+		} 
+	</style> 
 </head>
+<style>
 
+fa-1x {
+font-size: 1.5rem;
+}
+.navbar-toggler.toggler-example {
+cursor: pointer;
+}
+.dark-blue-text {
+color: #0A38F5;
+}
+.dark-pink-text {
+color: #AC003A;
+}
+.dark-amber-text {
+color: #ff6f00;
+}
+.dark-teal-text {
+color: #004d40;
+}
+</style>
 <body>
-  
+   
   <!--================ Start Header Menu Area =================-->
 	<header class="header_area">
     <div class="main_menu">
       <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container">
           <a class="navbar-brand logo_h" href="/index"><img src="{% static 'api/img/drawing.png'%}" alt=""></a>
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+         
+         
+          <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon-bar"></span> 
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
-          </button>
-          <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+          </button> -->
+          <button class="navbar-toggler ml-auto custom-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#nav3"> 
+        <span class="navbar-toggler-icon"></span> 
+      </button> 
+        <div class="collapse navbar-collapse" id="nav3">
+          <!-- <div class="collapse navbar-collapse offset" id="navbarSupportedContent"> -->
             <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
               
               
@@ -137,7 +179,6 @@
 
             
 
-
             
           </div>
         </div>
@@ -157,6 +198,13 @@
   <script src="{% static 'api/fend/vendors/jquery.ajaxchimp.min.js'%}"></script>
   <script src="{% static 'api/fend/vendors/mail-script.js'%}"></script>
   <script src="{% static 'api/fend/js/main.js'%}"></script>
+
+	<script src= 
+"https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"> 
+</script> 
+	<script src= 
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"> 
+</script> 
   
 </body>
 </html>
