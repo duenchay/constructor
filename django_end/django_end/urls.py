@@ -20,8 +20,9 @@ urlpatterns = [
     path('register/',views.register), 
     path('logout/',views.logout),     
     path('editstore/<int:id>/', views.editstore), 
+    # path('editstore', views.editstore), 
     path('store',views.store),
-    path('tables',views.tables),
+   
     path('product/',views.product),
     path('addproduct',views.addproduct),
     # path('editproduct',views.editproduct),
@@ -35,8 +36,8 @@ urlpatterns = [
     path('storck',views.storck),
     path('payment',views.payment),  
 
-    path('home2',views.home2),  
-    path('home',views.home), 
+    # path('home2',views.home2),  
+    # path('home',views.home), 
     path('base2',views.base2), 
     path('orderUser',views.orderUser), 
     path('mechanicDetailUser/<int:id>/',views.mechanicDetailUser),   

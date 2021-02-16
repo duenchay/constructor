@@ -41,10 +41,10 @@ class StorckForm(forms.ModelForm):
 
 
 
-class AdminnForm(forms.ModelForm):
+class UsersForm(forms.ModelForm):
 
     class Meta:
-        model = Adminn 
+        model = Users 
         fields = [ 'first_name' ,'last_name', 'email', 'avatar','username','password', ]
     
 

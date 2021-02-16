@@ -139,4 +139,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # # MEDIA_URL = '/media/'
 # # STATIC_ROOT = '/home/constructor/django_end/static'
 STATIC_URL = '/static/' 
-AUTH_USER_MODEL = 'api.Adminn'
+AUTH_USER_MODEL = 'api.Users'

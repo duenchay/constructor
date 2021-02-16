@@ -18,17 +18,20 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.hashers import make_password
 
+
+
+#หน้าแสดงสินค้าทั้งหมด
 def showProductAll(request):
-    product_type=Product_Type.objects.all()
+    product_type=Product_Type.objects.all() # แสดงประเภทช่างบน tap
     product=Product.objects.all()
     return render(request,'api/showProductAll.html',{
-
         'product_type':product_type,
 		'product':product,
 })
 
+#เพิ่มข้อมูลร้าน
 def addstore(request):
-    adminn = Adminn.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
     if request.method == 'POST':
         form = StoreForm(request.POST ,request.FILES)
         if form.is_valid():
@@ -36,27 +39,26 @@ def addstore(request):
             return redirect('/addstore')
     else:
         form = StoreForm()
-    return render(request, 'api/addstore.html',
-                  {
+    return render(request, 'api/addstore.html',{
                       'form': form,
-                    #   'product_types': Product_Type.objects.all(),
-                    #   'product_statuss': Product_Status.objects.all(),
-                      'adminn':adminn
-
-                  })
+                      'users':users
+ })
 
 
-# Search
+# Searchสินค้า
 def search(request):
 	q=request.GET['q']
 	data=Product.objects.filter(product_name__icontains=q).order_by('id')
-	return render(request,'api/search.html',{'data':data})
+	return render(request,'api/search.html',{
+        'data':data
+        })
 
+#หน้าโปรไฟล์
 def profileAdmin(req):
-    adminn = Adminn.objects.get(username=req.user.username)
+    users = Users.objects.get(username=req.user.username)
     product_type=Product_Type.objects.all()
     return render(req, 'api/profileAdmin.html', {
-        'adminn': adminn,
+        'users': users,
         'product_type':product_type
        
     })
@@ -68,9 +70,9 @@ def cart(req):
       
     })
 def profile(req):
-    adminn = Adminn.objects.get(username=req.user.username)
+    users = Users.objects.get(username=req.user.username)
     return render(req, 'api/profile.html', {
-        'adminn': adminn,
+        'users': users,
        
     })
 
@@ -78,22 +80,15 @@ def logout(req):
     # if req.adminn.is_/authenticated:
     auth_logout(req)
     return redirect('/')
-# def login(req):
-#     return render(req, 'api/login.html')
- 
-# def register(req):
-#     return render(req, 'api/register.html') 
-
-
 
 def login(req):
     if req.method == 'POST':
         print(req.POST)
-        adminn = authenticate(username=req.POST['username'], password=req.POST['password'])
-        print(adminn)
-        if adminn is not None:
-            print(adminn)
-            auth_login(req, adminn)
+        users = authenticate(username=req.POST['username'], password=req.POST['password'])
+        print(users)
+        if users is not None:
+            print(users)
+            auth_login(req, users)
             return redirect('/')
     else:
         print('ยังไม่ได้กรอก login/password')
@@ -101,11 +96,10 @@ def login(req):
 
 def register(req):
     print('register()')
-    form = AdminnForm()
+    form = Users()
     print(req)
-
     if req.method == 'POST':
-        form = AdminnForm(req.POST, req.FILES)
+        form = Users(req.POST, req.FILES)
         print("req.POST")
         print(req.POST)
         if form.is_valid():
@@ -115,24 +109,15 @@ def register(req):
         else:
             print("==== form.errors ====")
             print(form.errors)
-    # admin = form.instance 
-    # dob = f'{member.dob.month:02}/{member.dob.day:02}/{member.dob.year}' #str(member.dob).replace("/","-")
     return render(req, 'api/register.html', { 
         'form': form,
        
         })
 
-
-
-  
-
-
+# รายละเอียดสินค้า
 def productUser(req,id=0):
-    # orderproducts = Order_Product.objects.filter(pk=id)
     product=Product.objects.get(pk=id)
     product_type=Product_Type.objects.all()
-    # adminn = Adminn.objects.get(username=req.user.username)
-    # mechanic= Mechanic.objects.get(pk=id)
     return render(req, 'api/productUser.html',{
         'product' :product,
         'product_type':product_type,
@@ -140,8 +125,7 @@ def productUser(req,id=0):
 
     })
 
-
-
+# หน้าสินค้าแต่ละหมวดหมู่
 def productTypeUser(request,id=0):
     type=Product_Type.objects.get(pk=id)
     product_type=Product_Type.objects.all()
@@ -154,7 +138,7 @@ def productTypeUser(request,id=0):
         'product_type':product_type
         # 'adminn' :adminn
         })
-
+# หน้าาเทสสสสสสสสสสสสหมวดหมู่
 def product_type(request):
     product_type=Product_Type.objects.all().order_by('id')
     # adminn = Adminn.objects.get(username=request.user.username)
@@ -163,22 +147,18 @@ def product_type(request):
         'product_type':product_type,
         # 'adminn' :adminn
         })
+
 def test(req):
     return render(req, 'api/test.html')
+
+# หน้าแรก
 def index(req):
-    # adminn = Adminn.objects.get(username=req.user.username)
-    # product=Banner.objects.all().order_by('-id')
-    # data=Product.objects.filter()
     product_type=Product_Type.objects.all()
     return render(req, 'api/index.html',{
-        #  'adminn': adminn(req),
-        #  'data':data,
          'product_type' :product_type
     })
 
-
-def home2(req):
-    return render(req, 'api/home2.html')
+# หน้ารวมช่าง
 def mechanicUser(req):
     mechanic= Mechanic.objects.all()
     product_type=Product_Type.objects.all()
@@ -187,11 +167,10 @@ def mechanicUser(req):
         'mechanic' :mechanic ,
         'product_type':product_type,
         # 'adminn': adminn
-
     })
 
+# หน้ารายละเอียดช่าง
 def mechanicDetailUser(req,id=0):
-    # orderproducts = Order_Product.objects.filter(pk=id)
     product_type=Product_Type.objects.all()
     mechanic= Mechanic.objects.get(pk=id)
     # adminn = Adminn.objects.get(username=req.user.username)
@@ -199,88 +178,33 @@ def mechanicDetailUser(req,id=0):
         'mechanic' :mechanic,
         'product_type':product_type,
         # 'adminn' :adminn
-
     })
+
 def base2(req):
     return render(req, 'api/base2.html')
+
 def register1(req):
     return render(req, 'api/register1.html')
-def home(req):
-    product = Product.objects.all()
-    return render(req, 'api/home.html', {
-        'product' :product
-    })
 
+# หน้าข้อมูลร้าน
 def storeUser(req):
+    product_type=Product_Type.objects.all()
     store = Store.objects.get()
     return render(req, 'api/storeUser.html', {
-        'store' :store
+        'store' :store,
+        'product_type' :product_type
     })
+# หมวดหมู่สินค้าบนแทป
 def producttype(req):
     producttype = Product_Type.objects.get()
     return render(req, 'api/base1.html', {
         'producttype' :producttype
     })
-# def store(req):
-#     store = Store.objects.get() 
-#     return render(req, 'api/store.html', {
-#         'store': store,
-#     })
-# def index0(req):
-#     mechanics = Mechanic.objects.get()
-#     return render(req, 'api/index0.html',{
-#         'mechanics' :mechanics
-#     })
-# def mechanic(request):
-#     mechanics = Mechanic.objects.all()
-#     # paginator = Paginator(mechanics_list, 100)
-#     # page = request.GET.get('page')
-#     # try:
-#     #     mechanics = paginator.page(page)
-#     # except PageNotAnInteger:
-#     #     mechanics = paginator.page(1)
-#     # except EmptyPage:
-#     #     mechanics = paginator.page(paginator.num_pages)
-#     return render(request, 'api/mechanic.html', {'mechanics': mechanics})
-
-# def index0(req, id=-1):
-#     type = Product_Type.objects.get(pk=id)
-#     products= Product.objects.all()
-#     result = [] 
-#     for product in products:
-#         if product.typee == type:
-#             result
-#             result.append(product)
-#     return render(req, 'api/user/index0.html',{
-#         'products' :result,
-
-#     }
-#     )
-# def clothe_cat(req, cid=-1):
-#     # print(f'cid = {cid}')
-#     cat = Category.objects.get(pk=cid)
-#     cloths = Cloth.objects.all()
-#     result = [] 
-#     for cloth in cloths:
-#         if cloth.category == cat:
-#             result.append(cloth)
-#     return render(req, 'lookinggreat/clothe.html', { 
-#         'cloths': result,
-#         'has_store': has_store(req),
-#     })
-
-def tables(req):
-    return render(req, 'api/tables.html')
-
-# def login(req):
-#     return render(req, 'api/login.html')
 
 
-# def register(req):
-#     return render(req, 'api/register.html')
 # เพิ่มสินค้า
 def addproduct(request):
-    adminn = Adminn.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
     if request.method == 'POST':
         form = ProductForm(request.POST ,request.FILES)
         if form.is_valid():
@@ -293,7 +217,7 @@ def addproduct(request):
                       'form': form,
                       'product_types': Product_Type.objects.all(),
                       'product_statuss': Product_Status.objects.all(),
-                      'adminn':adminn
+                      'users':users
 
                   }) 
 # แก้ไขสินค้า
@@ -301,7 +225,7 @@ def editproduct(request, id=0):
     product = Product.objects.get(pk=id)
     product_types = Product_Type.objects.all()
     product_statuss = Product_Status.objects.all()
-    adminn = Adminn.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
@@ -320,7 +244,7 @@ def editproduct(request, id=0):
         'product': product,
         'product_types': product_types,
         'product_statuss': product_statuss,
-        'adminn':adminn
+        'users':users
     })
 
 # ลบสินค้า
@@ -343,9 +267,9 @@ def productpage(request):
     product = paginate_result[0]
     paginator = paginate_result[1]
     base_url = '/api/product/?'
-    adminn = Adminn.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
     return render(request, 'api/product.html',
-                      {'products': products, 'paginator' : paginator, 'base_url': base_url ,'adminn':adminn})
+                      {'products': products, 'paginator' : paginator, 'base_url': base_url ,'users':users})
 #ค้นหาสินค้า
 def product(request):
     product_name = request.POST.get('product_name', '').strip()
@@ -357,9 +281,9 @@ def product(request):
     product = paginate_result[0]
     paginator = paginate_result[1]
     base_url = '/api/user_search/?product_name=' + product_name + "&"
-    adminn = Adminn.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
     return render(request, 'api/product.html',
-                      {'product': product, 'paginator' : paginator, 'base_url': base_url, 'search_product_name': product_name,'adminn':adminn})
+                      {'product': product, 'paginator' : paginator, 'base_url': base_url, 'search_product_name': product_name,'users':users})
 
 def do_paginate(data_list, page_number):
     ret_data_list = data_list
@@ -393,15 +317,15 @@ def do_paginate(data_list, page_number):
 # ข้อมูลร้าน
 def store(req):
     store = Store.objects.get() 
-    adminn = Adminn.objects.get(username=req.user.username)
+    users = Users.objects.get(username=req.user.username)
     return render(req, 'api/store.html', {
         'store': store,
-        'adminn' : adminn
+        'users' : users
     })
 # แก้ไขข้อมูลร้าน
-def editstore(request, id=0):
-    store = Store.objects.get(pk=id)
-    adminn = Adminn.objects.get(username=request.user.username)
+def editstore(request ,id= 0):
+    store = Store.objects.all(pk=id)
+    users = Users.objects.get(username=request.user.username)
     if request.method == 'POST':
         form = StoreForm(request.POST, request.FILES, instance=store)
         if form.is_valid():
@@ -414,12 +338,12 @@ def editstore(request, id=0):
     return render(request, 'api/editstore.html' ,{ 
         'form': form,
         'store': store,
-        'adminn' : adminn
+        'users' : users
     })
 #ข้อมูลช่าง
 def mechanic(request):
     mechanics = Mechanic.objects.all()
-    adminn = Adminn.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
     # paginator = Paginator(mechanics_list, 100)
     # page = request.GET.get('page')
     # try:
@@ -428,7 +352,7 @@ def mechanic(request):
     #     mechanics = paginator.page(1)
     # except EmptyPage:
     #     mechanics = paginator.page(paginator.num_pages)
-    return render(request, 'api/mechanic.html', {'mechanics': mechanics,'adminn':adminn})
+    return render(request, 'api/mechanic.html', {'mechanics': mechanics,'users':users})
 
 def editmechanic(request, id=0):
     mechanic = Mechanic.objects.get(pk=id)
@@ -451,7 +375,7 @@ def editmechanic(request, id=0):
 
 def order(request):
     orders = Order.objects.all()
-    adminn = Adminn.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
     # sortid= Order.objects.order_by('id') 
     
     # context= {'sortedprice': sortid}
@@ -464,7 +388,7 @@ def order(request):
     #     orders = paginator.page(1)
     # except EmptyPage:
     #     orders = paginator.page(paginator.num_pages)
-    return render(request, 'api/order.html', {'orders': orders,'adminn':adminn})
+    return render(request, 'api/order.html', {'orders': orders,'users':users})
 
 # def editmechanic(request, id=0):
 #     mechanic = Mechanic.objects.get(pk=id)
@@ -488,9 +412,9 @@ def order(request):
 def orderproduct(request,id=0):
     # orders = Order.objects.all(pk=id)
     orderproducts = Order_Product.objects.filter(pk=id)
-    adminn = Adminn.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
 
-    return render(request, 'api/orderproduct.html', {'orderproducts': orderproducts,'adminn':adminn})
+    return render(request, 'api/orderproduct.html', {'orderproducts': orderproducts,'users':users})
  
 
 # def orderproduct(request, id=0):
@@ -515,7 +439,7 @@ def orderproduct(request,id=0):
 
 
 def payment(request):
-    adminn = Adminn.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
     payments = Payment.objects.all()
     # sortid= Order.objects.payment_by('id') 
     
@@ -529,11 +453,11 @@ def payment(request):
     #     payments = paginator.page(1)
     # except EmptyPage:
     #     payments = paginator.page(paginator.num_pages)
-    return render(request, 'api/payment.html', {'payments': payments,'adminn':Adminn})
+    return render(request, 'api/payment.html', {'payments': payments,'users':users})
 
 def storck(request):
     storcks = Storck.objects.all()
-    adminn = Adminn.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
     # paginator = Paginator(mechanics_list, 100)
     # page = request.GET.get('page')
     # try:
@@ -542,7 +466,7 @@ def storck(request):
     #     mechanics = paginator.page(1)
     # except EmptyPage:
     #     mechanics = paginator.page(paginator.num_pages)
-    return render(request, 'api/storck.html', {'storcks': storcks,'adminn':adminn})
+    return render(request, 'api/storck.html', {'storcks': storcks,'users':users})
 
 
 def orderUser(req):

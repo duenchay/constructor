@@ -5,14 +5,14 @@ from django.db.models.deletion import CASCADE
 from django.contrib.auth.models import AbstractUser
  
 from django.shortcuts import reverse
-class Adminn(AbstractUser): 
+class Users(AbstractUser): 
     # pass
     # admin = models.AutoField(primary_key=True)
     # user= models.ForeignKey(User,on_delete=models.CASCADE)
     first_name = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อ')
     last_name = models.CharField(max_length=100,default=' ',verbose_name = 'นามสกุล')
     email = models.CharField(max_length=50,default=' ',verbose_name = 'อีเมล')
-    avatar = models.ImageField(upload_to='images/adminn/', default='images/adminn/no-img.png' ,verbose_name = 'รูปโปรไฟล์')
+    avatar = models.ImageField(upload_to='images/users/', default='images/users/no-img.png' ,verbose_name = 'รูปโปรไฟล์')
     # username = models.CharField(max_length=100,default=' ')
     password = models.CharField(max_length=500,default=' ')
     # USERNAME_FIELD = "username"
@@ -99,12 +99,12 @@ class Mechanic(models.Model):
         verbose_name = 'ช่าง'
 
 class Store (models.Model):
-    store_name = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อร้าน')
-    store_img = models.ImageField(upload_to='images/store/', default='images/store/no-img.png', verbose_name = 'รูปร้าน')
-    store_phone = models.CharField(max_length=100,default=' ',verbose_name = 'เบอร์โทรศัพท์ร้าน')
-    store_address = models.CharField(max_length=100,default=' ',verbose_name = 'ที่อยู่ร้าน')
-    lat =  models.CharField(max_length=1000,default=' ')
-    lng =  models.CharField(max_length=1000,default=' ')
+    store_name = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อร้าน',null=True)
+    store_img = models.ImageField(upload_to='images/store/', default='images/store/no-img.png', verbose_name = 'รูปร้าน',null=True)
+    store_phone = models.CharField(max_length=100,default=' ',verbose_name = 'เบอร์โทรศัพท์ร้าน',null=True)
+    store_address = models.CharField(max_length=100,default=' ',verbose_name = 'ที่อยู่ร้าน',null=True)
+    lat =  models.CharField(max_length=1000,default=' ',null=True)
+    lng =  models.CharField(max_length=1000,default=' ',null=True)
     # time_open =models.CharField(max_length=100,default=' ')
     # time_close =models.CharField(max_length=100,default=' ')
     def __str__(self):
