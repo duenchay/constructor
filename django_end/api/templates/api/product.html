@@ -44,7 +44,7 @@
   
               <form class="form-inline" action="/product/" style="font:right;" method="POST">
               {% csrf_token %}
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="product_name" value="{{ search_product_name }}">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="name" value="{{ search_name }}">
               <button class="btn btn-outline-success my-2 my-sm-0"name="search" type="submit">Search</button>
             </form> 
           </nav>
@@ -77,12 +77,12 @@
                     
                           <tr>
                             <td>{{ product.id }}</td>
-                              <td>{{ product.product_name }}</td>
-                              <td>{{ product.product_price }}</td>
+                              <td>{{ product.name }}</td>
+                              <td>{{ product.price }}</td>
                               <td>{{ product.product_type }}</td>
                               <td>{{ product.product_detail }}</td>
                               <td><img src="/media/{{product.product_img}}" style="height: 75px;"></td>
-                              <td>{{ product.product_amount }}</td>
+                              <td>{{ product.quantity }}</td>
                               <!-- <td>{{ i.created_at  |date:"d-m-Y H:i:s" }}</td> -->
                               <td>                                   
                                   <a class="btn btn-sm btn-warning" href="/editproduct/{{product.id}}"> <span class="fa fa-edit"></span> Edit</a>

@@ -144,7 +144,7 @@ class Product(models.Model):
     product_type = models.ForeignKey(Product_Type,on_delete=models.CASCADE,verbose_name = 'หมวดหมู่สินค้า') #หมวดหมู่สินค้า
     product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า')  #สถานะสินค้า
     quantity = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
-    slug = models.SlugField()
+    # slug = models.SlugField()
     def __str__(self):
         return f'{self.name}  '
     class Meta:
@@ -167,7 +167,7 @@ class CartItem(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2)
     quantity = models.IntegerField()
     date_added = models.DateTimeField(auto_now_add=True)
-    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
     def __str__(self):
         return "{}:{}".format(self.product.name, self.id)

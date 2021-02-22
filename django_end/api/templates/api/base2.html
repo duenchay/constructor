@@ -143,6 +143,10 @@ color: #004d40;
             </ul>
                
             <ul class="nav navbar-nav menu_nav ">
+              
+            <!-- <a href="/cart">Cart: {{ cart_item_count }} item</a> -->
+              {% csrf_token %}
+              {% if user.is_authenticated %}
               <li class="nav-item">
                 <a class="nav-link" href="/cart">
                     <!-- <i class="fas fa-fw fa-chart-area"></i> -->
@@ -151,12 +155,9 @@ color: #004d40;
                     <span>Cart: {{ cart_item_count }} item</span></a>
                    
             </li> 
-            <!-- <a href="/cart">Cart: {{ cart_item_count }} item</a> -->
-              {% csrf_token %}
-              {% if user.is_authenticated %}
              
               {% if request.user.is_superuser %}
-                
+             
                   <!-- แอดมิน -->
               <li class="nav-item submenu dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -168,7 +169,8 @@ color: #004d40;
                 <img class="img-profile rounded-circle"
                 src="{%static 'api/img/undraw_profile.svg'%}" style="height: 25px;" width="25px">
             </a>   
-             {% else %}
+             {% else %} 
+            
 
               <li class="nav-item submenu dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -204,6 +206,7 @@ color: #004d40;
                     </ul>
                </li>
                {% else %}
+
               <li class="nav-item submenu dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                   aria-expanded="false">เข้าสู่ระบบ</a>

@@ -46,7 +46,7 @@ urlpatterns = [
     path('mechanicUser',views.mechanicUser),    
     path('product_type',views.product_type,name='product_type'),
     path('productTypeUser/<int:id>',views.productTypeUser,name='productTypeUser'),
-    path('product/<slug:slug>/<int:product_id>',views.productUser,),
+    path('product/<int:product_id>',views.productUser,),
     path('test',views.test),
     # path('cart',views.cart), 
     # path('checkout',views.checkout),  

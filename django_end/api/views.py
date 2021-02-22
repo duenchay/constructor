@@ -31,6 +31,7 @@ from django.contrib import messages
 # from .models import Product, Order, LineItem
 # from .forms import CartForm, CheckoutForm, UsersForm
 from . import cart 
+
 # from api import cart
 
 # def cart_item_count(request):
@@ -53,6 +54,7 @@ def show_cart(request):
     else:
         users= Users.objects.get(username=request.user.username)
     item_count = cart.item_count(request)
+    product_type=Product_Type.objects.all()
 
     if request.method == 'POST':
         if request.POST.get('submit') == 'Update':
@@ -68,15 +70,17 @@ def show_cart(request):
                                             'cart_items': cart_items,
                                             'cart_subtotal': cart_subtotal,
                                             'cart_item_count': item_count,
-                                            'users':users
+                                            'users':users,
+                                            'product_type':product_type
                                             })
 # รายละเอียดสินค้า 
-def productUser(request,slug,product_id):
+def productUser(request,product_id):
    
     # except: pass
    
     product = get_object_or_404(Product, id=product_id)
     item_count = cart.item_count(request) #ตัวเลขบนตะกร้าสินค้า
+    product_type=Product_Type.objects.all()
 
     if request.method == 'POST':
         form = CartForm(request, request.POST)
@@ -90,6 +94,7 @@ def productUser(request,slug,product_id):
                                             'product': product,
                                             'form': form,
                                             'cart_item_count': item_count,
+                                            'product_type':product_type
                                          
                                             })
 
@@ -104,6 +109,8 @@ def checkout(request):
     # try:
     # #     favc = FavoriteCloth.objects.filter(member=member).first()
     # except: pass
+    product_type=Product_Type.objects.all()
+    item_count = cart.item_count(request)
     if request.method == 'POST':
         form = CheckoutForm(request.POST)
         if form.is_valid():
@@ -139,6 +146,8 @@ def checkout(request):
         form = CheckoutForm()
         return render(request, 'api/checkout.html', {'form': form,
         # 'users':users
+        'product_type':product_type,
+        'cart_item_count':item_count
         })
       
 
@@ -147,9 +156,11 @@ def checkout(request):
 def showProductAll(request):
     product_type=Product_Type.objects.all() # แสดงประเภทช่างบน tap
     product=Product.objects.all()
+    item_count = cart.item_count(request)
     return render(request,'api/showProductAll.html',{
         'product_type':product_type,
 		'product':product,
+        'cart_item_count':item_count
 })
 
 #เพิ่มข้อมูลร้าน
@@ -201,12 +212,17 @@ def addstore(request):
 
 
 # Searchสินค้า
-def search(request):
-	q=request.GET['q']
-	data=Product.objects.filter(product_name__icontains=q).order_by('id')
-	return render(request,'api/search.html',{
-        'data':data
-        })
+#  item_count = cart.item_count(request)
+def search (request):
+    item_count = cart.item_count(request)
+    q=request.GET['q']
+    data=Product.objects.filter(name__icontains=q).order_by('id')
+    return render(request,'api/search.html',{
+    'data':data,
+    'cart_item_count':item_count
+    })
+
+
 
 #หน้าโปรไฟล์
 def profileAdmin(req):
@@ -304,11 +320,13 @@ def productTypeUser(request,id=0):
     product_type=Product_Type.objects.all()
     # adminn = Adminn.objects.get(username=request.user.username)
     product=Product.objects.filter(product_type=type).order_by('id')
+    item_count = cart.item_count(request)
     # mechanic= Mechanic.objects.all()
     return render(request,'api/productTypeUser.html',{
         'product':product,
         # 'product_type' :product,
-        'product_type':product_type
+        'product_type':product_type,
+        'cart_item_count':item_count
         # 'adminn' :adminn
         })
 # หน้าาเทสสสสสสสสสสสสหมวดหมู่
@@ -325,31 +343,37 @@ def test(req):
     return render(req, 'api/test.html')
 
 # หน้าแรก
-def index(req):
+def index(request):
     product_type=Product_Type.objects.all()
-    return render(req, 'api/index.html',{
-         'product_type' :product_type
+    item_count = cart.item_count(request)
+    return render(request, 'api/index.html',{
+         'product_type' :product_type,
+         'cart_item_count':item_count
     })
 
 # หน้ารวมช่าง
-def mechanicUser(req):
+def mechanicUser(request):
     mechanic= Mechanic.objects.all()
     product_type=Product_Type.objects.all()
+    item_count = cart.item_count(request)
     # adminn = Adminn.objects.get(username=req.user.username)
-    return render(req, 'api/mechanicUser.html',{
+    return render(request, 'api/mechanicUser.html',{
         'mechanic' :mechanic ,
         'product_type':product_type,
+        'cart_item_count':item_count,
         # 'adminn': adminn
     })
 
 # หน้ารายละเอียดช่าง
-def mechanicDetailUser(req,slug,id=0):
+def mechanicDetailUser(request,id=0):
     product_type=Product_Type.objects.all()
     mechanic= Mechanic.objects.get(pk=id)
+    item_count = cart.item_count(request)
     # adminn = Adminn.objects.get(username=req.user.username)
-    return render(req, 'api/mechanicDetailUser.html',{
+    return render(request, 'api/mechanicDetailUser.html',{
         'mechanic' :mechanic,
         'product_type':product_type,
+        'cart_item_count':item_count
         # 'adminn' :adminn
     })
 
@@ -360,12 +384,14 @@ def register1(req):
     return render(req, 'api/register1.html')
 
 # หน้าข้อมูลร้าน
-def storeUser(req):
+def storeUser(request):
     product_type=Product_Type.objects.all()
+    item_count = cart.item_count(request)
     store = Store.objects.get()
-    return render(req, 'api/storeUser.html', {
+    return render(request, 'api/storeUser.html', {
         'store' :store,
-        'product_type' :product_type
+        'product_type' :product_type,
+        'cart_item_count': item_count
     })
 # หมวดหมู่สินค้าบนแทป
 def producttype(req):
@@ -427,6 +453,13 @@ def deleteproduct(req, id=0):
     # product_statuss = Product_Status.objects.all()
     product.delete()
     return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+# def deleteproduct(req, id):
+#     # product = Product.objects.get(pk=id)
+#     product = get_object_or_404(Product, id=id)
+#     # product_types = Product_Type.objects.all()
+#     # product_statuss = Product_Status.objects.all()
+#     product.delete() 
+#     return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
 
 
@@ -445,18 +478,18 @@ def productpage(request):
                       {'products': products, 'paginator' : paginator, 'base_url': base_url ,'users':users})
 #ค้นหาสินค้า
 def product(request):
-    product_name = request.POST.get('product_name', '').strip()
-    if len(product_name) == 0:
-        product_name = request.GET.get('product_name', '').strip()
-    product = Product.objects.filter(product_name__contains=product_name)
+    name = request.POST.get('name', '').strip()
+    if len(name) == 0:
+        name = request.GET.get('name', '').strip()
+    product = Product.objects.filter(name__contains=name)
     page_number = request.GET.get('page', 1)
     paginate_result = do_paginate(product, page_number)
     product = paginate_result[0]
     paginator = paginate_result[1]
-    base_url = '/api/user_search/?product_name=' + product_name + "&"
+    base_url = '/api/user_search/?name=' + name + "&"
     users = Users.objects.get(username=request.user.username)
     return render(request, 'api/product.html',
-                      {'product': product, 'paginator' : paginator, 'base_url': base_url, 'search_product_name': product_name,'users':users})
+                      {'product': product, 'paginator' : paginator, 'base_url': base_url, 'search_name': name,'users':users})
 
 def do_paginate(data_list, page_number):
     ret_data_list = data_list
