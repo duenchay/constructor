@@ -3,7 +3,7 @@ from django.contrib.admin.sites import DefaultAdminSite
 from django.db import models
 from django.db.models.deletion import CASCADE
 from django.contrib.auth.models import AbstractUser
- 
+from django.conf import settings
 from django.shortcuts import reverse
 class Users(AbstractUser): 
     # pass
@@ -99,12 +99,12 @@ class Mechanic(models.Model):
         verbose_name = 'ช่าง'
 
 class Store (models.Model):
-    store_name = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อร้าน',null=True)
+    store_name = models.CharField(max_length=100,default='- ',verbose_name = 'ชื่อร้าน',null=True)
     store_img = models.ImageField(upload_to='images/store/', default='images/store/no-img.png', verbose_name = 'รูปร้าน',null=True)
-    store_phone = models.CharField(max_length=100,default=' ',verbose_name = 'เบอร์โทรศัพท์ร้าน',null=True)
-    store_address = models.CharField(max_length=100,default=' ',verbose_name = 'ที่อยู่ร้าน',null=True)
-    lat =  models.CharField(max_length=1000,default=' ',null=True)
-    lng =  models.CharField(max_length=1000,default=' ',null=True)
+    store_phone = models.CharField(max_length=100,default=' -',verbose_name = 'เบอร์โทรศัพท์ร้าน',null=True)
+    store_address = models.CharField(max_length=100,default=' -',verbose_name = 'ที่อยู่ร้าน',null=True)
+    lat =  models.CharField(max_length=1000,default=' -',null=True)
+    lng =  models.CharField(max_length=1000,default='- ',null=True)
     # time_open =models.CharField(max_length=100,default=' ')
     # time_close =models.CharField(max_length=100,default=' ')
     def __str__(self):
@@ -135,34 +135,78 @@ class Product_Status (models.Model):
 #สินค้า
 class Product(models.Model): 
     # id = models.AutoField(primary_key=True)
-    product_name = models.CharField(max_length=1000,default=' ',verbose_name = 'ชื่อสินค้า')
-    product_price = models.FloatField(verbose_name = 'ราคาสินค้า')
+
+    name = models.CharField(max_length=1000,default=' ',verbose_name = 'ชื่อสินค้า')
+    # product_price = models.FloatField(verbose_name = 'ราคาสินค้า')
+    price = models.DecimalField(max_digits=7, decimal_places=2)
     product_detail = models.TextField(max_length=10000,default=' ',verbose_name = 'รายละเอียดสินค้า')
     product_img = models.ImageField(upload_to='images/product/', default='images/product/no-img.png' ,verbose_name = 'รูปสินค้า')
     product_type = models.ForeignKey(Product_Type,on_delete=models.CASCADE,verbose_name = 'หมวดหมู่สินค้า') #หมวดหมู่สินค้า
     product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า')  #สถานะสินค้า
-    product_amount = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
+    quantity = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
     slug = models.SlugField()
     def __str__(self):
-        return f'{self.product_name}  '
+        return f'{self.name}  '
     class Meta:
         verbose_name = 'สินค้า'
 
-    def get_absolute_url(self):
-        return reverse("core:product", kwargs={
-            'slug': self.slug
-        })
-    #เพิ่มสินค้าเข้าตะกร้า
-    def get_add_to_cart_url(self):
-        return reverse("core:add-to-cart", kwargs={
-            'slug': self.slug
-        })
+# class Product(models.Model):
+#     name = models.CharField(max_length=191)
+#     price = models.DecimalField(max_digits=7, decimal_places=2)
+#     slug = models.SlugField()
+#     description = models.TextField()
+#     image = models.ImageField(upload_to='products_images/', blank=True)
 
-    def get_remove_from_cart_url(self):
-        return reverse("core:remove-from-cart", kwargs={
-            'slug': self.slug
-        }) 
+#     def __str__(self):
+#         return self.name 
 
+
+class CartItem(models.Model):
+    user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
+    cart_id = models.CharField(max_length=50)
+    price = models.DecimalField(max_digits=7, decimal_places=2)
+    quantity = models.IntegerField()
+    date_added = models.DateTimeField(auto_now_add=True)
+    product = models.ForeignKey(Product, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return "{}:{}".format(self.product.name, self.id)
+
+    def update_quantity(self, quantity):
+        self.quantity = self.quantity + quantity
+        self.save()
+
+    def total_cost(self):
+        return self.quantity * self.price
+
+
+class Order(models.Model):
+    name = models.CharField(max_length=191)
+    email = models.EmailField()
+    postal_code = models.IntegerField()
+    address = models.CharField(max_length=191)
+    date = models.DateTimeField(auto_now_add=True)
+    paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "{}:{}".format(self.id, self.email)
+
+    def total_cost(self):
+        return sum([ li.cost() for li in self.lineitem_set.all() ] )
+
+
+class LineItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=7, decimal_places=2)
+    quantity = models.IntegerField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{}:{}".format(self.product.name, self.id)
+
+    def cost(self):
+        return self.price * self.quantity
 #สถานะการชำระเงิน
 class Money_Status(models.Model):
     money_status =  models.CharField(max_length=100,default=' ',verbose_name = 'สถานะการชำระเงิน') 
@@ -191,22 +235,30 @@ class Payment_Options (models.Model):
         verbose_name = 'ตัวเลือกการชำระเงิน'
 
 # สั่งซื้อ
-class Order (models.Model): 
-    # order_id = models.AutoField(primary_key=True) #รหัสสั่งซื้อ
-    date = models.DateTimeField(auto_now=False,  verbose_name='วันที่สั่งสินค้า')
-    # shopping_date =  models.CharField(max_length=100,default=' ') 
-    user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name = 'รหัสผู้สั่งซื้อสินค้า')
-    admin =  models.ForeignKey(Admin,on_delete=models.CASCADE,verbose_name = 'รหัสผู้ขายสินค้า')
-    all_price =  models.FloatField(verbose_name = 'ราคารวม')
-    lat =  models.CharField(max_length=1000,default=' ')
-    lng =  models.CharField(max_length=1000,default=' ')
-    money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
-    delivery_options = models.ForeignKey(Delivery_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการจัดส่ง')
-    payment_options = models.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน')
-    def __str__(self):
-        return f'{self.user} '
-    class Meta:
-        verbose_name = 'ข้อมูลการสั่งซื้อ'
+# class Order (models.Model): 
+#     # order_id = models.AutoField(primary_key=True) #รหัสสั่งซื้อ
+#     date = models.DateTimeField(auto_now=False,  verbose_name='วันที่สั่งสินค้า')
+#     # shopping_date =  models.CharField(max_length=100,default=' ') 
+#     user = models.ForeignKey(settings.AUTH_USER_MODEL,
+#                              on_delete=models.CASCADE,verbose_name = 'รหัสผู้สั่งซื้อสินค้า')
+#     # admin =  models.ForeignKey(Admin,on_delete=models.CASCADE,verbose_name = 'รหัสผู้ขายสินค้า')
+#     all_price =  models.FloatField(verbose_name = 'ราคารวม')
+#     lat =  models.CharField(max_length=1000,default=' ')
+#     lng =  models.CharField(max_length=1000,default=' ')
+#     # money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
+#     # delivery_options = models.ForeignKey(Delivery_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการจัดส่ง')
+#     # payment_options = models.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน')
+#     def __str__(self):
+#         return f'{self.user} '
+#     class Meta:
+#         verbose_name = 'ข้อมูลการสั่งซื้อ'
+#     def get_total(self):
+#         total = 0
+#         for order_item in self.items.all():
+#             total += order_item.get_final_price()
+#         if self.coupon:
+#             total -= self.coupon.amount
+#         return total
 
 class Payment (models.Model):
     date =  models.DateTimeField(auto_now=False,  verbose_name='วันที่ชำระเงิน') 
@@ -233,17 +285,38 @@ class Order_Product (models.Model):
     class Meta:
         verbose_name = 'รายการสินค้า'
 
+
 #ตะกร้าสินค้า
 class Carts (models.Model):
     # carts_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name = 'รหัสผู้ใช้งาน')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                             on_delete=models.CASCADE ,verbose_name = 'รหัสผู้ใช้งาน')
+    ordered = models.BooleanField(default=False)
     product= models.ForeignKey(Product,on_delete=models.CASCADE,verbose_name = 'รหัสสินค้า')
-    amount  = models.IntegerField(verbose_name = 'จำนวนสินต้าที่เลือก') #จำนวนสินค้าที่เลือก
+    quantity  = models.IntegerField(default=1 ,verbose_name = 'จำนวนสินต้าที่เลือก') #จำนวนสินค้าที่เลือก
     # order_id = models.ForeignKey(Order,on_delete=models.CASCADE)
-    def __str__(self):
-        return f'{self.user} {self.product}  '
+    # def __str__(self):
+    #     return f'{self.user} {self.product}  '
     class Meta:
         verbose_name = 'ตะกร้าสินค้า'
+    def __str__(self):
+        return f"{self.quantity} of {self.product.product_name}"
+
+    def get_total_item_price(self):
+        return self.quantity * self.product.product_price
+
+    # def get_total_discount_item_price(self):
+    #     return self.quantity * self.product.product_price
+
+    def get_amount_saved(self):
+        return self.get_total_item_price() - self.get_total_discount_item_price()
+
+    def get_final_price(self):
+        # if self.product.product_price:
+        #     return self.get_total_discount_item_price()
+        return self.get_total_item_price()
+
+
 
 #บทสนทนา  
 class Conversations(models.Model):
@@ -251,7 +324,7 @@ class Conversations(models.Model):
     # admin = models.ForeignKey(Admin,on_delete=models.CASCADE)
     message = models.CharField(max_length=1000,default=' ',verbose_name = 'ข้อความ')
     joined_at = models.DateTimeField(auto_now_add=True)  
-    updated_at = models.DateTimeField(auto_now=True)  
+    # updated_at = models.DateTimeField(auto_now=True)  
     def __str__(self):
         return f'{self.user}  '
     class Meta:

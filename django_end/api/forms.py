@@ -1,20 +1,30 @@
 from django import forms
 from .models import *
+  
 
- 
+class CartForm(forms.Form):
+    quantity = forms.IntegerField(initial='1')
+    product_id = forms.IntegerField(widget=forms.HiddenInput)
+
+    def __init__(self, request, *args, **kwargs):
+        self.request = request
+        super(CartForm, self).__init__(*args, **kwargs)
+
+
+class CheckoutForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        exclude = ('paid',)
+
+        widgets = {
+            'address': forms.Textarea(attrs={'row': 6, 'col': 8}),
+        }
+
 class ProductForm(forms.ModelForm):
-    # product_type = forms.ModelChoiceField(queryset=Product_Type.objects.all(),
-    #                                 to_field_name = 'product_type',
-    #                                  empty_label="Select Product_Type")
-    # product_detail = forms.CharField(widget=forms.Textarea(attrs={
-    #     'cols': 200,
-    #     'rows': 3,
-    #     'style': 'width: 100%'
-    # }))
     class Meta:
         model = Product
         # fields = '__all__'
-        fields = [  'product_name','product_price', 'product_detail', 'product_img','product_type','product_status','product_amount' ]
+        fields = [  'name','price', 'product_detail', 'product_img','product_type','product_status','quantity' ]
 
 class StoreForm(forms.ModelForm):
     class Meta:
@@ -43,7 +53,7 @@ class StorckForm(forms.ModelForm):
 
 class UsersForm(forms.ModelForm):
 
-    class Meta:
+    class Meta: 
         model = Users 
         fields = [ 'first_name' ,'last_name', 'email', 'avatar','username','password', ]
     

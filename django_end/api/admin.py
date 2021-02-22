@@ -11,14 +11,34 @@ admin.site.register(Admin)
 admin.site.register(Users)
 admin.site.register(Product_Type)
 admin.site.register(Product_Status)
-admin.site.register(Product)
+# admin.site.register(Product)
 admin.site.register(Money_Status)
 admin.site.register(Delivery_Options)
 admin.site.register(Payment_Options)
-admin.site.register(Order)
+# admin.site.register(Order)
 admin.site.register(Payment)
 admin.site.register(Order_Product)
 admin.site.register(Carts)
 admin.site.register(Conversations)
 # admin.site.register(Conversations)
 admin.site.register(Storck)
+class ProductAdmin(admin.ModelAdmin):
+    list_display =['id', 'name', 'price']
+
+
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name', 'email', 'date', 'paid']
+
+
+class OrderItemAdmin(admin.ModelAdmin):
+    list_display = ['id', 'price', 'quantity', 'product']
+
+
+class LineItemAdmin(admin.ModelAdmin):
+    list_display = ['id', 'price', 'quantity', 'date_added', 'order']
+
+
+admin.site.register(Product, ProductAdmin)
+admin.site.register(Order, OrderAdmin)
+admin.site.register(CartItem, OrderItemAdmin)
+admin.site.register(LineItem, LineItemAdmin)

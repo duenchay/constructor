@@ -19,7 +19,7 @@ urlpatterns = [
     path('login/',views.login),
     path('register/',views.register), 
     path('logout/',views.logout),     
-    path('editstore/<int:id>/', views.editstore), 
+    path('editstore/', views.editstore),  
     # path('editstore', views.editstore), 
     path('store',views.store),
    
@@ -46,21 +46,33 @@ urlpatterns = [
     path('mechanicUser',views.mechanicUser),    
     path('product_type',views.product_type,name='product_type'),
     path('productTypeUser/<int:id>',views.productTypeUser,name='productTypeUser'),
-    path('product/<int:id>',views.productUser,name='productUser'),
+    path('product/<slug:slug>/<int:product_id>',views.productUser,),
     path('test',views.test),
-    path('cart',views.cart),
+    # path('cart',views.cart), 
+    # path('checkout',views.checkout),  
     path('profileAdmin',views.profileAdmin),
     path('search',views.search,name='search'),
     path('addstore',views.addstore,name='addstore'),
     path('showProductAll',views.showProductAll,name='showProductAll'),
     
+    path('cart/', views.show_cart, name='show_cart'),
+    path('home', views.home,),
+    path('checkout/', views.checkout, name='checkout'),
+    # path('base', views.base,),
   
+   
+
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))
 ]
 
 
-if settings.DEBUG: # new
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG: # new
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+if settings.DEBUG:
+    # import debug_toolbar
+    # urlpatterns += [path('__debug__/', include(debug_toolbar.urls))]
+    urlpatterns += static(settings.MEDIA_URL,document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

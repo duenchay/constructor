@@ -19,7 +19,14 @@
 
     <!-- Custom styles for this template-->
     <link href="{% static 'api/css/sb-admin-2.min.css'%}" rel="stylesheet">
+<style>
 
+.bg-register-image {
+    background: url(https://i.pinimg.com/originals/99/42/df/9942df3ac8a0db0ba6c773b839fb3185.jpg);
+    background-position: center;
+    background-size: cover;
+}
+</style>
 </head>
 
 <body class="bg-gradient-primary">
@@ -104,7 +111,7 @@
 
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'api/vendor/jquery/jquery.min.js'%}"></script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'api/vendor/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="{% static 'api/vendor/jquery-easing/jquery.easing.min.js'%}"></script>

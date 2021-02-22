@@ -1,3 +1,4 @@
+from django.utils import timezone
 from api.forms import *
 from django.http import HttpResponse
 # from django.utils import translation
@@ -18,6 +19,128 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.hashers import make_password
 
+# from .utils import cookieCart, cartData, guestOrder
+from django.shortcuts import render, get_object_or_404
+
+# from . import cart
+
+# from . import cart
+from django.shortcuts import render, HttpResponse, redirect, \
+    get_object_or_404, reverse
+from django.contrib import messages
+# from .models import Product, Order, LineItem
+# from .forms import CartForm, CheckoutForm, UsersForm
+from . import cart 
+# from api import cart
+
+# def cart_item_count(request):
+#     item_count = cart.item_count(request)
+#     # return {'cart_item_count' : item_count }
+#     return render(request, "api/cart.html", {
+#                                     'cart_item_count': item_count,
+#                                     })
+
+
+
+def home(request):
+    all_products = Product.objects.all()
+    return render(request, "api/home.html", {
+                                    'all_products': all_products,
+                                    })
+def show_cart(request):
+    if request.user.is_anonymous:
+        return redirect('/login')
+    else:
+        users= Users.objects.get(username=request.user.username)
+    item_count = cart.item_count(request)
+
+    if request.method == 'POST':
+        if request.POST.get('submit') == 'Update':
+            cart.update_item(request)
+        if request.POST.get('submit') == 'Remove':
+            cart.remove_item(request)
+        # form.instance.store = store
+        # form.save()
+
+    cart_items = cart.get_all_cart_items(request)
+    cart_subtotal = cart.subtotal(request)
+    return render(request, 'api/cart.html', {
+                                            'cart_items': cart_items,
+                                            'cart_subtotal': cart_subtotal,
+                                            'cart_item_count': item_count,
+                                            'users':users
+                                            })
+# รายละเอียดสินค้า 
+def productUser(request,slug,product_id):
+   
+    # except: pass
+   
+    product = get_object_or_404(Product, id=product_id)
+    item_count = cart.item_count(request) #ตัวเลขบนตะกร้าสินค้า
+
+    if request.method == 'POST':
+        form = CartForm(request, request.POST)
+        if form.is_valid():
+            request.form_data = form.cleaned_data
+            cart.add_item_to_cart(request)   #เพิ่มสินค้าเข้าตะกร้า
+            return redirect('show_cart')
+
+    form = CartForm(request, initial={'product_id': product.id})
+    return render(request, 'api/productUser.html', {
+                                            'product': product,
+                                            'form': form,
+                                            'cart_item_count': item_count,
+                                         
+                                            })
+
+def checkout(request):
+    # if request.user.is_anonymous:
+    #     return redirect('/login')
+    # else:
+    #     users = Users.objects.get(username=request.user.username)
+        # member = Member.objects.get(username=request.user.username)
+        # knn = joblib.load('static/knn.model')
+    # favc = None
+    # try:
+    # #     favc = FavoriteCloth.objects.filter(member=member).first()
+    # except: pass
+    if request.method == 'POST':
+        form = CheckoutForm(request.POST)
+        if form.is_valid():
+            cleaned_data = form.cleaned_data
+            o = Order(
+                name = cleaned_data.get('name'),
+                email = cleaned_data.get('email'),
+                postal_code = cleaned_data.get('postal_code'),
+                address = cleaned_data.get('address'),
+            )
+            o.save()
+
+            all_items = cart.get_all_cart_items(request)
+            for cart_item in all_items:
+                li = LineItem(          #รายการสินค้า
+                    product_id = cart_item.product_id,
+                    price = cart_item.price,
+                    quantity = cart_item.quantity,
+                    order_id = o.id
+                )
+
+                li.save()
+
+            cart.clear(request)
+
+            request.session['order_id'] = o.id
+
+            messages.add_message(request, messages.INFO, 'Order Placed!')
+            return redirect('checkout')
+
+
+    else:
+        form = CheckoutForm()
+        return render(request, 'api/checkout.html', {'form': form,
+        # 'users':users
+        })
+      
 
 
 #หน้าแสดงสินค้าทั้งหมด
@@ -30,19 +153,51 @@ def showProductAll(request):
 })
 
 #เพิ่มข้อมูลร้าน
+# def addstore(request):
+#     # form = StoreForm(request.POST ,request.FILES)
+#     users = Users.objects.get(username=request.user.username)
+#     if request.method == 'POST':
+#         form = StoreForm(request.POST ,request.FILES)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('/addstore')
+#     else:
+#         form = StoreForm()
+#     return render(request, 'api/addstore.html',{
+#                       'form': form,
+#                       'users':users
+#  })
 def addstore(request):
-    users = Users.objects.get(username=request.user.username)
+    form = StoreForm()
+    # users = Users.objects.get(username=request.user.username)
     if request.method == 'POST':
         form = StoreForm(request.POST ,request.FILES)
         if form.is_valid():
+            form.instance.users = Users.objects.get(username=request.user.username)
             form.save()
-            return redirect('/addstore')
+            # return redirect('/addstore')
     else:
         form = StoreForm()
+        store = form.instance
     return render(request, 'api/addstore.html',{
                       'form': form,
-                      'users':users
+                    #   'users':users,
+                      'store': store
  })
+# def registerstore(req):
+#     form = StoreForm()
+#     if req.method == 'POST':
+#         form = StoreForm(req.POST, req.FILES)
+#         if form.is_valid():
+#             form.instance.member = Member.objects.get(username=req.user.username)
+#             form.save()
+#     else:
+#         form = StoreForm()
+#     store = form.instance
+#     return render(req, 'lookinggreat/registerstore.html', {
+#         'store': store,
+#         'form': form
+#  })
 
 
 # Searchสินค้า
@@ -63,12 +218,7 @@ def profileAdmin(req):
        
     })
 
-def cart(req):
-    # adminn = Adminn.objects.get(username=req.user.username)
-    return render(req, 'api/cart.html', {
-        # 'adminn': adminn,
-      
-    })
+
 def profile(req):
     users = Users.objects.get(username=req.user.username)
     return render(req, 'api/profile.html', {
@@ -96,17 +246,19 @@ def login(req):
 
 def register(req):
     print('register()')
-    form = Users()
+    form = UsersForm()
     print(req)
     if req.method == 'POST':
-        form = Users(req.POST, req.FILES)
+        form = UsersForm(req.POST, req.FILES)
         print("req.POST")
         print(req.POST)
         if form.is_valid():
             print('form valid')
             form.instance.password = make_password(req.POST['password'])
             form.save()
-        else:
+        else: 
+
+            
             print("==== form.errors ====")
             print(form.errors)
     return render(req, 'api/register.html', { 
@@ -114,19 +266,40 @@ def register(req):
        
         })
 
-# รายละเอียดสินค้า
-def productUser(req,id=0):
-    product=Product.objects.get(pk=id)
-    product_type=Product_Type.objects.all()
-    return render(req, 'api/productUser.html',{
-        'product' :product,
-        'product_type':product_type,
-        # 'adminn' : adminn
+# def show_product(request, slug,product_id, ):
+#     product = get_object_or_404(Product, id=product_id)
 
-    })
+#     if request.method == 'POST':
+#         form = CartForm(request, request.POST)
+#         if form.is_valid():
+#             request.form_data = form.cleaned_data
+#             cart.add_item_to_cart(request)
+#             return redirect('show_cart')
 
+#     form = CartForm(request, initial={'product_id': product.id})
+#     return render(request, 'api/product_detail.html', {
+#                                             'product': product,
+#                                             'form': form,
+#                                             })
+
+# # รายละเอียดสินค้า
+# def productUser(request,slug,product_id):
+#     product = get_object_or_404(Product, id=product_id)
+
+#     if request.method == 'POST':
+#         form = CartForm(request, request.POST)
+#         if form.is_valid():
+#             request.form_data = form.cleaned_data
+#             cart.add_item_to_cart(request)
+#             return redirect('show_cart')
+
+#     form = CartForm(request, initial={'product_id': product.id})
+#     return render(request, 'api/productUser.html', {
+#                                             'product': product,
+#                                             'form': form,
+#                                             })
 # หน้าสินค้าแต่ละหมวดหมู่
-def productTypeUser(request,id=0):
+def productTypeUser(request,id=0): 
     type=Product_Type.objects.get(pk=id)
     product_type=Product_Type.objects.all()
     # adminn = Adminn.objects.get(username=request.user.username)
@@ -170,7 +343,7 @@ def mechanicUser(req):
     })
 
 # หน้ารายละเอียดช่าง
-def mechanicDetailUser(req,id=0):
+def mechanicDetailUser(req,slug,id=0):
     product_type=Product_Type.objects.all()
     mechanic= Mechanic.objects.get(pk=id)
     # adminn = Adminn.objects.get(username=req.user.username)
@@ -316,6 +489,7 @@ def do_paginate(data_list, page_number):
 
 # ข้อมูลร้าน
 def store(req):
+    
     store = Store.objects.get() 
     users = Users.objects.get(username=req.user.username)
     return render(req, 'api/store.html', {
@@ -323,8 +497,8 @@ def store(req):
         'users' : users
     })
 # แก้ไขข้อมูลร้าน
-def editstore(request ,id= 0):
-    store = Store.objects.all(pk=id)
+def editstore(request):
+    store = Store.objects.filter()
     users = Users.objects.get(username=request.user.username)
     if request.method == 'POST':
         form = StoreForm(request.POST, request.FILES, instance=store)

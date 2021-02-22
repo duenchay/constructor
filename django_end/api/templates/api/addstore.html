@@ -21,7 +21,7 @@
 </style>
 
 <div id="content-wrapper">
-
+ 
   <div class="container-fluid">
       <!-- Breadcrumbs-->
       <!-- <ol class="breadcrumb">
@@ -43,7 +43,7 @@
                       <div class="col-md-9">
                           <div class="form-label-group">
                             <label for="store_name"><b>ชื่อสินค้า</b></label>
-                            <input type="text" class="form-control" placeholder="กรุณากรอกชื่อสินค้า" name="store_name" required>
+                            <input type="text" class="form-control" placeholder="กรุณากรอกชื่อสินค้า" name="store_name"  value="{{ store.store_name }}">
                            
                               <!-- <input type="text" class="form-control" name="product_name" placeholder="กรุณากรอกชื่อสินค้า" id="inputFirst" required>  -->
                           </div>
@@ -57,7 +57,7 @@
                     <div class="col-md-9">
                         <div class="form-label-group">
                           <label for="store_phone"><b>ชื่อสินค้า</b></label>
-                          <input type="text" class="form-control" placeholder="กรุณากรอกชื่อสินค้า" name="store_phone" required>
+                          <input type="text" class="form-control" placeholder="กรุณากรอกชื่อสินค้า" name="store_phone" value="{{ store.store_phone }}">
                          
                             <!-- <input type="text" class="form-control" name="product_name" placeholder="กรุณากรอกชื่อสินค้า" id="inputFirst" required>  -->
                         </div>
@@ -70,7 +70,7 @@
                     <div class="col-md-9">
                         <div class="form-label-group">
                           <label for="store_address"><b>ชื่อสินค้า</b></label>
-                          <input type="text" class="form-control" placeholder="กรุณากรอกชื่อสินค้า" name="store_address" required>
+                          <input type="text" class="form-control" placeholder="กรุณากรอกชื่อสินค้า" name="store_address" value="{{ store.store_address }}">
                          
                             <!-- <input type="text" class="form-control" name="product_name" placeholder="กรุณากรอกชื่อสินค้า" id="inputFirst" required>  -->
                         </div>
@@ -85,7 +85,7 @@
                 <div class="col-md-9">
                     <div class="form-label-group">
                       <label for="exampleInputFile"><b>เลือกรูปสินค้า</b></label> 
-                      <input type="file" class="form-control-file" id="exampleInputFile" name="store_img" aria-describedby="fileHelp" required>
+                      <input type="file" class="form-control-file" id="exampleInputFile" name="store_img" aria-describedby="fileHelp" >
                     </div>
                 </div>
              
@@ -99,7 +99,7 @@
               <div class="col-md-9">
                   <div class="form-label-group">
                     <label for="lat"><b>lat</b></label>
-                    <input type="text" class="form-control" placeholder="กรุณากรอกจำนวนสินค้า" name="lat" required>
+                    <input type="text" class="form-control" placeholder="กรุณากรอกจำนวนสินค้า" name="lat" value="{{ store.lat }}">
                   </div>
               </div>
            
@@ -111,7 +111,7 @@
             <div class="col-md-9">
                 <div class="form-label-group">
                   <label for="lng"><b>lng</b></label>
-                  <input type="text" class="form-control" placeholder="กรุณากรอกจำนวนสินค้า" name="lng" required>
+                  <input type="text" class="form-control" placeholder="กรุณากรอกจำนวนสินค้า" name="lng" value="{{ store.lng }}">
                 </div>
             </div>
          

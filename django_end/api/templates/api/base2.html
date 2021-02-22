@@ -30,6 +30,19 @@
 			background-image: url( 
 "data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(0, 128, 0, 0.8)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E"); 
 		} 
+
+
+
+    table{
+            border-collapse: collapse;
+            border: none;
+        }
+        td{
+            padding: 10px;
+        }
+        form{
+            margin-bottom: 0;
+        }
 	</style> 
 </head>
 <style>
@@ -62,7 +75,7 @@ color: #004d40;
         <div class="container">
           <a class="navbar-brand logo_h" href="/index"><img src="{% static 'api/img/drawing.png'%}" alt=""></a>
          
-         
+          <!-- <a href="/cart">Cart: {{ cart_item_count }} item</a> -->
           <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="icon-bar"></span> 
@@ -110,6 +123,7 @@ color: #004d40;
                 </div>
               </div>
               </form>
+
 <!-- 
            <li class="nav-item submenu dropdown">
             <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -127,8 +141,17 @@ color: #004d40;
 
            
             </ul>
-
+               
             <ul class="nav navbar-nav menu_nav ">
+              <li class="nav-item">
+                <a class="nav-link" href="/cart">
+                    <!-- <i class="fas fa-fw fa-chart-area"></i> -->
+                    <i class="fas fa-fw fa-wrench"></i>
+                    
+                    <span>Cart: {{ cart_item_count }} item</span></a>
+                   
+            </li> 
+            <!-- <a href="/cart">Cart: {{ cart_item_count }} item</a> -->
               {% csrf_token %}
               {% if user.is_authenticated %}
              
@@ -222,13 +245,16 @@ color: #004d40;
   <script src="{% static 'api/fend/vendors/jquery.ajaxchimp.min.js'%}"></script>
   <script src="{% static 'api/fend/vendors/mail-script.js'%}"></script>
   <script src="{% static 'api/fend/js/main.js'%}"></script>
+  <!-- <script src="{% static 'api/fend/vendors/bootstrap/bootstrap.min.css'%}"></script> -->
 
-	<script src= 
+	<!-- <script src= 
 "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"> 
 </script> 
 	<script src= 
 "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"> 
-</script> 
+</script>  -->
+
+
   
 </body>
 </html>

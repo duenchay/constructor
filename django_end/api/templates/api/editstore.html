@@ -45,7 +45,7 @@
               <a  class="btn btn-sm btn-success" href="/store" style="padding: 8px; float: right; background-color: rgb(53, 122, 155); color: white;">Back</a>
           </div>
           <div class="card-body">
-            <form class="form-horizontal" action="/editstore/{{ store.id }}/" method="POST"  enctype="multipart/form-data">
+            <form class="form-horizontal" action="/editstore/" method="POST"  enctype="multipart/form-data">
               {% csrf_token %}
               <div class="form-group">
                   <div class="form-row">
