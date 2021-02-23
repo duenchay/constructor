@@ -137,8 +137,9 @@ def checkout(request):
             cart.clear(request)
 
             request.session['order_id'] = o.id
+            # messages.info(request, "This item was not in your cart")
 
-            messages.add_message(request, messages.INFO, 'Order Placed!')
+            messages.info(request, messages.INFO, 'Order Placed!')
             return redirect('checkout')
 
 
