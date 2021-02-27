@@ -36,7 +36,7 @@
               <i class="fas fa-table"></i>
               คลังสินค้า
 
-              <a  class="btn btn-sm btn-success" href="storck" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a>
+              <!-- <a  class="btn btn-sm btn-success" href="/stock" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a> -->
           </div>
           <!-- <div class="input-group">
             <div class="form-outline">
@@ -69,32 +69,58 @@
                           <th>ชื่อ</th>
                           <th>ราคา</th>
                           <th>หมวดหมู่</th>
-                          <th>รายละเอียด</th>
+                          <th>จำนวน</th>
                           <!-- <th>รูป</th> -->
                           <!-- <th>จำนวน</th> -->
-                          <!-- <th>Created At</th> -->
-                          <th>แก้ไข</th> 
-                          <th>ลบ</th>
+                          <th>Buy</th>
+                          <th>Add Stock</th> 
+                          <!-- <th>ลบ</th> -->
                       </tr>
                       </thead>
                       <tbody>
                         {% csrf_token %} 
-                      {% for storck in storcks %}
+                      {% for product in products %}
                     
                           <tr>
-                            <td>{{ storck.id }}</td>
-                              <td>{{ storck.all_products }}</td>
-                              <td>{{ storck.Sold }}</td>
-                              <td>{{ storck.inventories }}</td>
-                              <td>{{ storck.product }}</td>
+                            <td>{{ product.id }}</td>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.price }}</td>
+                            <td>{{ product.product_type }}</td> 
+                            <td>{{ product.quantity}}</td>
+                              
+                              
+                              
+                              
                               <!-- <td><img src="media/{{storcks.storcks_img}}" style="height: 75px;"></td>
                               <td>{{ storcks.storcks_amount }}</td> -->
                               <!-- <td>{{ i.created_at  |date:"d-m-Y H:i:s" }}</td> -->
-                              <td>                                   
-                                  <a class="btn btn-sm btn-warning" href="/editstorcks/{{storcks.id}}"> <span class="fa fa-edit"></span> Edit</a>
+                              <!-- <td>                                   
+                                  <a class="btn btn-sm btn-warning" href="/editstorcks/{{storcks.id}}"> <span class="fa fa-edit"></span> add stock</a>
                                   
-                              </td>
-                              <td><a class="btn btn-sm btn-danger" href="deletestorcks/{{product.id}}"><span class="fa fa-trash"></span> Delete</a></td>
+                              </td> -->
+
+                              <td><a href="/issue_item/{{product.id}}"
+                                ><input
+                                  type="submit"
+                                  value="BUY ITEM"
+                                  class="btn btn-secondary btn"
+                                  type="button"
+                              /></a></td>
+                        
+
+                              <td><a href="/add_to_stock/{{product.id}}"
+                                ><input
+                                  type="submit"
+                                  value="Add Stock"
+                                  class="btn btn-secondary btn"
+                                  type="button"
+                              /></a></td>
+
+
+
+
+                             
+                              <!-- <td><a class="b/tn btn-sm btn-danger" href="deletestorcks/{{product.id}}"><span class="fa fa-trash"></span> Delete</a></td> -->
                           </tr>
                           
                       {% endfor %}

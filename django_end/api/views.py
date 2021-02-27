@@ -32,15 +32,57 @@ from django.contrib import messages
 # from .forms import CartForm, CheckoutForm, UsersForm
 from . import cart 
 
-# from api import cart
 
-# def cart_item_count(request):
-#     item_count = cart.item_count(request)
-#     # return {'cart_item_count' : item_count }
-#     return render(request, "api/cart.html", {
-#                                     'cart_item_count': item_count,
-#                                     })
+def issue_item(request, pk):
+    product = Product.objects.get(id = pk)
+    sales_form = SaleForm(request.POST)  
+      
+    if request.method == 'POST':     
+        if sales_form.is_valid():
+            # new_sale = sales_form.save(commit=False)
+            # new_sale.item = product
+            # new_sale.unit_price = product.unit_price   
+            # new_sale.save()
+            #To keep track of the stock remaining after sales
+            issued_quantity = int(request.POST['quantity'])
+            product.quantity -= issued_quantity
+            product.save()
 
+            print(product.name) #ชื่อ
+            print(request.POST['quantity']) #จำนวน
+            # print(product.total_quantity)
+
+            return redirect('/stock') 
+
+    return render (request, 'api/issue_item.html',
+     {
+    'sales_form': sales_form,
+    })
+
+def add_to_stock(request, pk):
+    issued_item = Product.objects.get(id = pk)
+    form = AddStockForm(request.POST)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            added_quantity = int(request.POST['received_quantity'])
+            issued_item.quantity += added_quantity
+            issued_item.save()
+
+            #To add to the remaining stock quantity is reducing
+            print(added_quantity)
+            print (issued_item.quantity)
+            return redirect('/stock')
+
+    return render (request, 'api/add_to_stock.html', {'form': form})
+
+
+def stock(request):
+    products = Product.objects.all()
+    # users = Users.objects.get(username=request.user.username)
+    return render(request, 'api/stock.html', {'products': products,
+    # 'users':users
+    })
 
 
 def home(request):
@@ -663,18 +705,18 @@ def payment(request):
     #     payments = paginator.page(paginator.num_pages)
     return render(request, 'api/payment.html', {'payments': payments,'users':users})
 
-def storck(request):
-    storcks = Storck.objects.all()
-    users = Users.objects.get(username=request.user.username)
-    # paginator = Paginator(mechanics_list, 100)
-    # page = request.GET.get('page')
-    # try:
-    #     mechanics = paginator.page(page)
-    # except PageNotAnInteger:
-    #     mechanics = paginator.page(1)
-    # except EmptyPage:
-    #     mechanics = paginator.page(paginator.num_pages)
-    return render(request, 'api/storck.html', {'storcks': storcks,'users':users})
+# def storck(request):
+#     storcks = Storck.objects.all()
+#     users = Users.objects.get(username=request.user.username)
+#     # paginator = Paginator(mechanics_list, 100)
+#     # page = request.GET.get('page')
+#     # try:
+#     #     mechanics = paginator.page(page)
+#     # except PageNotAnInteger:
+#     #     mechanics = paginator.page(1)
+#     # except EmptyPage:
+#     #     mechanics = paginator.page(paginator.num_pages)
+#     return render(request, 'api/storck.html', {'storcks': storcks,'users':users})
 
 
 def orderUser(req):

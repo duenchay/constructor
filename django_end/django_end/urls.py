@@ -33,7 +33,7 @@ urlpatterns = [
     path('editmechanic/<int:id>/', views.editmechanic),
     path('order',views.order),
     path('orderproduct/<int:id>/',views.orderproduct),
-    path('storck',views.storck),
+    path('stock',views.stock),
     path('payment',views.payment),  
 
     # path('home2',views.home2),  
@@ -54,10 +54,12 @@ urlpatterns = [
     path('search',views.search,name='search'),
     path('addstore',views.addstore,name='addstore'),
     path('showProductAll',views.showProductAll,name='showProductAll'),
-    
+    path('add_to_stock/<str:pk>/', views.add_to_stock, name='add_to_stock'),
+    path('issue_item/<str:pk>/', views.issue_item, name='issue_item'), 
+     
     path('cart/', views.show_cart, name='show_cart'),
     path('home', views.home,),
-    path('checkout/', views.checkout, name='checkout'),
+    path('checkout/', views.checkout,  name='checkout'),
     # path('base', views.base,),
   
    

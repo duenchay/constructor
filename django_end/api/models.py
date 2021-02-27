@@ -144,22 +144,32 @@ class Product(models.Model):
     product_type = models.ForeignKey(Product_Type,on_delete=models.CASCADE,verbose_name = 'หมวดหมู่สินค้า') #หมวดหมู่สินค้า
     product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า')  #สถานะสินค้า
     quantity = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
+    received_quantity = models.IntegerField(default = 0, null = True, blank = True)
+   
     # slug = models.SlugField()
     def __str__(self):
         return f'{self.name}  '
     class Meta:
         verbose_name = 'สินค้า'
 
-# class Product(models.Model):
-#     name = models.CharField(max_length=191)
-#     price = models.DecimalField(max_digits=7, decimal_places=2)
-#     slug = models.SlugField()
-#     description = models.TextField()
-#     image = models.ImageField(upload_to='products_images/', blank=True)
+class Sale(models.Model):
+    item = models.ForeignKey(Product, on_delete = models.CASCADE)
+    quantity = models.IntegerField(default = 0, null = True, blank = True)
+    # amount_received = models.IntegerField(default = 0, null = True, blank = True)
+    # issued_to = models.CharField(max_length = 50, null = True, blank = True)
+    # unit_price = models.IntegerField(default = 0, null = True, blank = True)
 
-#     def __str__(self):
-#         return self.name 
+    # def get_total(self):
+    #     total = self.quantity * self.item.unit_price
+    #     return int(total)
+    
+    # def get_change(self):
+    #     change = self.get_total() - self.amount_received
+    #     return abs(int(change))
 
+    
+    def __str__(self):
+        return self.item.item_name
 
 class CartItem(models.Model):
     user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)

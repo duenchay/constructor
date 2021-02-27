@@ -43,6 +43,7 @@ def add_item_to_cart(request):
             price = price,
             quantity = quantity,
             product_id = product_id,
+            user = request.user
         )
 
         # item.cart_id = cart_id

@@ -62,3 +62,17 @@ class StoreForm(forms.ModelForm):
     class Meta:
         model = Store
         fields = '__all__'
+
+
+
+class AddStockForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ['received_quantity']
+
+
+
+class SaleForm(forms.ModelForm):
+    class Meta: 
+        model = Sale
+        fields = ["quantity"]
