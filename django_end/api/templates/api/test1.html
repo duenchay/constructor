@@ -44,43 +44,43 @@
                         <th>id</th>
                         <th>วันที่สั่งซื้อ</th>
                           <th>ชื่อผู้สั่ง</th>
-                          <!-- <th>ชื่อผู้รับออเดอร์</th>
-                          <th>ราคา</th> -->
-                          
-                          <th>สถานะการชำระเงิน</th>
+            
                           <!-- <th>รูปงานช่าง</th>
                           <th>ประเภทช่าง</th> -->
                           <!-- <th>Created At</th> -->
                           <!-- <th>แก้ไข</th>  -->
-                          <!-- <th>รายการสินค้า</th> -->
+                          <th>รายการสินค้า</th>
                       </tr>
                       </thead>
                       <tbody>
                         {% csrf_token %} 
-                      {% for i in orders %}
-                      
+
+                      {% for n in litem %}
+                     
+                    
                     
                           <tr>
-                            <td>{{ i.id }}</td>
+                            <td>{{ n.id }}</td>
                             <!-- <td><img src="media/{{i.avatar}}" style="height: 75px;"></td> -->
-                              <td>{{ i.name }}</td>
-                              <td>{{ i.email }}</td>
+                              <td>{{ n.product }}</td>
+                              <td>{{ n.price }}</td>
                              
-                              <!-- <td>{{ i.avatar }}</td> -->
+                              <td>{{ n.order }}</td>
                               
                               <!-- <td>{{ i.all_price }}</td> -->
                               <!-- <td><img src="media/{{i.mechanic_img}}" style="height: 75px;"></td> -->
  
                               <!-- <td>{{ i.money_status }}</td> -->
                               <!-- <td>{{ i.created_at  |date:"d-m-Y H:i:s" }}</td> -->
-                              <td>                                   
-                                  <a class="btn btn-sm btn-primary" href="/test1/{{i.id}}"> <span></span>รายการสินค้า</a>
+                              <!-- <td>                                   
+                                  <a class="btn btn-sm btn-primary" href="/orderproduct/{{i.id}}"> <span></span>รายการสินค้า</a>
                                   
-                              </td>
+                              </td> -->
                               <!-- <td><a class="btn btn-sm btn-primary" href="orderproduct/{{order.id}}"><span ></span> รายการสินค้า</a></td> -->
                           </tr>
-                         
-                      {% endfor %}
+                          
+                          {% endfor %}
+                      
                       </tbody>
                   </table><s></s>
               </div>

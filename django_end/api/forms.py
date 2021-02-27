@@ -76,3 +76,9 @@ class SaleForm(forms.ModelForm):
     class Meta: 
         model = Sale
         fields = ["quantity"]
+
+
+class LineItemForm(forms.ModelForm):
+    class Meta: 
+        model = LineItem
+        fields = '__all__'

@@ -95,17 +95,17 @@ color: #004d40;
               
               <li class="nav-item active"><a class="nav-link" href="/index">หน้าแรก</a></li>
               <li class="nav-item submenu dropdown">
-                <a href=" " class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                <a href="showProductAll" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                   aria-expanded="false">วัสดุก่อสร้าง</a>
                 <ul class="dropdown-menu">
                   <li class="nav-item"><a class="nav-link" href="/showProductAll">ทั้งหมด</a></li>
                   {% if product_type  %}
-			{% for cat in product_type %}
+	                 	{% for cat in product_type %}
      
                    
                   <li class="nav-item"><a class="nav-link" href="/productTypeUser/{{cat.id}}">{{cat.product_type}}</a></li>
                   {% endfor %}
-		{% endif %}
+                  		{% endif %}
                   <!-- <li class="nav-item"><a class="nav-link" href="single-product.html">Product Details</a></li>
                   <li class="nav-item"><a class="nav-link" href="checkout.html">Product Checkout</a></li>
                   <li class="nav-item"><a class="nav-link" href="confirmation.html">Confirmation</a></li>
@@ -192,9 +192,13 @@ color: #004d40;
                         <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                         Profile
                     </a></li>
+                    <li class="nav-item"><a class="nav-link" href="/profileAdmin">
+                      <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
+                      ประวัติการซื้อ
+                  </a></li>
                     {% if request.user.is_superuser %}
                     <li class="nav-item">  <a class="nav-link" href="/store" >
-                      <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                      <i class="fas fa-tachometer-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                         จัดการข้อมูล
                   </a></li>
                   {% endif %}

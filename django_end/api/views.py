@@ -277,6 +277,21 @@ def profileAdmin(req):
        
     })
 
+def editprofile(request, id=0):
+    users = Users.objects.get(username=request.user.username)
+    if request.method == 'POST':
+        form = UsersForm(request.POST, request.FILES, instance=users)
+        if form.is_valid():
+            form.save()
+        else:
+            print("==== form.errors ====")
+            print(form.errors)
+    else:
+        form = UsersForm(users)  
+    return render(request, 'api/editprofile.html' ,{ 
+        'form': form,
+        'users':users
+    })
 
 def profile(req):
     users = Users.objects.get(username=req.user.username)
@@ -383,7 +398,44 @@ def product_type(request):
         })
 
 def test(req):
-    return render(req, 'api/test.html')
+    orders = Order.objects.filter()
+   
+    return render(req, 'api/test.html',{
+        'orders':orders,
+        # 'litem':litem
+        # 'users':users
+    })
+
+
+# def editprofile(request, id=0):
+#     users = Users.objects.get(username=request.user.username)
+#     if request.method == 'POST':
+#         form = UsersForm(request.POST, request.FILES, instance=users)
+#         if form.is_valid():
+#             form.save()
+#         else:
+#             print("==== form.errors ====")
+#             print(form.errors)
+#     else:
+#         form = UsersForm(users)  
+#     return render(request, 'api/editprofile.html' ,{ 
+#         'form': form,
+#         'users':users
+#     })
+
+
+def test1(req,id):
+    litem = LineItem.objects.filter(order=id)
+    orders = Order.objects.filter()
+    # print(litem)
+    print(id)
+    print(orders)
+    # users = Users.objects.get(username=request.user.username)
+    return render(req, 'api/test1.html',{
+        'orders':orders,
+        'litem':litem
+        # 'users':users
+    })
 
 # หน้าแรก
 def index(request):

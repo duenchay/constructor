@@ -61,6 +61,8 @@ urlpatterns = [
     path('home', views.home,),
     path('checkout/', views.checkout,  name='checkout'),
     # path('base', views.base,),
+    path('editprofile/<int:id>/', views.editprofile),
+    path('test1/<int:id>/', views.test1),
   
    
 
