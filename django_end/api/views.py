@@ -1,6 +1,6 @@
-from django.utils import timezone
+# from django.utils import timezone
 from api.forms import *
-from django.http import HttpResponse
+# from django.http import HttpResponse
 # from django.utils import translation
 from .models import *
 from .serializers import *
@@ -8,9 +8,9 @@ from django.core.checks import messages
 from django.http import request
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect, render
-from django.core.exceptions import ValidationError
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import ListView
+# from django.core.exceptions import ValidationError
+# from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+# from django.views.generic import ListView
 # Create your views here.
 
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -22,15 +22,37 @@ from django.contrib.auth.hashers import make_password
 # from .utils import cookieCart, cartData, guestOrder
 from django.shortcuts import render, get_object_or_404
 
-# from . import cart
-
-# from . import cart
 from django.shortcuts import render, HttpResponse, redirect, \
     get_object_or_404, reverse
 from django.contrib import messages
 # from .models import Product, Order, LineItem
 # from .forms import CartForm, CheckoutForm, UsersForm
 from . import cart 
+
+
+def orderproductUser(req,id):
+    litem = LineItem.objects.filter(order=id)
+    orders = Order.objects.filter()
+    # print(litem)
+    print(id)
+    print(orders)
+    # users = Users.objects.get(username=request.user.username)
+    return render(req, 'api/orderproductUser.html',{
+        'orders':orders,
+        'litem':litem
+        # 'users':users
+    })
+
+def orderUser(req):
+    litem = LineItem.objects.all()
+    orders = Order.objects.all()
+    # litem = LineItem.objects.all()
+    
+
+    return render(req, 'api/orderUser.html',{
+        'orders':orders,
+        'litem':litem
+    })
 
 
 def issue_item(request, pk):
@@ -59,9 +81,10 @@ def issue_item(request, pk):
     'sales_form': sales_form,
     })
 
+#เพิ่มจำนวนสินค้าในสต๊อก
 def add_to_stock(request, pk):
     issued_item = Product.objects.get(id = pk)
-    form = AddStockForm(request.POST)
+    form = AddStockForm(request.POST)  #จำนวนสินค้าในสต๊อก
 
     if request.method == 'POST':
         if form.is_valid():
@@ -79,9 +102,9 @@ def add_to_stock(request, pk):
 
 def stock(request):
     products = Product.objects.all()
-    # users = Users.objects.get(username=request.user.username)
+    users = Users.objects.get(username=request.user.username)
     return render(request, 'api/stock.html', {'products': products,
-    # 'users':users
+    'users':users
     })
 
 
@@ -90,18 +113,20 @@ def home(request):
     return render(request, "api/home.html", {
                                     'all_products': all_products,
                                     })
+#สินค้าในตะกร้า
 def show_cart(request):
     if request.user.is_anonymous:
         return redirect('/login')
     else:
         users= Users.objects.get(username=request.user.username)
-    item_count = cart.item_count(request)
-    product_type=Product_Type.objects.all()
+
+    item_count = cart.item_count(request)  #จำนวนสินค้า
+    product_type=Product_Type.objects.all() #หมวดหมู่สินค้า
 
     if request.method == 'POST':
-        if request.POST.get('submit') == 'Update':
+        if request.POST.get('submit') == 'Update': #เพิ่ม
             cart.update_item(request)
-        if request.POST.get('submit') == 'Remove':
+        if request.POST.get('submit') == 'Remove': # ลบ
             cart.remove_item(request)
         # form.instance.store = store
         # form.save()
@@ -144,7 +169,7 @@ def checkout(request):
     # if request.user.is_anonymous:
     #     return redirect('/login')
     # else:
-    #     users = Users.objects.get(username=request.user.username)
+    # users = Users.objects.get(username=request.user.username)
         # member = Member.objects.get(username=request.user.username)
         # knn = joblib.load('static/knn.model')
     # favc = None
@@ -158,10 +183,15 @@ def checkout(request):
         if form.is_valid():
             cleaned_data = form.cleaned_data
             o = Order(
-                name = cleaned_data.get('name'),
-                email = cleaned_data.get('email'),
-                postal_code = cleaned_data.get('postal_code'),
-                address = cleaned_data.get('address'),
+                # name = cleaned_data.get('name'),
+                lat = cleaned_data.get('lat'),
+                lng = cleaned_data.get('lng'),
+                money_status = cleaned_data.get('money_status'),
+                delivery_options = cleaned_data.get('delivery_options'),
+                payment_options = cleaned_data.get('payment_options'),
+                # users = Users.objects.get(username=request.user.username)
+                
+                # address = cleaned_data.get('address'),
             )
             o.save()
 
@@ -171,13 +201,16 @@ def checkout(request):
                     product_id = cart_item.product_id,
                     price = cart_item.price,
                     quantity = cart_item.quantity,
-                    order_id = o.id
+                    order_id = o.id,
+                    user = cart_item.user
+
+                   
                 )
 
                 li.save()
 
             cart.clear(request)
-
+            
             request.session['order_id'] = o.id
             # messages.info(request, "This item was not in your cart")
 
@@ -188,9 +221,13 @@ def checkout(request):
     else:
         form = CheckoutForm()
         return render(request, 'api/checkout.html', {'form': form,
-        # 'users':users
+        # 'users':users,
         'product_type':product_type,
-        'cart_item_count':item_count
+        'cart_item_count':item_count,
+        'money_status': Money_Status.objects.all(),
+        'delivery_options': Delivery_Options.objects.all(),
+        'payment_options': Payment_Options.objects.all(),
+        
         })
       
 
@@ -398,12 +435,16 @@ def product_type(request):
         })
 
 def test(req):
-    orders = Order.objects.filter()
+    orders = Order.objects.all()
+    # user = req.user
+    print(orders)
+    users = Users.objects.get(username=req.user.username)
    
     return render(req, 'api/test.html',{
         'orders':orders,
+        # 'user':user
         # 'litem':litem
-        # 'users':users
+        'users':users
     })
 
 
@@ -771,109 +812,106 @@ def payment(request):
 #     return render(request, 'api/storck.html', {'storcks': storcks,'users':users})
 
 
-def orderUser(req):
-   
 
-    return render(req, 'api/orderUser.html')
 
-class RoleViewSet(viewsets.ModelViewSet):
-    queryset = Role.objects.all()
-    serializer_class = RoleSerializer
+# class RoleViewSet(viewsets.ModelViewSet):
+#     queryset = Role.objects.all()
+#     serializer_class = RoleSerializer
 
-class UserViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+# class UserViewSet(viewsets.ModelViewSet):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
 
-class CustomerViewSet(viewsets.ModelViewSet):
-    queryset = Customer.objects.all()
-    serializer_class = CustomerSerializer
+# class CustomerViewSet(viewsets.ModelViewSet):
+#     queryset = Customer.objects.all()
+#     serializer_class = CustomerSerializer
 
-class AdminViewSet(viewsets.ModelViewSet):
-    queryset = Admin.objects.all()
-    serializer_class = AdminSerializer
+# class AdminViewSet(viewsets.ModelViewSet):
+#     queryset = Admin.objects.all()
+#     serializer_class = AdminSerializer
 
-class Mechanic_TypeViewSet(viewsets.ModelViewSet):
-    queryset = Mechanic_Type.objects.all()
-    serializer_class = Mechanic_TypeSerializer
+# class Mechanic_TypeViewSet(viewsets.ModelViewSet):
+#     queryset = Mechanic_Type.objects.all()
+#     serializer_class = Mechanic_TypeSerializer
 
-class MechanicViewSet(viewsets.ModelViewSet):
-    queryset = Mechanic.objects.all()
-    serializer_class = MechanicSerializer
+# class MechanicViewSet(viewsets.ModelViewSet):
+#     queryset = Mechanic.objects.all()
+#     serializer_class = MechanicSerializer
 
-class StoreViewSet(viewsets.ModelViewSet):
-    queryset = Store.objects.all()
-    serializer_class = StoreSerializer
+# class StoreViewSet(viewsets.ModelViewSet):
+#     queryset = Store.objects.all()
+#     serializer_class = StoreSerializer
 
-class Product_TypeViewSet(viewsets.ModelViewSet):
-    queryset = Product_Type.objects.all()
-    serializer_class = Product_TypeSerializer
+# class Product_TypeViewSet(viewsets.ModelViewSet):
+#     queryset = Product_Type.objects.all()
+#     serializer_class = Product_TypeSerializer
 
-class Product_StatusViewSet(viewsets.ModelViewSet):
-    queryset = Product_Status.objects.all()
-    serializer_class = Product_StatusSerializer
+# class Product_StatusViewSet(viewsets.ModelViewSet):
+#     queryset = Product_Status.objects.all()
+#     serializer_class = Product_StatusSerializer
 
-class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+# class ProductViewSet(viewsets.ModelViewSet):
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
 
-class Money_StatusViewSet(viewsets.ModelViewSet):
-    queryset = Money_Status.objects.all()
-    serializer_class = Money_StatusSerializer
+# class Money_StatusViewSet(viewsets.ModelViewSet):
+#     queryset = Money_Status.objects.all()
+#     serializer_class = Money_StatusSerializer
 
-class Delivery_OptionsViewSet(viewsets.ModelViewSet):
-    queryset = Delivery_Options.objects.all()
-    serializer_class = Delivery_OptionsSerializer
+# class Delivery_OptionsViewSet(viewsets.ModelViewSet):
+#     queryset = Delivery_Options.objects.all()
+#     serializer_class = Delivery_OptionsSerializer
 
-class Payment_OptionsViewSet(viewsets.ModelViewSet):
-    queryset = Payment_Options.objects.all()
-    serializer_class = Payment_OptionsSerializer
+# class Payment_OptionsViewSet(viewsets.ModelViewSet):
+#     queryset = Payment_Options.objects.all()
+#     serializer_class = Payment_OptionsSerializer
 
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+# class OrderViewSet(viewsets.ModelViewSet):
+#     queryset = Order.objects.all()
+#     serializer_class = OrderSerializer
 
-class PaymentViewSet(viewsets.ModelViewSet):
-    queryset = Payment.objects.all()
-    serializer_class = PaymentSerializer
+# class PaymentViewSet(viewsets.ModelViewSet):
+#     queryset = Payment.objects.all()
+#     serializer_class = PaymentSerializer
 
-class Order_ProductViewSet(viewsets.ModelViewSet):
-    queryset = Order_Product.objects.all()
-    serializer_class = Order_ProductSerializer
+# class Order_ProductViewSet(viewsets.ModelViewSet):
+#     queryset = Order_Product.objects.all()
+#     serializer_class = Order_ProductSerializer
 
-class CartsViewSet(viewsets.ModelViewSet):
-    queryset = Carts.objects.all()
-    serializer_class = CartsSerializer
+# class CartsViewSet(viewsets.ModelViewSet):
+#     queryset = Carts.objects.all()
+#     serializer_class = CartsSerializer
 
-class ConversationsViewSet(viewsets.ModelViewSet):
-    queryset = Conversations.objects.all()
-    serializer_class = ConversationsSerializer
+# class ConversationsViewSet(viewsets.ModelViewSet):
+#     queryset = Conversations.objects.all()
+#     serializer_class = ConversationsSerializer
 
-class StorckViewSet(viewsets.ModelViewSet):
-    queryset = Storck.objects.all()
-    serializer_class = StorckSerializer
+# class StorckViewSet(viewsets.ModelViewSet):
+#     queryset = Storck.objects.all()
+#     serializer_class = StorckSerializer
 
 
 # # Routers provide an easy way of automatically determining the URL conf.
-router = routers.DefaultRouter()
-router.register(r'role', RoleViewSet)
-router.register(r'user', UserViewSet)
-router.register(r'Customer', CustomerViewSet)
-router.register(r'Admin', AdminViewSet)
-router.register(r'Mechanic_Type', Mechanic_TypeViewSet)
-router.register(r'Mechanic', MechanicViewSet)
-router.register(r'Store', StoreViewSet)
-router.register(r'Product_Type', Product_TypeViewSet)
-router.register(r'Product_Status', Product_StatusViewSet)
-router.register(r'Product', ProductViewSet)
-router.register(r'Money_Status', Money_StatusViewSet)
-router.register(r'Delivery_Options', Delivery_OptionsViewSet)
-router.register(r'Payment_Options', Payment_OptionsViewSet)
-router.register(r'Order', OrderViewSet)
-router.register(r'Payment', PaymentViewSet)
-router.register(r'Order_Product', Order_ProductViewSet)
-router.register(r'Carts', CartsViewSet)
-router.register(r'Conversations', ConversationsViewSet)
-router.register(r'Storck', StorckViewSet)
+# router = routers.DefaultRouter()
+# router.register(r'role', RoleViewSet)
+# router.register(r'user', UserViewSet)
+# router.register(r'Customer', CustomerViewSet)
+# router.register(r'Admin', AdminViewSet)
+# router.register(r'Mechanic_Type', Mechanic_TypeViewSet)
+# router.register(r'Mechanic', MechanicViewSet)
+# router.register(r'Store', StoreViewSet)
+# router.register(r'Product_Type', Product_TypeViewSet)
+# router.register(r'Product_Status', Product_StatusViewSet)
+# router.register(r'Product', ProductViewSet)
+# router.register(r'Money_Status', Money_StatusViewSet)
+# router.register(r'Delivery_Options', Delivery_OptionsViewSet)
+# router.register(r'Payment_Options', Payment_OptionsViewSet)
+# router.register(r'Order', OrderViewSet)
+# router.register(r'Payment', PaymentViewSet)
+# router.register(r'Order_Product', Order_ProductViewSet)
+# router.register(r'Carts', CartsViewSet)
+# router.register(r'Conversations', ConversationsViewSet)
+# router.register(r'Storck', StorckViewSet)
 
 
 # Create your views here.

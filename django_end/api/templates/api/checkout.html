@@ -1,3 +1,6 @@
+
+
+
 {% extends 'api/base2.html' %}
 
 {% block title %}
@@ -6,27 +9,141 @@
 
 {% block content %}
 
-    <div class="container">
-        <div class="row">
+<div id="content-wrapper">
 
-            <h2>Checkout</h2>
-
-            {% for message in messages %}
-                <p>{{ message }}</p>
-            {% endfor %}
-
-
-            <form action="" method="post">
-                <table>
-                    {% csrf_token %}
-                    {{ form.as_table }}
-                    <tr>
-                        <td></td>
-                        <td><input type="submit" value="Place Order"></td>
-                    </tr>
-                </table>
+    <div class="container-fluid">
+        <!-- Breadcrumbs-->
+        <!-- <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="#">CRUD</a>
+            </li>
+            <li class="breadcrumb-item active">Add</li> -->
+        </ol>
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="fas fa-table"></i>
+                เพิ่มสินค้า
+            </div>
+            <div class="card-body">
+              <form class="form-horizontal" action="" method="POST"  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <div class="form-row">
+                        <div class="col-md-9">
+                            <div class="form-label-group">
+                              <label for="lat"><b>lat</b></label>
+                              <input type="text" class="form-control" placeholder="lat" name="lat" required>
+                             
+                                <!-- <input type="text" class="form-control" name="product_name" placeholder="กรุณากรอกชื่อสินค้า" id="inputFirst" required>  -->
+                            </div>
+                        </div>
+                     
+                    </div>
+                </div>
+                <div class="form-group">
+                  <div class="form-row">
+                      <div class="col-md-9">
+                          <div class="form-label-group">
+                            <label for="lng"><b>lng</b></label>
+                            <input type="text" class="form-control" placeholder="lng" name="lng" required>
+                              <!-- <input type="text" class="form-control" name="product_name" placeholder="กรุณากรอกชื่อสินค้า" id="inputFirst" required>  -->
+                          </div>
+                      </div>
+                   
+                  </div>
+              </div>
+             
+       
+          <div class="form-group">
+            <div class="form-row">
+                <div class="col-md-9">
+                    <div class="form-label-group">
+                      <label for="exampleSelect1"><b> money_status</b></label>
+                      <select class="form-control" id="Select" name="money_status" required>
+              
+                        <!-- {% for s in product_types %}
+              
+                        {% if s == product.product_type %}
+                        <option value="{{s.sid}}" selected>{{ s.product_type }}</option>  
+                        {% else %}
+                        <option value="{{s.sid}}">{{ s.product_type }}</option>  
+                        {% endif %}
+              
+                        {% endfor %} -->
+                        {% for c in money_status %}
+                        <option value="{{c.id}}">{{ c.money_status }}</option>  
+                        {% endfor %}
+                      </select>
+                  
+                    </div>
+                </div>
+             
+            </div>
+        </div>
+        <div class="form-group">
+          <div class="form-row">
+              <div class="col-md-9">
+                  <div class="form-label-group">
+                    <label for="exampleSelect2"><b>delivery_options</b></label>
+                    <select class="form-control" id="Select" name="delivery_options" required>
+            
+                      <!-- {% for s in product_types %}
+            
+                      {% if s == product.product_type %}
+                      <option value="{{s.sid}}" selected>{{ s.product_type }}</option>  
+                      {% else %}
+                      <option value="{{s.sid}}">{{ s.product_type }}</option>  
+                      {% endif %}
+            
+                      {% endfor %} -->
+                      {% for s in delivery_options %}
+                      <option value="{{s.id}}">{{ s.delivery_options }}</option>  
+                      {% endfor %}
+                    </select>
+                
+                  </div>
+              </div>
+           
+          </div>
+      </div>
+      <div class="form-group">
+        <div class="form-row">
+            <div class="col-md-9">
+                <div class="form-label-group">
+                  <label for="exampleSelect2"><b>payment_options</b></label>
+                  <select class="form-control" id="Select" name="payment_options" required>
+          
+                    <!-- {% for s in product_types %}
+          
+                    {% if s == product.product_type %}
+                    <option value="{{s.sid}}" selected>{{ s.product_type }}</option>  
+                    {% else %}
+                    <option value="{{s.sid}}">{{ s.product_type }}</option>  
+                    {% endif %}
+          
+                    {% endfor %} -->
+                    {% for s in payment_options %}
+                    <option value="{{s.id}}">{{ s.payment_options }}</option>  
+                    {% endfor %}
+                  </select>
+              
+                </div>
+            </div>
+         
+        </div>
+    </div>  
+    
+                <button class="btn btn-primary btn-block" type="submit">Submit &nbsp;&nbsp;&nbsp;<span></span></button>
             </form>
+            </div>
         </div>
     </div>
+  </div>
+
+
+
+    
 
 {% endblock %}
+
+    

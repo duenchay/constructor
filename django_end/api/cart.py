@@ -1,7 +1,7 @@
 from .models import CartItem, Product
 from django.shortcuts import get_object_or_404, get_list_or_404
 
-
+#ไอดีตะกร้า
 def _cart_id(request):
     if 'cart_id' not in request.session:
         request.session['cart_id'] = _generate_cart_id()
@@ -53,7 +53,7 @@ def add_item_to_cart(request):
 def item_count(request):
     return get_all_cart_items(request).count()
 
-
+#ราคารวม
 def subtotal(request):
     cart_item = get_all_cart_items(request)
     sub_total = 0

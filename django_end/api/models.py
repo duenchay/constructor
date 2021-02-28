@@ -189,35 +189,6 @@ class CartItem(models.Model):
     def total_cost(self):
         return self.quantity * self.price
 
-
-class Order(models.Model):
-    name = models.CharField(max_length=191)
-    email = models.EmailField()
-    postal_code = models.IntegerField()
-    address = models.CharField(max_length=191)
-    date = models.DateTimeField(auto_now_add=True)
-    paid = models.BooleanField(default=False)
-
-    def __str__(self):
-        return "{}".format(self.id)
-        # return "{}:{}".format(self.id, self.email)
-
-    def total_cost(self):
-        return sum([ li.cost() for li in self.lineitem_set.all() ] )
-
-
-class LineItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=7, decimal_places=2)
-    quantity = models.IntegerField()
-    date_added = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return "{}:{}".format(self.product.name, self.id)
-
-    def cost(self):
-        return self.price * self.quantity
 #สถานะการชำระเงิน
 class Money_Status(models.Model):
     money_status =  models.CharField(max_length=100,default=' ',verbose_name = 'สถานะการชำระเงิน') 
@@ -244,6 +215,43 @@ class Payment_Options (models.Model):
         return f'{self.payment_options} '
     class Meta:
         verbose_name = 'ตัวเลือกการชำระเงิน'
+
+
+class Order(models.Model):
+    # name = models.CharField(max_length=191)
+    # user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
+    # email = models.EmailField()
+    lat =  models.CharField(max_length=1000,default=' ')
+    lng =  models.CharField(max_length=1000,default=' ')
+    money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
+    delivery_options = models.ForeignKey(Delivery_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการจัดส่ง')
+    payment_options = models.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน')
+    # postal_code = models.IntegerField()
+    # address = models.CharField(max_length=191)
+    date = models.DateTimeField(auto_now_add=True)
+    paid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "{}".format(self.id)
+        # return "{}:{}".format(self.id, self.email)
+
+    def total_cost(self):
+        return sum([ li.cost() for li in self.lineitem_set.all() ] )
+
+
+class LineItem(models.Model):
+    user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=7, decimal_places=2)
+    quantity = models.IntegerField()
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return "{}:{}".format(self.product.name, self.id)
+
+    def cost(self):
+        return self.price * self.quantity
 
 # สั่งซื้อ
 # class Order (models.Model): 
@@ -276,7 +284,7 @@ class Payment (models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name = 'รหัสผู้สั่งซื้อสินค้า')
     order= models.ForeignKey(Order,on_delete=models.CASCADE,verbose_name = 'รหัสการสั่งซื้อสินค้า') #รหัสการสั่งซื้อ
     payment_img = models.ImageField(upload_to='media/', verbose_name = 'รูปสลิปโอนเงิน',null=True ,blank=True)
-    payment_options = models.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน')
+    # payment_options = models.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน')
     def __str__(self):
         return f'{self.user} {self.order} {self.payment_options} '
     class Meta:
@@ -342,14 +350,14 @@ class Conversations(models.Model):
         verbose_name = 'บทสนทนา'
 
 # //Stock
-class Storck(models.Model):
-    product= models.ForeignKey(Product,on_delete=models.CASCADE,verbose_name = 'รหัสสินค้า')
-    all_products= models.IntegerField(verbose_name = 'จำนวนสินค้าทั้งหมด')
-    Sold = models.IntegerField(verbose_name = 'จำนวนสินค้าที่ขายได้')
-    inventories = models.IntegerField(verbose_name = 'จำนวนสินค้าที่คงเหลือ')
-    # def __str__(self):
-    #     return f'{self.inventories}   '
-    class Meta:
-        verbose_name = 'คลังสินค้า'
+# class Storck(models.Model):
+#     product= models.ForeignKey(Product,on_delete=models.CASCADE,verbose_name = 'รหัสสินค้า')
+#     all_products= models.IntegerField(verbose_name = 'จำนวนสินค้าทั้งหมด')
+#     Sold = models.IntegerField(verbose_name = 'จำนวนสินค้าที่ขายได้')
+#     inventories = models.IntegerField(verbose_name = 'จำนวนสินค้าที่คงเหลือ')
+#     # def __str__(self):
+#     #     return f'{self.inventories}   '
+#     class Meta:
+#         verbose_name = 'คลังสินค้า'
 
 

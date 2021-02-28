@@ -20,14 +20,15 @@ admin.site.register(Payment)
 admin.site.register(Order_Product)
 admin.site.register(Carts)
 admin.site.register(Conversations)
+admin.site.register(Sale)
 # admin.site.register(Conversations)
-admin.site.register(Storck)
+# admin.site.register(Storck)
 class ProductAdmin(admin.ModelAdmin):
     list_display =['id', 'name', 'price']
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'email', 'date', 'paid']
+    list_display = ['id',  'date', 'paid']
 
 
 class OrderItemAdmin(admin.ModelAdmin):

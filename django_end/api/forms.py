@@ -16,9 +16,9 @@ class CheckoutForm(forms.ModelForm):
         model = Order
         exclude = ('paid',)
 
-        widgets = {
-            'address': forms.Textarea(attrs={'row': 6, 'col': 8}),
-        }
+        # widgets = {
+        #     'address': forms.Textarea(attrs={'row': 6, 'col': 8}),
+        # }
 
 class ProductForm(forms.ModelForm):
     class Meta:
@@ -44,10 +44,10 @@ class Order_ProductForm(forms.ModelForm):
         model = Order_Product
         fields = '__all__'
 
-class StorckForm(forms.ModelForm):
-    class Meta:
-        model = Storck
-        fields = '__all__'
+# class StorckForm(forms.ModelForm):
+#     class Meta:
+#         model = Storck
+#         fields = '__all__'
 
 
 
@@ -68,7 +68,7 @@ class StoreForm(forms.ModelForm):
 class AddStockForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ['received_quantity']
+        fields = ['received_quantity']    #เพิ่มจำนวนสินค้าในสต๊อก
 
 
 
