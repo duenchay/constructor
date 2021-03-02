@@ -219,7 +219,8 @@ class Payment_Options (models.Model):
 
 class Order(models.Model):
     # name = models.CharField(max_length=191)
-    user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
+    # users = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
+    user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     # email = models.EmailField()
     # cart = models.ForeignKey(CartItem,on_delete=models.CASCADE , null=True)
     

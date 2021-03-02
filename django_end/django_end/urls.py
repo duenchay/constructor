@@ -31,26 +31,28 @@ urlpatterns = [
     # path('product_search/', views.product_search, name='product_search'),
     path('mechanic',views.mechanic),
     path('editmechanic/<int:id>/', views.editmechanic),
-    path('order',views.order),
-    path('orderproduct/<int:id>/',views.orderproduct),
+
+    path('orderAll',views.orderAll),
+    path('orderproductAll/<int:id>/',views.orderproductAll),
+    
     path('stock',views.stock),
     path('payment',views.payment),  
 
     # path('home2',views.home2),  
     # path('home',views.home), 
     path('base2',views.base2), 
-    path('orderUser',views.orderUser), 
+    
     path('mechanicDetailUser/<int:id>/',views.mechanicDetailUser),   
     path('storeUser',views.storeUser),  
     path('register1',views.register1),
     path('mechanicUser',views.mechanicUser),    
     path('product_type',views.product_type,name='product_type'),
     path('productTypeUser/<int:id>',views.productTypeUser,name='productTypeUser'),
-    path('product/<int:product_id>',views.productUser,),
-    # path('test',views.test),
+    path('product/<int:product_id>',views.productDetail,),
+    # path('test',views.test), 
     # path('cart',views.cart), 
     # path('checkout',views.checkout),  
-    path('profileAdmin',views.profileAdmin),
+    
     path('search',views.search,name='search'),
     path('addstore',views.addstore,name='addstore'),
     path('showProductAll',views.showProductAll,name='showProductAll'),
@@ -60,11 +62,15 @@ urlpatterns = [
     path('cart/', views.show_cart, name='show_cart'),
     path('home', views.home,),
     path('checkout/', views.checkout,  name='checkout'),
-    # path('base', views.base,),
+ 
+
+    path('profile',views.profile),
     path('editprofile/<int:id>/', views.editprofile),
+
     # path('test1/<int:id>/', views.test1),
-    path('orderproductUser/<int:id>/', views.orderproductUser),
+    path('order',views.order), 
     path('orderproduct/<int:id>/', views.orderproduct),
+    # path('orderproduct/<int:id>/', views.orderproduct),
   
    
 

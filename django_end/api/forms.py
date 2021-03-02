@@ -15,6 +15,7 @@ class CheckoutForm(forms.ModelForm):
     class Meta:
         model = Order
         exclude = ('paid',)
+        fields = [  'lat','lng', 'money_status', 'delivery_options','payment_options']
 
         # widgets = {
         #     'address': forms.Textarea(attrs={'row': 6, 'col': 8}),
