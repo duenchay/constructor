@@ -112,15 +112,7 @@
                   <!-- <label for="exampleSelect2"><b>payment_options</b></label> -->
                   <select class="form-control" id="Select" name="payment_options" required>
           
-                    <!-- {% for s in product_types %}
-          
-                    {% if s == product.product_type %}
-                    <option value="{{s.sid}}" selected>{{ s.product_type }}</option>  
-                    {% else %}
-                    <option value="{{s.sid}}">{{ s.product_type }}</option>  
-                    {% endif %}
-          
-                    {% endfor %} -->
+      
                     {% for s in payment_options %}
                     <option value="{{s.id}}">{{ s.payment_options }}</option>  
                     {% endfor %}

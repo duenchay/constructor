@@ -123,10 +123,10 @@ def home(request):
                                  })
 #สินค้าในตะกร้า
 def show_cart(request):
-    if request.user.is_anonymous:
-        return redirect('/login')
-    else: 
-        users= Users.objects.get(username=request.user.username)
+    # if request.user.is_anonymous:
+    #     return redirect('/login')
+    # else: 
+    #     users= Users.objects.get(username=request.user.username)
 
     item_count = cart.item_count(request)  #จำนวนสินค้า
     product_type=Product_Type.objects.all() #หมวดหมู่สินค้า
@@ -145,15 +145,15 @@ def show_cart(request):
                                             'cart_items': cart_items,
                                             'cart_subtotal': cart_subtotal,
                                             'cart_item_count': item_count,
-                                            'users':users,
+                                            # 'users':users,
                                             'product_type':product_type
                                             })
     # รายละเอียดสินค้า 
 def productUser(request,product_id):
-    # if request.user.is_anonymous:
-    #     return redirect('/login')
-    # else: 
-    #     users= Users.objects.get(username=request.user.username)
+    if request.user.is_anonymous:
+        return redirect('/login')
+    else: 
+        users= Users.objects.get(username=request.user.username)
    
     # except: pass
    
@@ -173,61 +173,73 @@ def productUser(request,product_id):
                                             'product': product,
                                             'form': form,
                                             'cart_item_count': item_count,
-                                            'product_type':product_type
+                                            'product_type':product_type,
+                                            'users':users
                                          
                                             })
 
 def checkout(request):
+    print(request.user)
     product_type=Product_Type.objects.all()
     item_count = cart.item_count(request)
     if request.method == 'POST':
+        print(request.POST)
         form = CheckoutForm(request.POST)
         if form.is_valid():
-            cleaned_data = form.cleaned_data
+            order = Order()
+            # order.users = request.user
+            order.lat =request.POST['lat']
+            order.lng =request.POST['lng']
+            # work.rice_type = Rice_type.objects.get(pk=req.POST['rice_type'])
+            order.money_status =Money_Status.objects.get(pk=request.POST['money_status'])
+            order.delivery_options =Delivery_Options.objects.get(pk=request.POST['delivery_options'])
+            order.payment_options =Payment_Options.objects.get(pk=request.POST['payment_options'])
+            order.user = request.user
+            # cleaned_data = form.cleaned_data
             # all_items = cart.get_all_cart_items(request)
             # for cart_item in all_items:
-            o = Order(
-                # name = cleaned_data.get('name'),
-                lat = cleaned_data.get('lat'),
-                lng = cleaned_data.get('lng'),
-                money_status = cleaned_data.get('money_status'),
-                delivery_options = cleaned_data.get('delivery_options'),
-                payment_options = cleaned_data.get('payment_options'),
-                # user = cart_item.user
-                # user = request.user
-            )
-            o.save()
+            # o = Order(
+            #     # name = cleaned_data.get('name'),
+            #     # user = cleaned_data.get('user'),
+            #     lat = cleaned_data.get('lat'),
+            #     lng = cleaned_data.get('lng'),
+            #     money_status = cleaned_data.get('money_status'),
+            #     delivery_options = cleaned_data.get('delivery_options'),
+            #     payment_options = cleaned_data.get('payment_options'),
+            #     # user = cart_item.user
+            #     user = request.user
+                
+            # )
+            # print("_________order_________",o)
+            order.save()
             # print(user)
-            print(o)
-
             all_items = cart.get_all_cart_items(request)
             for cart_item in all_items:
                 li = LineItem(          #รายการสินค้า
                     product_id = cart_item.product_id,
                     price = cart_item.price,
                     quantity = cart_item.quantity,
-                    order_id = o.id,
+                    order_id = order.id,
                     user = cart_item.user
                 )
-                # o = Order(
-                #     user = li.user
-                # )
-                # o.save()
+                print("____________LI____________",type(li))
                 li.save()
 
             cart.clear(request)
             
-            request.session['order_id'] = o.id
+            request.session['order_id'] = order.id
             # messages.info(request, "This item was not in your cart")
-
-            messages.info(request, messages.INFO, 'Order Placed!')
+            form.save()
+           # messages.info(request, messages.INFO, 'Order Placed!')
             return redirect('checkout')
+            
 
 
     else:
         form = CheckoutForm()
-        return render(request, 'api/checkout.html', {'form': form,
-        # 'users':users,
+        return render(request, 'api/checkout.html', {
+        'form': form,
+        # 'users':Users.objects.all(),
         'product_type':product_type,
         'cart_item_count':item_count,
         'money_status': Money_Status.objects.all(),
@@ -702,7 +714,7 @@ def editmechanic(request, id=0):
         'mechanic': mechanic,
         'mechanic_types' : mechanic_types,
     })
-from django.contrib.auth.models import Group
+# from django.contrib.auth.models import Group
 # หน้ารายการสั่งซื้อ
 def order(req):
     orders = Order.objects.all().order_by('-id')
@@ -711,6 +723,7 @@ def order(req):
    
 
     users = Users.objects.get(username=req.user.username)
+  
    
     return render(req, 'api/order.html',{
         'orders':orders,

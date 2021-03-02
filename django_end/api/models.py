@@ -26,53 +26,53 @@ class Users(AbstractUser):
         verbose_name = 'แอดมิน2' 
 
 
-class Role(models.Model):
-    role = models.CharField(max_length=100,default=' ' ,verbose_name = 'บทบาทผู้ใช้งาน')
-    def __str__(self):
-        return f'{self.role} '
-    class Meta:
-        verbose_name = 'บทบาทผู้ใช้งาน'
+# class Role(models.Model):
+#     role = models.CharField(max_length=100,default=' ' ,verbose_name = 'บทบาทผู้ใช้งาน')
+#     def __str__(self):
+#         return f'{self.role} '
+#     class Meta:
+#         verbose_name = 'บทบาทผู้ใช้งาน'
    
 
-class User(models.Model):
-    # id = models.AutoField(primary_key=True)
-    # user_name = models.CharField(max_length=100,default=' ')
-    # user_lastname = models.CharField(max_length=100,default=' ')
-    username = models.CharField(max_length=100,default=' ' )
-    email = models.CharField(max_length=50,default=' ')
-    password = models.CharField(max_length=100,default=' ')
-    role = models.ForeignKey(Role,on_delete=models.CASCADE) 
-    def __str__(self):
-        return f'{self.email}{self.role} '
-    class Meta:
-        verbose_name = 'ผู้ใช้งานระบบ'
+# class User(models.Model):
+#     # id = models.AutoField(primary_key=True)
+#     # user_name = models.CharField(max_length=100,default=' ')
+#     # user_lastname = models.CharField(max_length=100,default=' ')
+#     username = models.CharField(max_length=100,default=' ' )
+#     email = models.CharField(max_length=50,default=' ')
+#     password = models.CharField(max_length=100,default=' ')
+#     role = models.ForeignKey(Role,on_delete=models.CASCADE) 
+#     def __str__(self):
+#         return f'{self.email}{self.role} '
+#     class Meta:
+#         verbose_name = 'ผู้ใช้งานระบบ'
 
-class Customer (models.Model):
-    user= models.ForeignKey(User,on_delete=models.CASCADE)
-    customer_fname = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อ')
-    customer_lname = models.CharField(max_length=100,default=' ',verbose_name = 'นามสกุล')
-    customer_phone = models.CharField(max_length=100,default=' ',verbose_name = 'เบอร์โทรศัพท์')
-    customer_email = models.CharField(max_length=100,default=' ',verbose_name = 'อีเมล')
-    avatar = models.ImageField(upload_to='media/', verbose_name = 'รูปโปรไฟล์')
-    def __str__(self):
-        return f'{self.customer_email} '
-    class Meta:
-        verbose_name = 'ลูกค้า'
+# class Customer (models.Model):
+#     user= models.ForeignKey(User,on_delete=models.CASCADE)
+#     customer_fname = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อ')
+#     customer_lname = models.CharField(max_length=100,default=' ',verbose_name = 'นามสกุล')
+#     customer_phone = models.CharField(max_length=100,default=' ',verbose_name = 'เบอร์โทรศัพท์')
+#     customer_email = models.CharField(max_length=100,default=' ',verbose_name = 'อีเมล')
+#     avatar = models.ImageField(upload_to='media/', verbose_name = 'รูปโปรไฟล์')
+#     def __str__(self):
+#         return f'{self.customer_email} '
+#     class Meta:
+#         verbose_name = 'ลูกค้า'
 
 
-class Admin(models.Model): 
-    # admin = models.AutoField(primary_key=True)
-    user= models.ForeignKey(User,on_delete=models.CASCADE)
-    admin_fname = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อ')
-    admin_lname = models.CharField(max_length=100,default=' ',verbose_name = 'นามสกุล')
-    admin_email = models.CharField(max_length=50,default=' ',verbose_name = 'อีเมล')
-    avatar = models.ImageField(upload_to='media/', verbose_name = 'รูปโปรไฟล์')
-    # username = models.CharField(max_length=100,default=' ')
-    # password = models.CharField(max_length=100,default=' ')
-    def __str__(self):
-        return f'{self.admin_email} '
-    class Meta:
-        verbose_name = 'แอดมิน'
+# class Admin(models.Model): 
+#     # admin = models.AutoField(primary_key=True)
+#     user= models.ForeignKey(User,on_delete=models.CASCADE)
+#     admin_fname = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อ')
+#     admin_lname = models.CharField(max_length=100,default=' ',verbose_name = 'นามสกุล')
+#     admin_email = models.CharField(max_length=50,default=' ',verbose_name = 'อีเมล')
+#     avatar = models.ImageField(upload_to='media/', verbose_name = 'รูปโปรไฟล์')
+#     # username = models.CharField(max_length=100,default=' ')
+#     # password = models.CharField(max_length=100,default=' ')
+#     def __str__(self):
+#         return f'{self.admin_email} '
+#     class Meta:
+#         verbose_name = 'แอดมิน'
 
 class Mechanic_Type (models.Model):
     # mechanicCategory_id = models.AutoField(primary_key=True)
@@ -83,7 +83,7 @@ class Mechanic_Type (models.Model):
         verbose_name = 'ประเภทช่าง'
 
 class Mechanic(models.Model): 
-    user= models.ForeignKey(User,on_delete=models.CASCADE)
+    # user= models.ForeignKey(User,on_delete=models.CASCADE)
     mechanic_fname =models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อ')
     mechanic_lname =models.CharField(max_length=100,default=' ',verbose_name = 'นามสกุล')
     mechanic_phone =models.CharField(max_length=100,default=' ',verbose_name = 'เบอร์โทรศัพท์')
@@ -219,9 +219,10 @@ class Payment_Options (models.Model):
 
 class Order(models.Model):
     # name = models.CharField(max_length=191)
-    # user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
+    user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
     # email = models.EmailField()
     # cart = models.ForeignKey(CartItem,on_delete=models.CASCADE , null=True)
+    
     lat =  models.CharField(max_length=1000,default=' ')
     lng =  models.CharField(max_length=1000,default=' ')
     money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
@@ -233,14 +234,15 @@ class Order(models.Model):
     paid = models.BooleanField(default=False)
 
     def __str__(self):
-        return "{}".format(self.id)
+        # return f'ID:{self.id} Status:{self.money_status} Delivery_options:{self.delivery_options}'  
         # return "{}:{}".format(self.id, self.email)
+        return "{}".format(self.id)
 
     def total_cost(self):
         return sum([ li.cost() for li in self.lineitem_set.all() ] )
 
 
-class LineItem(models.Model):
+class LineItem(models.Model):# lineitem.order.user
     user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
@@ -282,7 +284,7 @@ class LineItem(models.Model):
 
 class Payment (models.Model):
     date =  models.DateTimeField(auto_now=False,  verbose_name='วันที่ชำระเงิน') 
-    user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name = 'รหัสผู้สั่งซื้อสินค้า')
+    # user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name = 'รหัสผู้สั่งซื้อสินค้า')
     order= models.ForeignKey(Order,on_delete=models.CASCADE,verbose_name = 'รหัสการสั่งซื้อสินค้า') #รหัสการสั่งซื้อ
     payment_img = models.ImageField(upload_to='media/', verbose_name = 'รูปสลิปโอนเงิน',null=True ,blank=True)
     # payment_options = models.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน')
@@ -339,26 +341,15 @@ class Carts (models.Model):
 
 
 #บทสนทนา  
-class Conversations(models.Model):
-    user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name = 'รหัสผู้ใช้งาน',)
-    # admin = models.ForeignKey(Admin,on_delete=models.CASCADE)
-    message = models.CharField(max_length=1000,default=' ',verbose_name = 'ข้อความ')
-    joined_at = models.DateTimeField(auto_now_add=True)  
-    # updated_at = models.DateTimeField(auto_now=True)  
-    def __str__(self):
-        return f'{self.user}  '
-    class Meta:
-        verbose_name = 'บทสนทนา'
-
-# //Stock
-# class Storck(models.Model):
-#     product= models.ForeignKey(Product,on_delete=models.CASCADE,verbose_name = 'รหัสสินค้า')
-#     all_products= models.IntegerField(verbose_name = 'จำนวนสินค้าทั้งหมด')
-#     Sold = models.IntegerField(verbose_name = 'จำนวนสินค้าที่ขายได้')
-#     inventories = models.IntegerField(verbose_name = 'จำนวนสินค้าที่คงเหลือ')
-#     # def __str__(self):
-#     #     return f'{self.inventories}   '
+# class Conversations(models.Model):
+#     # user = models.ForeignKey(User,on_delete=models.CASCADE,verbose_name = 'รหัสผู้ใช้งาน',)
+#     # admin = models.ForeignKey(Admin,on_delete=models.CASCADE)
+#     message = models.CharField(max_length=1000,default=' ',verbose_name = 'ข้อความ')
+#     joined_at = models.DateTimeField(auto_now_add=True)  
+#     # updated_at = models.DateTimeField(auto_now=True)  
+#     def __str__(self):
+#         return f'{self.user}  '
 #     class Meta:
-#         verbose_name = 'คลังสินค้า'
+#         verbose_name = 'บทสนทนา'
 
 
