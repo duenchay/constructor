@@ -67,6 +67,7 @@ def remove_item(request):
     item_id = request.POST.get('item_id')
     ci = get_object_or_404(CartItem, id=item_id)
     ci.delete()
+    
 
 
 def update_item(request):

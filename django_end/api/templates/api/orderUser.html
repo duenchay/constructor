@@ -33,7 +33,7 @@
       <div class="card mb-3">
           <div class="card-header">
               <i class="fas fa-table"></i>
-              รายการสั่งซื้อ ...
+              ประวัติการสั่งซื้อ
               <!-- <a  class="btn btn-sm btn-success" href="/order" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a> -->
           </div>
           <div class="card-body">
@@ -41,39 +41,36 @@
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" align="center" id="sortTable">
                       <thead>
                       <tr>
-                        <th>id</th>
+                        <th>รหัสสั่งซื้อ</th>
                         <th>วันที่สั่งซื้อ</th>
-                          <th>ชื่อผู้สั่ง</th>
+                          <!-- <th>ชื่อผู้สั่ง</th> -->
                           <!-- <th>ชื่อผู้รับออเดอร์</th>
                           <th>ราคา</th> -->
                           
                           <th>สถานะการชำระเงิน</th>
-                          <!-- <th>รูปงานช่าง</th>
-                          <th>ประเภทช่าง</th> -->
+                          <th>ชื่อผู้ใช้</th>
+                          <!-- <th>ตัวเลือกการชำระเงิน</th> -->
                           <!-- <th>Created At</th> -->
                           <!-- <th>แก้ไข</th>  -->
-                          <!-- <th>รายการสินค้า</th> -->
+                          <th>รายการสินค้า</th>
                       </tr>
                       </thead>
                       <tbody>
                         {% csrf_token %} 
                     
-                        {% if orders %}
+                       
                       {% for i in orders %}
-                     
-                   
-                      
-                      
-                      
                     
                           <tr>
                             <td>{{ i.id }}</td>
                             <!-- <td><img src="media/{{i.avatar}}" style="height: 75px;"></td> -->
                               <td>{{ i.date }}</td>
                               <td>{{ i.money_status }}</td>
-                              <td>{{ i.delivery_options}}</td>
-                              <td> {{i.payment_options}}</td>
-                              <td> {{litem.user}}</td>
+                              <!-- <td>{{ i.delivery_options}}</td> -->
+                              <!-- <td> {{i.payment_options}}</td> -->
+                             
+                              <td> {{i.user}}</td>
+                             
                              
                               <!-- <td>{{ i.avatar }}</td> -->
                               
@@ -90,7 +87,7 @@
                           </tr>
                         
                          {% endfor %}
-                         {% endif %}
+                         
                         
                         
                      

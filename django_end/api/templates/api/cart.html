@@ -2,72 +2,83 @@
 
 {% block content %}
 
+
 <main>
+    <!-- <a href="/cart">Cart: {{ cart_item_count }} item</a> -->
+    <br>
     <div class="container">
 
     <div class="table-responsive text-nowrap">
     <h2>Cart</h2>
-    <table class="table">
-    
     {% if cart_item_count %}
-    <table>
+    <table class="table">
         <thead>
         <tr>
-            <th scope="col">Product &nbsp; &nbsp;</th>
+            <th scope="col">Product</th>
             <th scope="col">Price</th>
             <th scope="col">Quantity</th>
-            <th></th>
-            <th></th>
+            <th scope="col"></th>
+            <th scope="col"></th>
             <th scope="col">Total</th>
         </tr>
         </thead>
         <tbody>
-        {% for item in cart_items %}
-            <tr>
-                <td>{{ item.product.name }}</td>
-                <td>{{ item.price }}</td>
-                <td>
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <input type="text" name="quantity" value="{{ item.quantity }}">
-                        <input type="hidden" name="item_id" value="{{ item.id }}">
-                </td>
-                <td>
-                        <input type="submit" name="submit" value="Update">
-                    </form>
-                </td>
-                <td>
-                    <form action="" method="post">
-                        {% csrf_token %}
-        
-                        <input type="hidden" name="item_id" value="{{ item.id }}">
-                        <input type="submit" name="submit" value="Remove">
-                    </form>
-                </td>
-                <td>${{ item.total_cost }}</td>
-            </tr>
+            {% for item in cart_items %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.price }}</td>
+            <td>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input type="text" name="quantity" value="{{ item.quantity }}">
+                    <input type="hidden" name="item_id" value="{{ item.id }}">
+            </td>
+            <td>
+                    <input  class="btn btn-sm btn-primary"type="submit" name="submit" value="Update">
+                </form>
+            </td>
+            <td>
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <input  class="btn btn-sm btn-primary" type="hidden" name="item_id" value="{{ item.id }}">
+                    <!-- <td><a type="submit" name="submit" value="Remove" class="btn btn-sm btn-danger" ><span class="fa fa-trash"></span> Delete</a></td> -->
+                    <!-- <input type="submit" name="submit" value="Remove" class="btn btn-sm btn-danger"  >
+                     -->
+                      <input  class="btn btn-sm btn-danger" type="submit" name="submit" value="Remove">
+                </form>
+            </td>
+            <td>{{ item.total_cost }} ฿</td>
+        </tr>
         {% endfor %}
+       <!-- /ll// -->
+
+        
+
+        <tr>
+            <td colspan="5" style="text-align: right">Total</td>
+            <td>{{ cart_subtotal }} ฿</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td colspan="4" style="text-align: right">
+                <a href="/showProductAll" class="btn btn-primary">Continue Shopping</a>
+            </td>
+            {% if cart_item_count %}
+            
+                <td><a  href="/checkout" class="btn btn-warning">Checkout</a></td>
+            {% endif %}
+        </tr>
         </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="5" style="text-align: right">Total</td>
-                <td>${{ cart_subtotal }}</td>
-            </tr>
-            <tr>
-                <td></td>
-                <td colspan="5" style="text-align: right">
-                    <a href="/showProductAll" class='btn btn-primary float-right'>Continue Shopping</a>
-                </td>
-                {% if cart_item_count %}
-                
-                    <td><a href="/checkout" class='btn btn-warning float-right ml-2'>Checkout</a></td>
-                {% endif %}
-            </tr>
-        </tfoot>
     </table>
     {% else %}
-        <p>Cart Empty</p>
+    <tr>
+        <td colspan='5'>Your cart is empty</td>
+    </tr>
     {% endif %}
 
+    </div>
+
+    </div>
+  </main>
 
 {% endblock %}

@@ -4,10 +4,10 @@
 
 <style>
     body {
-    margin: 0;
+    /* margin: 0; */
     font-family: Nunito,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-    font-size: 1rem;
-    font-weight: 400;
+    /* font-size: 1rem;
+    font-weight: 400; */
     line-height: 1.5;
     color: #000000;
     text-align: left;
@@ -34,55 +34,62 @@
           <div class="card-header">
               <i class="fas fa-table"></i>
               รายการสินค้า
-              <a  class="btn btn-sm btn-success" href="/orderproduct" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a>
+              <!-- <a  class="btn btn-sm btn-success" href="/order" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a> -->
+                <a  class="btn btn-sm btn-success" href="/order" style="padding: 8px; float: right; background-color: rgb(53, 122, 155); color: white;">Back</a>
           </div>
           <div class="card-body">
               <div class="table-responsive">
-                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" align="center" >
+                  <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" align="center" id="sortTable">
                       <thead>
                       <tr>
-                        <th>id</th>
-                        <th>วันที่สั่งซื้อ</th>
-                          <th>ชื่อสินค้า</th>
+                        <th>รหัสสินค้า</th>
+                        <th>ชื่อสินค้า</th>
                           <th>ราคา</th>
-                          <th>จำนวน</th>
-                          <!-- <th>ราคา</th> -->
-                          
-                          <!-- <th>สถานะการชำระเงิน</th> -->
+            
                           <!-- <th>รูปงานช่าง</th>
                           <th>ประเภทช่าง</th> -->
                           <!-- <th>Created At</th> -->
-                          <!-- <th>แก้ไข</th>  -->
-                          <!-- <th>รายการสินค้า</th> -->
+                          
+                          <th>จำนวน</th>
+                          <th>ชื่อผู้ใช้</th> 
+                          <!-- <th>ที่อยู่</th>  -->
                       </tr>
                       </thead>
                       <tbody>
                         {% csrf_token %} 
-                      {% for i in orderproducts %}
+
+                      {% for n in litem %}
+                    
                      
+                    
+                    
                           <tr>
-                            <td>{{ i.id }}</td>
+                            <td>{{ n.id }}</td>
                             <!-- <td><img src="media/{{i.avatar}}" style="height: 75px;"></td> -->
-                              <td>{{ i.order }}</td>
-                              <td>{{ i.product }}</td>
-                              <td>{{ i.amount }}</td>
-                              <td>{{ i.amount }}</td>
-                              <!-- <td>{{ i.avatar }}</td> -->
-                              
-                              <!-- <td>{{ i.all_price }}</td> -->
+                              <td>{{ n.product }}</td>
+                              <td>{{ n.price }}</td>
+                             
+                              <!-- <td>{{ n.order }}</td> -->
+                              <td>{{ n.quantity }}</td>
+                             
+                              <td>{{ n.user }}</td>
+                            
+                              <!-- <td>{{ n.quantity }}</td> -->
                               <!-- <td><img src="media/{{i.mechanic_img}}" style="height: 75px;"></td> -->
+ 
                               <!-- <td>{{ i.money_status }}</td> -->
                               <!-- <td>{{ i.created_at  |date:"d-m-Y H:i:s" }}</td> -->
                               <!-- <td>                                   
-                                  <a class="btn btn-sm btn-primary" href="/oder/{{mechanic.id}}"> <span></span> รายการสินค้า</a>
+                                  <a class="btn btn-sm btn-primary" href="/orderproduct/{{i.id}}"> <span></span>รายการสินค้า</a>
                                   
-                              </td>  -->
-                              <!-- <td><a class="btn btn-sm btn-primary" href="oderproduct/{{order.id}}"><span ></span> รายการสินค้า</a></td> -->
+                              </td> -->
+                              <!-- <td><a class="btn btn-sm btn-primary" href="orderproduct/{{order.id}}"><span ></span> รายการสินค้า</a></td> -->
                           </tr>
                           
-                      {% endfor %}
+                          {% endfor %}
+                      
                       </tbody>
-                  </table>
+                  </table><s></s>
               </div>
           </div>
       </div>

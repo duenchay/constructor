@@ -168,8 +168,8 @@ class Sale(models.Model):
     #     return abs(int(change))
 
     
-    def __str__(self):
-        return self.item.item_name
+    # def __str__(self):
+    #     return self.item.item_name
 
 class CartItem(models.Model):
     user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
@@ -221,6 +221,7 @@ class Order(models.Model):
     # name = models.CharField(max_length=191)
     # user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
     # email = models.EmailField()
+    # cart = models.ForeignKey(CartItem,on_delete=models.CASCADE , null=True)
     lat =  models.CharField(max_length=1000,default=' ')
     lng =  models.CharField(max_length=1000,default=' ')
     money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน

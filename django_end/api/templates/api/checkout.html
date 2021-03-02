@@ -3,10 +3,6 @@
 
 {% extends 'api/base2.html' %}
 
-{% block title %}
-    Checkout |
-{% endblock %}
-
 {% block content %}
 
 <div id="content-wrapper">
@@ -57,8 +53,9 @@
           <div class="form-group">
             <div class="form-row">
                 <div class="col-md-9">
+                    <label for="exampleSelect1"><b> money_status</b></label>
                     <div class="form-label-group">
-                      <label for="exampleSelect1"><b> money_status</b></label>
+                      <!-- <label for="exampleSelect1"><b> money_status</b></label> -->
                       <select class="form-control" id="Select" name="money_status" required>
               
                         <!-- {% for s in product_types %}
@@ -83,8 +80,9 @@
         <div class="form-group">
           <div class="form-row">
               <div class="col-md-9">
+                <label for="exampleSelect2"><b>delivery_options</b></label>
                   <div class="form-label-group">
-                    <label for="exampleSelect2"><b>delivery_options</b></label>
+                    <!-- <label for="exampleSelect2"><b>delivery_options</b></label> -->
                     <select class="form-control" id="Select" name="delivery_options" required>
             
                       <!-- {% for s in product_types %}
@@ -109,8 +107,9 @@
       <div class="form-group">
         <div class="form-row">
             <div class="col-md-9">
+                <label for="exampleSelect2"><b>payment_options</b></label>
                 <div class="form-label-group">
-                  <label for="exampleSelect2"><b>payment_options</b></label>
+                  <!-- <label for="exampleSelect2"><b>payment_options</b></label> -->
                   <select class="form-control" id="Select" name="payment_options" required>
           
                     <!-- {% for s in product_types %}
