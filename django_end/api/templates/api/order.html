@@ -48,10 +48,12 @@
                           <th>ราคา</th> -->
                           
                           <th>สถานะการชำระเงิน</th>
+                         
+                          <th>ตัวเลือกการชำระเงิน</th>
+                          <th>ตัวเลือกการจัดส่ง</th>
+                        
+                          <th>ที่อยู่</th> 
                           <th>ชื่อผู้ใช้</th>
-                          <!-- <th>ตัวเลือกการชำระเงิน</th> -->
-                          <!-- <th>Created At</th> -->
-                          <!-- <th>แก้ไข</th>  -->
                           <th>รายการสินค้า</th>
                       </tr>
                       </thead>
@@ -63,13 +65,14 @@
                     
                           <tr>
                             <td>{{ i.id }}</td>
-                            <!-- <td><img src="media/{{i.avatar}}" style="height: 75px;"></td> -->
-                              <td>{{ i.date }}</td>
-                              <td>{{ i.money_status }}</td>
-                              <!-- <td>{{ i.delivery_options}}</td> -->
-                              <!-- <td> {{i.payment_options}}</td> -->
-                             
-                              <td> {{i.user}}</td>
+                            <td>{{ i.date }}</td>
+                            <td>{{ i.money_status }}</td>
+                           
+                            <td> {{i.payment_options}}</td>
+                            <td>{{ i.delivery_options}}</td>
+                            <td> {{i.address}}</td>
+                           
+                            <td>{{ i.user }}</td>
                              
                              
                               <!-- <td>{{ i.avatar }}</td> -->

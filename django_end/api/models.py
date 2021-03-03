@@ -89,8 +89,8 @@ class Mechanic(models.Model):
     mechanic_phone =models.CharField(max_length=100,default=' ',verbose_name = 'เบอร์โทรศัพท์')
     mechanic_email =models.CharField(max_length=100,default=' ',verbose_name = 'อีเมล')
     avatar = models.ImageField(upload_to='images/mechanic/', default='images/mechanic/no-img.png', verbose_name = 'รูปโปรไฟล์')
-    mechanic_img = models.ImageField(upload_to='media/', verbose_name =  'รูปงานช่าง')
-    mechanic_detail =models.CharField(max_length=100,default=' ',verbose_name = 'รายละเอียดงานช่าง')
+    mechanic_img = models.ImageField(upload_to='images/mechanic/', default='images/mechanic/no-img.png', verbose_name =  'รูปงานช่าง')
+    mechanic_detail =models.TextField(max_length=1000,default=' ',verbose_name = 'รายละเอียดงานช่าง')
     mechanic_type= models.ForeignKey(Mechanic_Type,on_delete=models.CASCADE) #ประเภทช่าง
  
     def __str__(self):
@@ -103,8 +103,8 @@ class Store (models.Model):
     store_img = models.ImageField(upload_to='images/store/', default='images/store/no-img.png', verbose_name = 'รูปร้าน',null=True)
     store_phone = models.CharField(max_length=100,default=' -',verbose_name = 'เบอร์โทรศัพท์ร้าน',null=True)
     store_address = models.CharField(max_length=100,default=' -',verbose_name = 'ที่อยู่ร้าน',null=True)
-    lat =  models.CharField(max_length=1000,default=' -',null=True)
-    lng =  models.CharField(max_length=1000,default='- ',null=True)
+    # lat =  models.CharField(max_length=1000,default=' -',null=True)
+    # lng =  models.CharField(max_length=1000,default='- ',null=True)
     # time_open =models.CharField(max_length=100,default=' ')
     # time_close =models.CharField(max_length=100,default=' ')
     def __str__(self):
@@ -224,13 +224,13 @@ class Order(models.Model):
     # email = models.EmailField()
     # cart = models.ForeignKey(CartItem,on_delete=models.CASCADE , null=True)
     
-    lat =  models.CharField(max_length=1000,default=' ')
-    lng =  models.CharField(max_length=1000,default=' ')
+    # lat =  models.CharField(max_length=1000,default=' ')
+    # lng =  models.CharField(max_length=1000,default=' ')
     money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
     delivery_options = models.ForeignKey(Delivery_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการจัดส่ง')
     payment_options = models.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน')
     # postal_code = models.IntegerField()
-    # address = models.CharField(max_length=191)
+    address = models.CharField(max_length=191)
     date = models.DateTimeField(auto_now_add=True)
     paid = models.BooleanField(default=False)
 

@@ -158,8 +158,9 @@ def checkout(request):
         if form.is_valid():
             order = Order() 
             order.user = request.user
-            order.lat =request.POST['lat'] 
-            order.lng =request.POST['lng']
+            # order.lat =request.POST['lat'] 
+            # order.lng =request.POST['lng']
+            order.address = request.POST['address']
             # work.rice_type = Rice_type.objects.get(pk=req.POST['rice_type'])
             order.money_status =Money_Status.objects.get(pk=request.POST['money_status'])
             order.delivery_options =Delivery_Options.objects.get(pk=request.POST['delivery_options'])
@@ -201,7 +202,7 @@ def checkout(request):
             # messages.info(request, "This item was not in your cart")
           
            # messages.info(request, messages.INFO, 'Order Placed!')
-            return redirect('/checkout')
+            return redirect('/order')
     else:
         form = CheckoutForm()
     return render(request, 'api/checkout.html', {
@@ -314,6 +315,7 @@ def register(req):
             print('form valid')
             form.instance.password = make_password(req.POST['password'])
             form.save()
+            return redirect('/login')
         else: 
 
             
@@ -466,13 +468,14 @@ def store(req):
     })
 
 # แก้ไขข้อมูลร้าน
-def editstore(request):
-    store = Store.objects.filter()
+def editstore(request,id):
+    store = Store.objects.get(pk=id)
     users = Users.objects.get(username=request.user.username)
     if request.method == 'POST':
         form = StoreForm(request.POST, request.FILES, instance=store)
         if form.is_valid():
             form.save()
+            return redirect('/store')
         else:
             print("==== form.errors ====")
             print(form.errors)
@@ -484,6 +487,53 @@ def editstore(request):
         'users' : users
     })
 
+# เพิ่มสินค้า
+def addproductType(request):
+    users = Users.objects.get(username=request.user.username)
+    producttype = Product_Type.objects.all()
+    if request.method == 'POST':
+        form = Product_TypeForm(request.POST ,request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('/addproductType')
+    else:
+        form = Product_TypeForm()
+    return render(request, 'api/addproductType.html',
+                  {
+                      'form': form,
+                    #   'product_types': Product_Type.objects.all(),
+                    #   'product_statuss': Product_Status.objects.all(),
+                      'users':users,
+                      'producttype':producttype
+
+                  }) 
+
+def editproductType(request, id=0):
+    product_type = Product_Type.objects.get(pk=id)
+    users = Users.objects.get(username=request.user.username)
+    if request.method == 'POST':
+        form = Product_TypeForm(request.POST, request.FILES, instance=product_type)
+        if form.is_valid():
+            form.save()
+            return redirect('/addproductType')
+        else:
+            print("==== form.errors ====")
+            print(form.errors)
+    else:
+        form = Product_Type(product_type)
+       
+    return render(request, 'api/editproductType.html' ,{ 
+        'form': form,
+        'product_type': product_type,
+        'users':users
+    })
+
+def deleteproduct(req, id=0):
+    product = Product.objects.get(pk=id)
+    # product_types = Product_Type.objects.all()
+    # product_statuss = Product_Status.objects.all()
+    product.delete()
+    return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
 # เพิ่มสินค้า
 def addproduct(request):
@@ -513,6 +563,7 @@ def editproduct(request, id=0):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
+            return redirect('/product')
         else:
             print("==== form.errors ====")
             print(form.errors)
@@ -528,11 +579,11 @@ def editproduct(request, id=0):
     })
 
 # ลบสินค้า
-def deleteproduct(req, id=0):
-    product = Product.objects.get(pk=id)
+def deleteproductType(req, id=0):
+    product_types = Product_Type.objects.get(pk=id)
     # product_types = Product_Type.objects.all()
     # product_statuss = Product_Status.objects.all()
-    product.delete()
+    product_types.delete()
     return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
 # แสดงสินค้า //
@@ -578,6 +629,8 @@ def do_paginate(data_list, page_number):
         # if the page_number is not an integer then return the first page data.
         ret_data_list = paginator.page(1)
     return [ret_data_list, paginator]
+
+# หน้าคลังสินค้า
 
 # หน้าคลังสินค้า
 def stock(request):
@@ -642,6 +695,23 @@ def mechanic(request):
     #     mechanics = paginator.page(paginator.num_pages)
     return render(request, 'api/mechanic.html', {'mechanics': mechanics,'users':users})
 
+def addmechanic(request):
+    users = Users.objects.get(username=request.user.username)
+    if request.method == 'POST':
+        form = MechanicForm(request.POST ,request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('/mechanic')
+    else:
+        form = MechanicForm()
+    return render(request, 'api/addmechanic.html',
+                  {
+                      'form': form,
+                      'mechanic_type': Mechanic_Type.objects.all(),
+                    #   'product_statuss': Product_Status.objects.all(),
+                      'users':users
+
+                  }) 
 def editmechanic(request, id=0):
     mechanic = Mechanic.objects.get(pk=id)
     mechanic_types = Mechanic_Type.objects.all()
@@ -649,6 +719,7 @@ def editmechanic(request, id=0):
         form = MechanicForm(request.POST, request.FILES, instance=mechanic)
         if form.is_valid():
             form.save()
+            return redirect('/mechanic')
         else:
             print("==== form.errors ====")
             print(form.errors)
@@ -660,6 +731,58 @@ def editmechanic(request, id=0):
         'mechanic_types' : mechanic_types,
     })
 
+def deletemechanic(req, id=0):
+    mechanic = Mechanic.objects.get(pk=id)
+    # product_types = Product_Type.objects.all()
+    # product_statuss = Product_Status.objects.all()
+    mechanic.delete()
+    return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+
+def addmechanicType(request):
+    users = Users.objects.get(username=request.user.username)
+    mechanic_type = Mechanic_Type.objects.all()
+    if request.method == 'POST':
+        form = Mechanic_TypeForm(request.POST ,request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('/addmechanicType')
+    else:
+        form = Mechanic_TypeForm()
+    return render(request, 'api/addmechanicType.html',
+                  {
+                      'form': form,
+                      
+                      'users':users,
+                      'mechanic_type':mechanic_type
+
+                  }) 
+
+def editmechanicType(request, id=0):
+    mechanic_type = Mechanic_Type.objects.get(pk=id)
+    users = Users.objects.get(username=request.user.username)
+    if request.method == 'POST':
+        form = Mechanic_TypeForm(request.POST, request.FILES, instance=mechanic_type)
+        if form.is_valid():
+            form.save()
+            return redirect('/addmechanicType')
+        else:
+            print("==== form.errors ====")
+            print(form.errors)
+    else:
+        form = Mechanic_TypeForm(mechanic_type)
+       
+    return render(request, 'api/editmechanicType.html' ,{ 
+        'form': form,
+        'mechanic_type': mechanic_type,
+        'users':users
+    })
+
+def deletemechanicType(req, id=0):
+    mechanic_types = Mechanic_Type.objects.get(pk=id)
+    # product_types = Product_Type.objects.all()
+    # product_statuss = Product_Status.objects.all()
+    mechanic_types.delete()
+    return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
 # หน้ารายการสั่งซื้อทั้งหมด
 def orderAll(req):
@@ -672,10 +795,11 @@ def orderAll(req):
         'litem':litem
     })
 
+
 # หน้ารายการสินค้า
 def orderproductAll(req,id):
     litem = LineItem.objects.filter(order=id)
-    orders = Order.objects.filter()
+    orders = Order.objects.filter(address = req.user)
     
     # print(litem)
     print(id)

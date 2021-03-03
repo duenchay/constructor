@@ -15,7 +15,7 @@ class CheckoutForm(forms.ModelForm):
     class Meta:
         model = Order
         exclude = ('paid',)
-        fields = [  'lat','lng', 'money_status', 'delivery_options','payment_options']
+        fields = [  'address', 'money_status', 'delivery_options','payment_options']
 
         # widgets = {
         #     'address': forms.Textarea(attrs={'row': 6, 'col': 8}),
@@ -27,6 +27,12 @@ class ProductForm(forms.ModelForm):
         # fields = '__all__'
         fields = [  'name','price', 'product_detail', 'product_img','product_type','product_status','quantity' ]
 
+class Product_TypeForm(forms.ModelForm):
+    class Meta:
+        model = Product_Type
+        # fields = '__all__'
+        fields = [  'product_type']
+
 class StoreForm(forms.ModelForm):
     class Meta:
         model = Store
@@ -37,8 +43,13 @@ class StoreForm(forms.ModelForm):
 class MechanicForm(forms.ModelForm):
     class Meta:
         model = Mechanic
-        fields = '__all__'
+        fields = ['mechanic_fname','mechanic_lname','mechanic_phone','mechanic_email','avatar','mechanic_img','mechanic_detail','mechanic_type']
 
+class Mechanic_TypeForm(forms.ModelForm):
+    class Meta:
+        model = Mechanic_Type
+        # fields = '__all__'
+        fields = [  'mechanic_type']
 
 class Order_ProductForm(forms.ModelForm):
     class Meta:

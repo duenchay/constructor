@@ -5,7 +5,7 @@ from .models import *
 # admin.site.register(User)
 # admin.site.register(Customer)
 admin.site.register(Mechanic_Type)
-# admin.site.register(Mechanic)
+admin.site.register(Mechanic)
 admin.site.register(Store)
 # admin.site.register(Admin)
 admin.site.register(Users)

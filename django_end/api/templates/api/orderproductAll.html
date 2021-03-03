@@ -35,7 +35,7 @@
               <i class="fas fa-table"></i>
               รายการสินค้า
               <!-- <a  class="btn btn-sm btn-success" href="/order" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a> -->
-                <a  class="btn btn-sm btn-success" href="/order" style="padding: 8px; float: right; background-color: rgb(53, 122, 155); color: white;">Back</a>
+                <a  class="btn btn-sm btn-success" href="/orderAll" style="padding: 8px; float: right; background-color: rgb(53, 122, 155); color: white;">Back</a>
           </div>
           <div class="card-body">
               <div class="table-responsive">
@@ -51,7 +51,7 @@
                           <!-- <th>Created At</th> -->
                           
                           <th>จำนวน</th>
-                          <th>ชื่อผู้ใช้</th> 
+                          <!-- <th>ชื่อผู้ใช้</th>  -->
                           <!-- <th>ที่อยู่</th>  -->
                       </tr>
                       </thead>
@@ -68,11 +68,11 @@
                             <!-- <td><img src="media/{{i.avatar}}" style="height: 75px;"></td> -->
                               <td>{{ n.product }}</td>
                               <td>{{ n.price }}</td>
-                             
+                              
                               <!-- <td>{{ n.order }}</td> -->
                               <td>{{ n.quantity }}</td>
                              
-                              <td>{{ n.user }}</td>
+                              <!-- <td>{{ n.user }}</td> -->
                             
                               <!-- <td>{{ n.quantity }}</td> -->
                               <!-- <td><img src="media/{{i.mechanic_img}}" style="height: 75px;"></td> -->
@@ -84,9 +84,17 @@
                                   
                               </td> -->
                               <!-- <td><a class="btn btn-sm btn-primary" href="orderproduct/{{order.id}}"><span ></span> รายการสินค้า</a></td> -->
-                          </tr>
+                              
+                              {% endfor %}
+                              {% for i in orders %}
+                              <td>{{ i.address }}</td>
+                              {% endfor %}  
+                            
+                     
+                            </tr>
                           
-                          {% endfor %}
+                        
+                    
                       
                       </tbody>
                   </table><s></s>

@@ -34,7 +34,7 @@
           <div class="card-header">
               <i class="fas fa-table"></i>
               ข้อมูลช่าง
-              <a  class="btn btn-sm btn-success" href="mechanic" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a>
+              <a  class="btn btn-sm btn-success" href="/addmechanic" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a>
           </div>
           <div class="card-body">
               <div class="table-responsive">
@@ -43,7 +43,7 @@
                       <tr>
                         <th>id</th>
                         <th>รูปโปรไฟล์</th>
-                          <th>ชื่อ</th>
+                          <th>ชื่อ-นามสกุล</th>
                           <th>เบอร์โทรศัพท์</th>
                           <th>อีเมล</th>
                           
@@ -62,7 +62,8 @@
                           <tr>
                             <td>{{ i.id }}</td>
                             <td><img src="media/{{i.avatar}}" style="height: 75px;"></td>
-                              <td>{{ i.mechanic_fname }}</td>
+                              <td>{{ i.mechanic_fname }} {{ i.mechanic_lname }}</td>
+                              <!-- <td>{{ i.mechanic_lname }}</td> -->
                               <td>{{ i.mechanic_phone }}</td>
                               <td>{{ i.mechanic_email }}</td>
                               <!-- <td>{{ i.avatar }}</td> -->
@@ -72,10 +73,10 @@
                               <td>{{ i.mechanic_type }}</td>
                               <!-- <td>{{ i.created_at  |date:"d-m-Y H:i:s" }}</td> -->
                               <td>                                   
-                                  <a class="btn btn-sm btn-warning" href="/editmechanic/{{mechanic.id}}"> <span class="fa fa-edit"></span> Edit</a>
+                                  <a class="btn btn-sm btn-warning" href="/editmechanic/{{i.id}}"> <span class="fa fa-edit"></span> Edit</a>
                                   
                               </td>
-                              <td><a class="btn btn-sm btn-danger" href="deleteproduct/{{product.id}}"><span class="fa fa-trash"></span> Delete</a></td>
+                              <td><a class="btn btn-sm btn-danger" href="deletemechanic/{{i.id}}"><span class="fa fa-trash"></span> Delete</a></td>
                           </tr>
                           
                       {% endfor %}
