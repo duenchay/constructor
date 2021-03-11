@@ -1,6 +1,6 @@
-# from rest_framework import routers, serializers, viewsets
-# from .models import *
-# # Serializers define the API representation.
+from rest_framework import routers, serializers, viewsets
+from .models import *
+# Serializers define the API representation.
 # class RoleSerializer(serializers.HyperlinkedModelSerializer):
 #     class Meta:
 #         model = Role
@@ -21,67 +21,67 @@
 #         model = Admin
 #         fields = '__all__'
 
-# class Mechanic_TypeSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Mechanic_Type
-#         fields = '__all__'
+class Mechanic_TypeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Mechanic_Type
+        fields = '__all__'
 
-# class MechanicSerializer(serializers.ModelSerializer):
-#     mechanic_type = Mechanic_TypeSerializer(many=False, read_only=True)
+class MechanicSerializer(serializers.ModelSerializer):
+    mechanic_type = Mechanic_TypeSerializer(many=False, read_only=True)
 
+    class Meta:
+        fields = '__all__'
+        model = Mechanic
+
+# class MechanicSerializer(serializers.HyperlinkedModelSerializer):
 #     class Meta:
-#         fields = '__all__'
 #         model = Mechanic
-
-# # class MechanicSerializer(serializers.HyperlinkedModelSerializer):
-# #     class Meta:
-# #         model = Mechanic
-# #         fields = '__all__'
-
-# class StoreSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Store
 #         fields = '__all__'
 
-# class Product_TypeSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Product_Type
-#         fields = '__all__'
+class StoreSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Store
+        fields = '__all__'
 
-# class Product_StatusSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Product_Status
-#         fields = '__all__'
-# class ProductSerializer(serializers.ModelSerializer):
-#     product_type = Product_TypeSerializer(many=False, read_only=True)
+class Product_TypeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Product_Type
+        fields = '__all__'
 
+class Product_StatusSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Product_Status
+        fields = '__all__'
+class ProductSerializer(serializers.ModelSerializer):
+    product_type = Product_TypeSerializer(many=False, read_only=True)
+
+    class Meta:
+        fields = '__all__'
+        model = Product
+# class ProductSerializer(serializers.HyperlinkedModelSerializer):
 #     class Meta:
-#         fields = '__all__'
 #         model = Product
-# # class ProductSerializer(serializers.HyperlinkedModelSerializer):
-# #     class Meta:
-# #         model = Product
-# #         fields = '__all__'
+#         fields = '__all__'
     
-# class Money_StatusSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Money_Status
-#         fields = '__all__'
+class Money_StatusSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Money_Status
+        fields = '__all__'
 
-# class Delivery_OptionsSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Delivery_Options
-#         fields = '__all__'
+class Delivery_OptionsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Delivery_Options
+        fields = '__all__'
 
-# class Payment_OptionsSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Payment_Options
-#         fields = '__all__'
+class Payment_OptionsSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Payment_Options
+        fields = '__all__'
 
-# class OrderSerializer(serializers.HyperlinkedModelSerializer):
-#     class Meta:
-#         model = Order
-#         fields = '__all__'
+class OrderSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'
 
 # class PaymentSerializer(serializers.HyperlinkedModelSerializer):
 #     class Meta:

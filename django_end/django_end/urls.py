@@ -5,7 +5,7 @@ from django.urls import path, include
 # from django.contrib.auth.models import User
 from api.models import *
 from api import views
-# from api.views import router
+from api.views import router
 from django.conf import settings # new
 
 from django.conf.urls.static import static
@@ -85,7 +85,7 @@ urlpatterns = [
    
 
     path('admin/', admin.site.urls),
-    # path('api/', include(router.urls)),
+    path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls'))
 ]
 
