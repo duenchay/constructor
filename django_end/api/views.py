@@ -11,7 +11,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, get_object_or_404
 from . import cart 
-
+from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
 
 
@@ -370,25 +370,6 @@ def product_type(request):
         })
 
 
-# def editprofile(request, id=0):
-#     users = Users.objects.get(username=request.user.username)
-#     if request.method == 'POST':
-#         form = UsersForm(request.POST, request.FILES, instance=users)
-#         if form.is_valid():
-#             form.save()
-#         else:
-#             print("==== form.errors ====")
-#             print(form.errors)
-#     else:
-#         form = UsersForm(users)  
-#     return render(request, 'api/editprofile.html' ,{ 
-#         'form': form,
-#         'users':users
-#     })
-
-
-
-
 
 # หน้ารวมช่าง
 def mechanicUser(request):
@@ -542,6 +523,7 @@ def addproduct(request):
         form = ProductForm(request.POST ,request.FILES)
         if form.is_valid():
             form.save()
+            # messages.info(request, "This item quantity was updated.")
             return redirect('/product')
     else:
         form = ProductForm()
@@ -549,7 +531,7 @@ def addproduct(request):
                   {
                       'form': form,
                       'product_types': Product_Type.objects.all(),
-                      'product_statuss': Product_Status.objects.all(),
+                    #   'product_statuss': Product_Status.objects.all(),
                       'users':users
 
                   }) 
@@ -616,7 +598,7 @@ def product(request):
 def do_paginate(data_list, page_number):
     ret_data_list = data_list
     #  หน้า มี 5รายการ
-    result_per_page = 5
+    result_per_page = 20
     # build the paginator object.
     paginator = Paginator(data_list, result_per_page)
     try:
@@ -640,31 +622,31 @@ def stock(request):
     'users':users
     })
 
-def issue_item(request, pk):
-    product = Product.objects.get(id = pk)
-    sales_form = SaleForm(request.POST)  
+# def issue_item(request, pk):
+#     product = Product.objects.get(id = pk)
+#     sales_form = SaleForm(request.POST)  
       
-    if request.method == 'POST':     
-        if sales_form.is_valid():
-            new_sale = sales_form.save(commit=False)
-            new_sale.item = product
-            # new_sale.unit_price = product.unit_price   
-            new_sale.save()
-            #To keep track of the stock remaining after sales
-            issued_quantity = int(request.POST['quantity'])
-            product.quantity -= issued_quantity
-            product.save()
+#     if request.method == 'POST':     
+#         if sales_form.is_valid():
+#             new_sale = sales_form.save(commit=False)
+#             new_sale.item = product
+#             # new_sale.unit_price = product.unit_price   
+#             new_sale.save()
+#             #To keep track of the stock remaining after sales
+#             issued_quantity = int(request.POST['quantity'])
+#             product.quantity -= issued_quantity
+#             product.save()
 
-            print(product.name) #ชื่อ
-            print(request.POST['quantity']) #จำนวน
-            # print(product.total_quantity)
+#             print(product.name) #ชื่อ
+#             print(request.POST['quantity']) #จำนวน
+#             # print(product.total_quantity)
 
-            return redirect('/stock') 
+#             return redirect('/stock') 
 
-    return render (request, 'api/issue_item.html',
-     {
-    'sales_form': sales_form,
-    })
+#     return render (request, 'api/issue_item.html',
+#      {
+#     'sales_form': sales_form,
+#     })
 
 #เพิ่มจำนวนสินค้าในสต๊อก
 def add_to_stock(request, pk):
@@ -792,7 +774,8 @@ def orderAll(req):
     return render(req, 'api/orderAll.html',{
         'orders':orders,
         'users':users,
-        'litem':litem
+        'litem':litem,
+        'money_status': Money_Status.objects.all()
     })
 
 
@@ -812,9 +795,9 @@ def orderproductAll(req,id):
     })
 
 
-def payment(request):
-    users = Users.objects.get(username=request.user.username)
-    payments = Payment.objects.all()
+# def payment(request):
+#     users = Users.objects.get(username=request.user.username)
+#     payments = Payment.objects.all()
     # sortid= Order.objects.payment_by('id') 
     
     # context= {'sortedprice': sortid}

@@ -14,8 +14,8 @@ class CartForm(forms.Form):
 class CheckoutForm(forms.ModelForm):
     class Meta:
         model = Order
-        exclude = ('paid',)
-        fields = [  'address', 'money_status', 'delivery_options','payment_options']
+        # exclude = ('paid',)
+        fields = [   'money_status', 'delivery_options','payment_options']
 
         # widgets = {
         #     'address': forms.Textarea(attrs={'row': 6, 'col': 8}),
@@ -25,7 +25,7 @@ class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
         # fields = '__all__'
-        fields = [  'name','price', 'product_detail', 'product_img','product_type','product_status','quantity' ]
+        fields = [  'name','price', 'product_detail', 'product_img','product_type','quantity' ]
 
 class Product_TypeForm(forms.ModelForm):
     class Meta:
@@ -51,10 +51,10 @@ class Mechanic_TypeForm(forms.ModelForm):
         # fields = '__all__'
         fields = [  'mechanic_type']
 
-class Order_ProductForm(forms.ModelForm):
-    class Meta:
-        model = Order_Product
-        fields = '__all__'
+# class Order_ProductForm(forms.ModelForm):
+#     class Meta:
+#         model = Order_Product
+#         fields = '__all__'
 
 # class StorckForm(forms.ModelForm):
 #     class Meta:
@@ -84,10 +84,10 @@ class AddStockForm(forms.ModelForm):
 
 
 
-class SaleForm(forms.ModelForm):
-    class Meta: 
-        model = Sale
-        fields = ["quantity"]
+# class SaleForm(forms.ModelForm):
+#     class Meta: 
+#         model = Sale
+#         fields = ["quantity"]
 
 
 class LineItemForm(forms.ModelForm):

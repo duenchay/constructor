@@ -16,11 +16,11 @@ admin.site.register(Money_Status)
 admin.site.register(Delivery_Options)
 admin.site.register(Payment_Options)
 # admin.site.register(Order)
-admin.site.register(Payment)
-admin.site.register(Order_Product)
-admin.site.register(Carts)
+# admin.site.register(Payment)
+# admin.site.register(Order_Product)
+# admin.site.register(Carts)
 # admin.site.register(Conversations)
-admin.site.register(Sale)
+# admin.site.register(Sale)
 # admin.site.register(Conversations)
 # admin.site.register(Storck)
 class ProductAdmin(admin.ModelAdmin):
@@ -28,7 +28,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id',  'date', 'paid']
+    list_display = ['id',  'date', ]
 
 
 class OrderItemAdmin(admin.ModelAdmin):

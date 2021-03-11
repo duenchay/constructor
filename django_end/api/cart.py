@@ -1,6 +1,6 @@
 from .models import CartItem, Product
 from django.shortcuts import get_object_or_404, get_list_or_404
-
+from django.contrib import messages
 #ไอดีตะกร้า
 def _cart_id(request):
     if 'cart_id' not in request.session:
@@ -47,6 +47,7 @@ def add_item_to_cart(request):
         )
 
         # item.cart_id = cart_id
+        messages.info(request, "เพิ่มสินค้าเข้าตะกร้าเรียบร้อยแล้ว")
         item.save()
 
 #จำนวนสินค้ามีกี่อย่าง (ชนิด) 
@@ -66,6 +67,7 @@ def subtotal(request):
 def remove_item(request):
     item_id = request.POST.get('item_id')
     ci = get_object_or_404(CartItem, id=item_id)
+    messages.info(request, "ลบสินค้าในตะกร้าเรียบร้อยแล้ว")
     ci.delete()
     
 
@@ -77,6 +79,7 @@ def update_item(request):
     if quantity.isdigit():
         quantity = int(quantity)
         ci.quantity = quantity
+        messages.info(request, "เพิ่มสินค้าเข้าตะกร้าเรียบร้อยแล้ว")
         ci.save()
 
 
