@@ -1,15 +1,15 @@
 
-from typing import KeysView
+# from typing import KeysView
 from django.contrib import admin
 from django.urls import path, include
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from api.models import *
 from api import views
 # from api.views import router
 from django.conf import settings # new
 
 from django.conf.urls.static import static
-from django.conf.urls import url
+# from django.conf.urls import urls
 
 urlpatterns = [  
     path('',views.index, name='index'), 
