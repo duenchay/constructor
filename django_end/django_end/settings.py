@@ -134,11 +134,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
- 
-# MEDIA_ROOT = '/home/constructor/django_end/media'
 # MEDIA_URL = '/media/'
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+ 
+MEDIA_ROOT = '/home/constructor/django_end/media'
+MEDIA_URL = '/media/'
 STATIC_ROOT = '/home/constructor/django_end/static'
 STATIC_URL = '/static/' 
 AUTH_USER_MODEL = 'api.Users'
