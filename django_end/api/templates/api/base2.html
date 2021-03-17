@@ -72,28 +72,20 @@ color: #004d40;
 <body>
    
   <!--================ Start Header Menu Area =================-->
-	<header class="header_area">
-    <div class="main_menu">
-      <nav class="navbar navbar-expand-lg navbar-light">
-        <div class="container">
-          <a class="navbar-brand logo_h" href="/index"><img src="{% static 'api/img/Samgo.png'%}" alt=""></a>
-         
-          <!-- <a href="/cart">Cart: {{ cart_item_count }} item</a> -->
-          <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="icon-bar"></span> 
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button> -->
-          <button class="navbar-toggler ml-auto custom-toggler"
-          type="button"
-          data-toggle="collapse"
-          data-target="#nav3"> 
-        <span class="navbar-toggler-icon"></span> 
-      </button> 
-        <div class="collapse navbar-collapse" id="nav3">
-          <!-- <div class="collapse navbar-collapse offset" id="navbarSupportedContent"> -->
-            <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
+
+          <header class="header_area">
+            <div class="main_menu">
+              <nav class="navbar navbar-expand-lg navbar-light">
+                <div class="container">
+                  <a class="navbar-brand logo_h" href="/index"><img src="{% static 'api/img/Samgo.png'%}" alt=""></a>
+                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <div class="collapse navbar-collapse offset" id="navbarSupportedContent">
+                    <ul class="nav navbar-nav menu_nav ml-auto mr-auto">
               
               
               <li class="nav-item active"><a class="nav-link" href="/index">หน้าแรก</a></li>
@@ -143,22 +135,19 @@ color: #004d40;
                   </a>
                    
             </li> 
-             
+            {% comment %} 
               {% if request.user.is_superuser %}
              
-                  <!-- แอดมิน -->
               <li class="nav-item submenu dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                 aria-expanded="false">
                 {{user.username}} 
-                <!-- user.avatar.url -->
-               
-                <!-- <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{adminn.username}}  </span> -->
+
                 <img class="img-profile rounded-circle"
                 src="{%static 'api/img/undraw_profile.svg'%}" style="height: 25px;" width="25px">
             </a>   
              {% else %} 
-            
+             {% endcomment %} 
 
               <li class="nav-item submenu dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
@@ -171,7 +160,7 @@ color: #004d40;
                 src="{{user.avatar.url}} " style="height: 25px;" width="25px">
             </a>    
 
-            {% endif %}
+           
            
 
            
@@ -253,7 +242,7 @@ color: #004d40;
     {% endblock %}
 
   <script src="{% static 'api/fend/vendors/jquery/jquery-3.2.1.min.js'%}"></script>
-  <!-- <script src="{% static 'api/fend/vendors/bootstrap/bootstrap.bundle.min.js'%}"></script> -->
+  <script src="{% static 'api/fend/vendors/bootstrap/bootstrap.bundle.min.js'%}"></script>
   <script src="{% static 'api/fend/vendors/skrollr.min.js'%}"></script>
   <script src="{% static 'api/fend/vendors/owl-carousel/owl.carousel.min.js'%}"></script>
   <script src="{% static 'api/fend/vendors/nice-select/jquery.nice-select.min.js'%}"></script>

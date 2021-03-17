@@ -88,6 +88,7 @@
                             <td>{{ product.name }}</td>
                             <td>{{ product.price }}</td>
                             <td>{{ product.product_type }}</td> 
+                            <td>{{ product.product_status}}</td> 
                             <td>{{ product.quantity}}</td>
                            
                               
@@ -102,13 +103,13 @@
                                   
                               </td> -->
 
-                              <!-- <td><a href="/issue_item/{{product.id}}"
+                              <td><a href="/issue_item/{{product.id}}"
                                 ><input
                                   type="submit"
                                   value="BUY ITEM"
                                   class="btn btn-secondary btn"
                                   type="button"
-                              /></a></td> -->
+                              /></a></td>
                         
 
                               <td><a href="/add_to_stock/{{product.id}}"

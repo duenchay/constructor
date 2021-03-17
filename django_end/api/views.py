@@ -13,7 +13,7 @@ from django.shortcuts import render, get_object_or_404
 from . import cart 
 from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
-
+from django.shortcuts import get_object_or_404
 
 # หน้าแรก
 def index(request):
@@ -51,7 +51,7 @@ def order(request):
     })
 
 # หน้ารายการสินค้า
-def orderproduct(request,id):
+def orderproduct(request,id=0):
     litem = LineItem.objects.filter(order=id)
     orders = Order.objects.filter()
     item_count = cart.item_count(request)
@@ -122,11 +122,6 @@ def home(request):
                                  })
 #สินค้าในตะกร้า
 def show_cart(request):
-    # if request.user.is_anonymous:
-    #     return redirect('/login')
-    # else: 
-    #     users= Users.objects.get(username=request.user.username)
-
     item_count = cart.item_count(request)  #จำนวนสินค้า
     product_type=Product_Type.objects.all() #หมวดหมู่สินค้า
 
@@ -158,11 +153,8 @@ def checkout(request):
         if form.is_valid():
             order = Order() 
             order.user = request.user
-            # order.lat =request.POST['lat'] 
-            # order.lng =request.POST['lng']
             order.address = request.POST['address']
-            # work.rice_type = Rice_type.objects.get(pk=req.POST['rice_type'])
-            order.money_status =Money_Status.objects.get(pk=request.POST['money_status'])
+            # order.money_status =Money_Status.objects.get(pk=request.POST['money_status'])
             order.delivery_options =Delivery_Options.objects.get(pk=request.POST['delivery_options'])
             order.payment_options =Payment_Options.objects.get(pk=request.POST['payment_options'])
             # order.user = request.user
@@ -181,7 +173,6 @@ def checkout(request):
             #     user = request.user
                 
             # )
-            # print("_________order_________",o)
             order.save()
             # print(order.user)
             all_items = cart.get_all_cart_items(request)
@@ -210,7 +201,7 @@ def checkout(request):
     # 'users':Users.objects.all(),
     'product_type':product_type,
     'cart_item_count':item_count,
-    'money_status': Money_Status.objects.all(),
+    # 'money_status': Money_Status.objects.all(),
     'delivery_options': Delivery_Options.objects.all(),
     'payment_options': Payment_Options.objects.all(),
     
@@ -268,14 +259,14 @@ def editprofile(request, id=0):
     product_type=Product_Type.objects.all()
     item_count = cart.item_count(request)
     if request.method == 'POST':
-        form = UsersForm(request.POST, request.FILES, instance=users)
+        form = EditProfileForm(request.POST, request.FILES, instance=users)
         if form.is_valid():
             form.save()
         else:
             print("==== form.errors ====")
             print(form.errors)
     else:
-        form = UsersForm(users)  
+        form = EditProfileForm(users)  
     return render(request, 'api/editprofile.html' ,{ 
         'form': form,
         'users':users,
@@ -290,30 +281,30 @@ def logout(req):
     auth_logout(req)
     return redirect('/')
 
-def login(req):
-    if req.method == 'POST':
-        print(req.POST)
-        users = authenticate(username=req.POST['username'], password=req.POST['password'])
+def login(request):
+    if request.method == 'POST':
+        print(request.POST)
+        users = authenticate(username=request.POST['username'], password=request.POST['password'])
         print(users)
         if users is not None:
             print(users)
-            auth_login(req, users)
+            auth_login(request, users)
             return redirect('/')
     else:
         print('ยังไม่ได้กรอก login/password')
-    return render(req, 'api/login.html')
+    return render(request, 'api/login.html')
 
-def register(req):
+def register(request):
     print('register()')
     form = UsersForm()
-    print(req)
-    if req.method == 'POST':
-        form = UsersForm(req.POST, req.FILES)
-        print("req.POST")
-        print(req.POST)
+    print(request)
+    if request.method == 'POST':
+        form = UsersForm(request.POST, request.FILES)
+        print("request.POST")
+        print(request.POST)
         if form.is_valid():
             print('form valid')
-            form.instance.password = make_password(req.POST['password'])
+            form.instance.password = make_password(request.POST['password'])
             form.save()
             return redirect('/login')
         else: 
@@ -321,7 +312,7 @@ def register(req):
             
             print("==== form.errors ====")
             print(form.errors)
-    return render(req, 'api/register.html', { 
+    return render(request, 'api/register.html', { 
         'form': form,
        
         })
@@ -617,36 +608,42 @@ def do_paginate(data_list, page_number):
 # หน้าคลังสินค้า
 def stock(request):
     products = Product.objects.all()
-    users = Users.objects.get(username=request.user.username)
+    # comment = get_object_or_404(Comment, pk=comment_id)
+    users = get_object_or_404(Users,username=request.user.username)
     return render(request, 'api/stock.html', {'products': products,
     'users':users
     })
 
-# def issue_item(request, pk):
-#     product = Product.objects.get(id = pk)
-#     sales_form = SaleForm(request.POST)  
+def issue_item(request, pk):
+    product = Product.objects.get(id = pk)
+    form = SaleForm(request.POST)  
       
-#     if request.method == 'POST':     
-#         if sales_form.is_valid():
-#             new_sale = sales_form.save(commit=False)
-#             new_sale.item = product
-#             # new_sale.unit_price = product.unit_price   
-#             new_sale.save()
-#             #To keep track of the stock remaining after sales
-#             issued_quantity = int(request.POST['quantity'])
-#             product.quantity -= issued_quantity
-#             product.save()
+    if request.method == 'POST':     
+        if form.is_valid():
+            new_sale = form.save(commit=False)
+            new_sale.item = product
+            # new_sale.unit_price = product.unit_price   
+            new_sale.save()
+            #To keep track of the stock remaining after sales
+            issued_quantity = int(request.POST['quantity'])
+            product.quantity -= issued_quantity
+            if product.quantity >= 0:
+                messages.success(request, "Issued success. " )
+                product.save()
+            else:
+                messages.warning(request, "สินค้าในสต๊อกไม่พอ")
+            # product.save()
 
-#             print(product.name) #ชื่อ
-#             print(request.POST['quantity']) #จำนวน
-#             # print(product.total_quantity)
+            print(product.name) #ชื่อ
+            print(request.POST['quantity']) #จำนวน
+            # print(product.total_quantity)
 
-#             return redirect('/stock') 
+            return redirect('/stock') 
 
-#     return render (request, 'api/issue_item.html',
-#      {
-#     'sales_form': sales_form,
-#     })
+    return render (request, 'api/issue_item.html',
+     {
+    'form': form,
+    })
 
 #เพิ่มจำนวนสินค้าในสต๊อก
 def add_to_stock(request, pk):
@@ -769,7 +766,7 @@ def deletemechanicType(req, id=0):
 # หน้ารายการสั่งซื้อทั้งหมด
 def orderAll(req):
     orders = Order.objects.all().order_by('-id')
-    litem = LineItem.objects.filter()
+    litem = LineItem.objects.all()
     users = Users.objects.get(username=req.user.username)
     return render(req, 'api/orderAll.html',{
         'orders':orders,
@@ -778,18 +775,36 @@ def orderAll(req):
         'money_status': Money_Status.objects.all()
     })
 
+def editOrder(request, id=0):
+    order = Order.objects.get(pk=id)
+    money_statuss = Money_Status.objects.all()
+    if request.method == 'POST':
+        form = EditOrderForm(request.POST, request.FILES, instance=order)
+        if form.is_valid():
+            form.save()
+            return redirect('/orderAll')
+        else:
+            print("==== form.errors ====")
+            print(form.errors)
+    else:
+        form = EditOrderForm(order)
+    return render(request, 'api/editOrder.html' ,{ 
+        'form': form,
+        'order': order,
+        'money_statuss' : money_statuss,
+    })
 
 # หน้ารายการสินค้า
 def orderproductAll(req,id):
     litem = LineItem.objects.filter(order=id)
-    orders = Order.objects.filter(address = req.user)
+    # orders = Order.objects.filter(address = req.user)
     
     # print(litem)
     print(id)
-    print(orders)
+    # print(orders)
     # users = Users.objects.get(username=request.user.username)
     return render(req, 'api/orderproductAll.html',{
-        'orders':orders,
+        # 'orders':orders,
         'litem':litem
         # 'users':users
     })

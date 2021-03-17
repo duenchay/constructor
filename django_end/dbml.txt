@@ -200,15 +200,6 @@ ref: Product.product_type > Product_Type.id
 ref: Product.product_status > Product_Status.id
 
 
-Table Sale {
-  id auto [note:"", pk, unique]
-  item foreign_key [note:""]
-  quantity integer [note:"", null]
-  Note: '''Sale(id, item, quantity)'''
-}
-ref: Sale.item > Product.id
-
-
 Table CartItem {
   id auto [note:"", pk, unique]
   user foreign_key [note:"", null]
@@ -252,8 +243,7 @@ Table Order {
   payment_options foreign_key [note:""]
   address char [note:""]
   date date_time [note:""]
-  paid boolean [note:""]
-  Note: '''Order(id, user, money_status, delivery_options, payment_options, address, date, paid)'''
+  Note: '''Order(id, user, money_status, delivery_options, payment_options, address, date)'''
 }
 ref: Order.user > Users.id
 ref: Order.money_status > Money_Status.id

@@ -80,7 +80,7 @@ class Product(models.Model):
     product_detail = models.TextField(max_length=10000,default=' ',verbose_name = 'รายละเอียดสินค้า')
     product_img = models.ImageField(upload_to='images/product/', default='images/product/no-img.png' ,verbose_name = 'รูปสินค้า')
     product_type = models.ForeignKey(Product_Type,on_delete=models.CASCADE,verbose_name = 'หมวดหมู่สินค้า') #หมวดหมู่สินค้า
-    product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า', null = True, blank = True)  #สถานะสินค้า
+    product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า', default=1,null=True,)  #สถานะสินค้า
     quantity = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
     received_quantity = models.IntegerField(default = 0, null = True, blank = True)
  
@@ -89,9 +89,9 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'สินค้า'
 
-# class Sale(models.Model):
-#     item = models.ForeignKey(Product, on_delete = models.CASCADE)
-#     quantity = models.IntegerField(default = 0, null = True, blank = True)
+class Sale(models.Model):
+    item = models.ForeignKey(Product, on_delete = models.CASCADE)
+    quantity = models.IntegerField(default = 0, null = True, blank = True)
 
 class CartItem(models.Model):
     user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
@@ -142,7 +142,7 @@ class Payment_Options (models.Model):
 class Order(models.Model):
 
     user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
-    money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
+    money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,default=1,null=True,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
     delivery_options = models.ForeignKey(Delivery_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการจัดส่ง')
     payment_options = models.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน')
     address = models.CharField(max_length=191)

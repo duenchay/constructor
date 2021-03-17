@@ -66,7 +66,8 @@
                           <tr>
                             <td>{{ i.id }}</td>
                             <td>{{ i.date }}</td>
-                            <td>{{ i.money_status }}</td>
+                            <td class> <span class="badge badge-pill badge-{{i.as_bootstrap_status}}">{{ i.money_status }}</span></td>
+                          
                            
                             <td> {{i.payment_options}}</td>
                             <td>{{ i.delivery_options}}</td>

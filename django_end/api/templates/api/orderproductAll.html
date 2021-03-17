@@ -45,46 +45,19 @@
                         <th>รหัสสินค้า</th>
                         <th>ชื่อสินค้า</th>
                           <th>ราคา</th>
-            
-                          <!-- <th>รูปงานช่าง</th>
-                          <th>ประเภทช่าง</th> -->
-                          <!-- <th>Created At</th> -->
-                          
                           <th>จำนวน</th>
-                          <!-- <th>ชื่อผู้ใช้</th>  -->
-                          <!-- <th>ที่อยู่</th>  -->
                       </tr>
                       </thead>
                       <tbody>
                         {% csrf_token %} 
 
                       {% for n in litem %}
-                    
-                     
-                    
-                    
                           <tr>
                             <td>{{ n.id }}</td>
-                            <!-- <td><img src="media/{{i.avatar}}" style="height: 75px;"></td> -->
                               <td>{{ n.product }}</td>
                               <td>{{ n.price }}</td>
-                              
-                              <!-- <td>{{ n.order }}</td> -->
                               <td>{{ n.quantity }}</td>
-                             
-                              <!-- <td>{{ n.user }}</td> -->
-                            
-                              <!-- <td>{{ n.quantity }}</td> -->
-                              <!-- <td><img src="media/{{i.mechanic_img}}" style="height: 75px;"></td> -->
- 
-                              <!-- <td>{{ i.money_status }}</td> -->
-                              <!-- <td>{{ i.created_at  |date:"d-m-Y H:i:s" }}</td> -->
-                              <!-- <td>                                   
-                                  <a class="btn btn-sm btn-primary" href="/orderproduct/{{i.id}}"> <span></span>รายการสินค้า</a>
-                                  
-                              </td> -->
-                              <!-- <td><a class="btn btn-sm btn-primary" href="orderproduct/{{order.id}}"><span ></span> รายการสินค้า</a></td> -->
-                              
+
                               {% endfor %}
                               {% for i in orders %}
                               <td>{{ i.address }}</td>
