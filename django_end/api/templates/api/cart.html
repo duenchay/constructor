@@ -24,10 +24,10 @@
         </tr>
         </thead>
         <tbody>
-            {% for item in cart_items %}
+            {% for order_product in object.products.all %}
         <tr>
-            <td>{{ item.product.name }}</td>
-            <td>{{ item.price }}</td>
+            <td>{{ order_product.product.name }}</td>
+            <!-- <td>{{ order_product.price }}</td> -->
             <td>
                 <form action="" method="post">
                     {% csrf_token %}

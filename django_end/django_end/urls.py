@@ -5,11 +5,18 @@ from django.urls import path, include
 # from django.contrib.auth.models import User
 from api.models import *
 from api import views
-from api.views import router
+from api.views import CheckoutView, OrderSummaryView, PaymentMethod, remove_from_cart, remove_single_item_from_cart, router
 from django.conf import settings # new
 
 from django.conf.urls.static import static
 # from django.conf.urls import urls
+
+from django.urls import path, include
+# from . import \
+# CheckoutView,\
+#     add_to_cart,\
+  
+
 
 urlpatterns = [  
     path('',views.index, name='index'), 
@@ -43,7 +50,7 @@ urlpatterns = [
     path('editmechanicType/<int:id>/', views.editmechanicType),  
 
     path('orderAll',views.orderAll),
-    path('editOrder/<int:id>/', views.editOrder), 
+    path('editOrder/<int:id>', views.editOrder), 
     path('orderproductAll/<int:id>/',views.orderproductAll),
     
     path('stock',views.stock),
@@ -59,20 +66,31 @@ urlpatterns = [
     path('mechanicUser',views.mechanicUser),    
     path('product_type',views.product_type,name='product_type'),
     path('productTypeUser/<int:id>',views.productTypeUser,name='productTypeUser'),
-    path('product/<int:product_id>',views.productDetail,),
+    path('productDetail/<int:pk>',views.productDetail,),
+    # path('product/<int:pk>', ItemDetailView.as_view(), name='product-detail'),
     # path('test',views.test), 
     # path('cart',views.cart), 
     # path('checkout',views.checkout),  
+
+    path('add-to-cart/<int:pk>', views.add_to_cart, name='add-to-cart'),
+    path('checkout/', CheckoutView.as_view(), name='check-out'),
+    path('order-summary/', OrderSummaryView.as_view(), name='order-summary'),
+    path('remove-from-cart/<int:pk>', remove_from_cart, name='remove-from-cart'),
+    path('remove-single-item-from-cart/<int:pk>', remove_single_item_from_cart, name='remove-single-item-from-cart'),
+    path('payment/<payment_option>', PaymentMethod.as_view(), name='payment'),
+    path('payment/<payment_option>', PaymentMethod.as_view(), name='payment'),
     
+ 
+
     path('search',views.search,name='search'),
     path('addstore',views.addstore,name='addstore'),
     path('showProductAll',views.showProductAll,name='showProductAll'),
     path('add_to_stock/<str:pk>/', views.add_to_stock, name='add_to_stock'),
     path('issue_item/<str:pk>/', views.issue_item, name='issue_item'),  
      
-    path('cart/', views.show_cart, name='show_cart'),
+    # path('cart/', views.show_cart, name='show_cart'),
     path('home', views.home,),
-    path('checkout/', views.checkout,  name='checkout'),
+    # path('checkout/', views.checkout,  name='checkout'),
  
 
     path('profile',views.profile),

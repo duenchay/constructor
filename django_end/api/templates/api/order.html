@@ -57,7 +57,7 @@
                           <th>รายการสินค้า</th>
                       </tr>
                       </thead>
-                      <tbody>
+                      <tbody> 
                        
                     
                        
@@ -65,13 +65,25 @@
                     
                           <tr>
                             <td>{{ i.id }}</td>
-                            <td>{{ i.date }}</td>
+                            <td>{{ i.ordered_date }}</td>
                             <td class> <span class="badge badge-pill badge-{{i.as_bootstrap_status}}">{{ i.money_status }}</span></td>
                           
                            
                             <td> {{i.payment_options}}</td>
-                            <td>{{ i.delivery_options}}</td>
+                            <!-- <td>{{ i.delivery_options}}</td> -->
                             <td> {{i.address}}</td>
+                            <!-- <td> {{i.product}}</td> -->
+                            <!-- <th scope="row">{{ forloop.counter }}</th> -->
+                            <td>
+                                   
+                                    {% for n in i.products.all %}
+                
+                                     {{ n.quantity }} x {{ n.product }}&nbsp;
+                
+                                    {% endfor %} 
+                
+                
+                            </td>
                            
                             <td>{{ i.user }}</td>
                              
@@ -83,9 +95,9 @@
  
                               <!-- <td>{{ i.money_status }}</td> -->
                               <!-- <td>{{ i.created_at  |date:"d-m-Y H:i:s" }}</td> -->
-                              <td>                                   
+                              <td>                                     
                                   <a class="btn btn-sm btn-primary" href="/orderproduct/{{i.id}}"> <span></span>รายการสินค้า</a>
-                                  
+                                 
                               </td>
                               <!-- <td><a class="btn btn-sm btn-primary" href="orderproduct/{{order.id}}"><span ></span> รายการสินค้า</a></td> -->
                           </tr>

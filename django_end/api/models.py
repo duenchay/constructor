@@ -139,29 +139,86 @@ class Payment_Options (models.Model):
         verbose_name = 'ตัวเลือกการชำระเงิน'
 
 
+class OrderItem(models.Model):
+    user = models.ForeignKey(Users, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    ordered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f" {self.id }  // {self.quantity} of {self.product.name}"
+
+    def get_total_product_price(self):
+        return self.quantity * self.product.price
+
+    # def get_total_discount_product_price(self):
+    #     return self.quantity * self.product.discount_price
+
+    def get_amount_saved(self):
+        return self.get_total_product_price() - self.get_total_discount_product_price()
+
+    # def get_final_price(self):
+    #     if self.product.discount_price:
+    #         return self.get_total_discount_product_price()
+    #     return self.get_total_product_price()
+
+
+
 class Order(models.Model):
+    # orderitem = models.ForeignKey(OrderItem, on_delete=models.CASCADE,null=True)
 
     user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,default=1,null=True,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
-    delivery_options = models.ForeignKey(Delivery_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการจัดส่ง')
-    payment_options = models.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน')
+    delivery_options = models.ForeignKey(Delivery_Options,verbose_name = 'ตัวเลือกการจัดส่ง',on_delete=models.SET_NULL, blank=True, null=True)
+    payment_options = models.ForeignKey(Payment_Options,verbose_name = 'ตัวเลือกการชำระเงิน',on_delete=models.SET_NULL, blank=True, null=True)
     address = models.CharField(max_length=191)
+    ordered_date = models.DateTimeField()
     date = models.DateTimeField(auto_now_add=True)
+    products = models.ManyToManyField(OrderItem)
+    ordered = models.BooleanField(default=False,null=True)
     # paid = models.BooleanField(default=False)
 
+    # def __str__(self):
+    #     # return f'ID:{self.id} Status:{self.money_status} Delivery_options:{self.delivery_options}'  
+    #     # return "{}:{}".format(self.id, self.email)
+    #     return "{}".format(self.id)
+
+    # def total_cost(self):
+    #     return sum([ li.cost() for li in self.lineitem_set.all() ] )
     def __str__(self):
-        # return f'ID:{self.id} Status:{self.money_status} Delivery_options:{self.delivery_options}'  
-        # return "{}:{}".format(self.id, self.email)
-        return "{}".format(self.id)
+        return self.user.username
+   
 
-    def total_cost(self):
-        return sum([ li.cost() for li in self.lineitem_set.all() ] )
+    def get_total(self):
+        total = 0
+        for order_product in self.products.all():
+            total += order_product.get_total_product_price()
+        # if self.coupon:
+        #     total -= self.coupon.amount
+        return total
+    # def as_bootstrap_status(self):
+    #     if self.money_status.money_status =='ชำระเงินแล้ว':
+    #         return 'success'
+    #     elif self.money_status.money_status == 'ยังไม่ชำระ' :
+    #         return 'danger'
+ 
 
-    def as_bootstrap_status(self):
-        if self.money_status.money_status =='ชำระเงินแล้ว':
-            return 'success'
-        elif self.money_status.money_status == 'ยังไม่ชำระ' :
-            return 'danger'
+
+class Payment(models.Model):
+    ppp = models.CharField(max_length=100 ,null=True)
+    # stripe_charge_id = models.CharField(max_length=50)
+    user = models.ForeignKey(
+        Users, on_delete=models.SET_NULL, blank=True, null=True)
+    amount = models.FloatField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.user.username
+
+
+
+
+
 
 #รายการสินค้า
 class LineItem(models.Model):

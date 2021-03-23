@@ -1,7 +1,10 @@
 from django import forms
 from .models import *
   
-
+PAYMENT_CHOICES = (
+    ('S', 'Stripe'), 
+    ('P', 'PayPal')
+)
 class CartForm(forms.Form):
     quantity = forms.IntegerField(initial='1')
     product_id = forms.IntegerField(widget=forms.HiddenInput)
@@ -10,12 +13,47 @@ class CartForm(forms.Form):
         self.request = request
         super(CartForm, self).__init__(*args, **kwargs)
 
+class CheckoutForm(forms.Form):
+    address = forms.CharField(required=False)
+    # money_status = forms. (Money_Status,on_delete=models.CASCADE,default=1,null=True,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
+    # delivery_options = forms.ForeignKey(Delivery_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการจัดส่ง',null=True)
+    # payment_options = forms.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน',null=True)
+    # shipping_address2 = forms.CharField(required=False)
+    # shipping_country = CountryField(blank_label='(select country)').formfield(
+    #     required=False,
+    #     widget=CountrySelectWidget(attrs={
+    #         'class': 'custom-select d-block w-100',
+    #     }))
+    # shipping_zip = forms.CharField(required=False)
 
-class CheckoutForm(forms.ModelForm):
-    class Meta:
-        model = Order
-        # exclude = ('paid',)
-        fields = [   'address', 'delivery_options','payment_options']
+    # billing_address = forms.CharField(required=False)
+    # billing_address2 = forms.CharField(required=False)
+    # billing_country = CountryField(blank_label='(select country)').formfield(
+    #     required=False,
+    #     widget=CountrySelectWidget(attrs={
+    #         'class': 'custom-select d-block w-100',
+    #     }))
+    # billing_zip = forms.CharField(required=False)
+
+    # same_billing_address = forms.BooleanField(required=False)
+    # set_default_shipping = forms.BooleanField(required=False)
+    # use_default_shipping = forms.BooleanField(required=False)
+    # set_default_billing = forms.BooleanField(required=False)
+    # use_default_billing = forms.BooleanField(required=False)
+
+    payment_option = forms.ChoiceField(
+        widget=forms.RadioSelect, choices=PAYMENT_CHOICES)
+
+
+class PaymentForm(forms.Form):
+    stripeToken = forms.CharField(required=False)
+    save = forms.BooleanField(required=False)
+    use_default = forms.BooleanField(required=False)
+# class CheckoutForm(forms.ModelForm):
+#     class Meta:
+#         model = Order
+#         # exclude = ('paid',)
+#         fields = [   'address', 'delivery_options','payment_options']
 
         # widgets = {
         #     'address': forms.Textarea(attrs={'row': 6, 'col': 8}),

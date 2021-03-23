@@ -28,7 +28,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ['id',  'date', ]
+    list_display = ['id',  'user', ]
 
 
 class OrderItemAdmin(admin.ModelAdmin):
@@ -43,3 +43,6 @@ admin.site.register(Product, ProductAdmin)
 admin.site.register(Order, OrderAdmin)
 admin.site.register(CartItem, OrderItemAdmin)
 admin.site.register(LineItem, LineItemAdmin)
+
+admin.site.register(OrderItem)
+admin.site.register(Payment)

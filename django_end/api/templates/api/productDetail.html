@@ -55,11 +55,11 @@
   
               </form> -->
 
-			  <form action="/product/{{product.id}}" method="post">
-				{% csrf_token %}
-				{{ form }}
-				<input type="submit" value="Add to cart" class="btn btn-primary" >
-			</form>
+			  <a  href="{% url 'add-to-cart' product.id %}" class="btn btn-primary btn-md my-0 p">Add to cart
+				<i class="fas fa-shopping-cart ml-1"></i>
+			</a>
+
+			
 		</div>
 	</div>
 	<hr />

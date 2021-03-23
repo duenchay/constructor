@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'api',
     'rest_framework',
     'django_dbml',
-    'django_extensions'
+    'django_extensions',
+    'crispy_forms',
+   
+    
 ]
 
 MIDDLEWARE = [ 

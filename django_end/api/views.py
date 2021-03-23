@@ -14,47 +14,59 @@ from . import cart
 from django.contrib import messages
 # from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
-
+from django.utils import timezone
 # หน้าแรก
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic import ListView, DetailView, View
+
+# def cart_item_count(user):
+#     if user.is_authenticated:
+#         qs = Order.objects.filter(user=user, ordered=False)
+#         if qs.exists():
+#             return qs[0].items.count()
+#     return 0
+
 def index(request):
     product_type=Product_Type.objects.all()
-    item_count = cart.item_count(request)
+    # item_count = cart.item_count(request)
     return render(request, 'api/index.html',{
          'product_type' :product_type,
-         'cart_item_count':item_count
+        #  'cart_item_count':cart_item_count
     })
 
 #แสดงสินค้าทั้งหมด
 def showProductAll(request):
     product_type=Product_Type.objects.all() # แสดงประเภทช่างบน tap
     product=Product.objects.all()
-    item_count = cart.item_count(request)
+    # item_count = cart.item_count(request)
     return render(request,'api/showProductAll.html',{
         'product_type':product_type,
 		'product':product,
-        'cart_item_count':item_count
+        # 'cart_item_count':item_count
 })
 
 #ประวัติการซื้อ
 def order(request):
     litem = LineItem.objects.all()
-    orders = Order.objects.filter(user =request.user)
+    orders = Order.objects.filter(user =request.user, ordered=True)
+    # orders = Order.objects.filter(user =request.user)
     # orders = Order.objects.all()s
-    item_count = cart.item_count(request)
+    # item_count = cart.item_count(request)
     product_type=Product_Type.objects.all()
 
     return render(request, 'api/order.html',{
         'orders':orders,
         'litem':litem,
-        'cart_item_count':item_count,
+        # 'cart_item_count':item_count,
         'product_type':product_type
     })
 
 # หน้ารายการสินค้า
 def orderproduct(request,id=0):
-    litem = LineItem.objects.filter(order=id)
-    orders = Order.objects.filter()
-    item_count = cart.item_count(request)
+    # litem = LineItem.objects.filter(order=id)
+    orders = Order.objects.filter(user =request.user)
+    # item_count = cart.item_count(request)
     product_type=Product_Type.objects.all()
     # print(litem)
     print(id)
@@ -62,8 +74,8 @@ def orderproduct(request,id=0):
     # users = Users.objects.get(username=request.user.username)
     return render(request, 'api/orderproduct.html',{
         'orders':orders,
-        'litem':litem,
-        'cart_item_count':item_count,
+        # 'litem':litem,
+        # 'cart_item_count':item_count,
         'product_type':product_type
         # 'users':users
     })
@@ -74,18 +86,18 @@ def productTypeUser(request,id=0):
     product_type=Product_Type.objects.all()
     # adminn = Adminn.objects.get(username=request.user.username)
     product=Product.objects.filter(product_type=type).order_by('id')
-    item_count = cart.item_count(request)
+    # item_count = cart.item_count(request)
     # mechanic= Mechanic.objects.all()
     return render(request,'api/productTypeUser.html',{
         'product':product,
         # 'product_type' :product,
         'product_type':product_type,
-        'cart_item_count':item_count
+        # 'cart_item_count':item_count
         # 'adminn' :adminn
         })
 
     # รายละเอียดสินค้า 
-def productDetail(request,product_id):
+def productDetail(request,pk):
     if request.user.is_anonymous:
         return redirect('/login')
     else: 
@@ -93,8 +105,8 @@ def productDetail(request,product_id):
    
     # except: pass
    
-    product = get_object_or_404(Product, id=product_id)
-    item_count = cart.item_count(request) #ตัวเลขบนตะกร้าสินค้า
+    product = get_object_or_404(Product, id=pk)
+    # item_count = cart.item_count(request) #ตัวเลขบนตะกร้าสินค้า
     product_type=Product_Type.objects.all()
 
     if request.method == 'POST':
@@ -104,11 +116,11 @@ def productDetail(request,product_id):
             cart.add_item_to_cart(request)   #เพิ่มสินค้าเข้าตะกร้า
             return redirect('show_cart')
 
-    form = CartForm(request, initial={'product_id': product.id})
+    form = CartForm(request, initial={'pk': product.pk})
     return render(request, 'api/productDetail.html', {
                                             'product': product,
                                             'form': form,
-                                            'cart_item_count': item_count,
+                                            # 'cart_item_count': item_count,
                                             'product_type':product_type,
                                             'users':users
                                          
@@ -120,92 +132,319 @@ def home(request):
     return render(request, "api/home.html", {
                                     'all_products': all_products,
                                  })
-#สินค้าในตะกร้า
-def show_cart(request):
-    item_count = cart.item_count(request)  #จำนวนสินค้า
-    product_type=Product_Type.objects.all() #หมวดหมู่สินค้า
+class OrderSummaryView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
 
-    if request.method == 'POST':
-        if request.POST.get('submit') == 'Update': #เพิ่ม
-            cart.update_item(request)
-        if request.POST.get('submit') == 'Remove': # ลบ
-            cart.remove_item(request)
-        # form.instance.store = store
-        # form.save()
+            context = {
+                'object': order,
 
-    cart_items = cart.get_all_cart_items(request)
-    cart_subtotal = cart.subtotal(request)
-    return render(request, 'api/cart.html', {
-                                            'cart_items': cart_items,
-                                            'cart_subtotal': cart_subtotal,
-                                            'cart_item_count': item_count,
-                                            # 'users':users,
-                                            'product_type':product_type
-                                            })
+            }
+            return render(self.request, 'api/order_summary.html', context)
+        except ObjectDoesNotExist:
+            messages.warning(self.request, "You do not have an active order")
+            return redirect("/")
 
-def checkout(request):
-    print(request.user)
-    product_type=Product_Type.objects.all()
-    item_count = cart.item_count(request)
-    if request.method == 'POST':
-        print(request.POST)
-        form = CheckoutForm(request.POST)
-        if form.is_valid():
-            order = Order() 
-            order.user = request.user
-            order.address = request.POST['address']
-            # order.money_status =Money_Status.objects.get(pk=request.POST['money_status'])
-            order.delivery_options =Delivery_Options.objects.get(pk=request.POST['delivery_options'])
-            order.payment_options =Payment_Options.objects.get(pk=request.POST['payment_options'])
-            # order.user = request.user
-            # cleaned_data = form.cleaned_data
-            # all_items = cart.get_all_cart_items(request)
-            # for cart_item in all_items:
-            # o = Order(
-            #     # name = cleaned_data.get('name'),
-            #     # user = cleaned_data.get('user'),
-            #     lat = cleaned_data.get('lat'),
-            #     lng = cleaned_data.get('lng'),
-            #     money_status = cleaned_data.get('money_status'),
-            #     delivery_options = cleaned_data.get('delivery_options'),
-            #     payment_options = cleaned_data.get('payment_options'),
-            #     # user = cart_item.user
-            #     user = request.user
-                
-            # )
-            order.save()
-            # print(order.user)
-            all_items = cart.get_all_cart_items(request)
-            for cart_item in all_items:
-                li = LineItem(          #รายการสินค้า
-                    product_id = cart_item.product_id,
-                    price = cart_item.price,
-                    quantity = cart_item.quantity,
-                    order_id = order.id,
-                    user = cart_item.user
-                )
-                # print("____________LI____________",type(li))
-                li.save()
+def add_to_cart(request, pk):
+    if request.user.is_anonymous:
+        return redirect('/login')
+    else: 
+        users= Users.objects.get(username=request.user.username)
+    product = get_object_or_404(Product, id=pk)
+    order_product, created = OrderItem.objects.get_or_create(
+        product=product, user=request.user, ordered=False)
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    # if there is a order
+    # หากมีการสั่งซื้อ
+    if order_qs.exists():
+        order = order_qs[0]
 
-            cart.clear(request)
-            
-            request.session['order_id'] = order.id
-            # messages.info(request, "This item was not in your cart")
-          
-           # messages.info(request, messages.INFO, 'Order Placed!')
-            return redirect('/order')
+        # check if the order item is in the order ==(order ache,for same-orderitem
+        # ตรวจสอบว่ารายการสั่งซื้ออยู่ในคำสั่งซื้อหรือไม่ == (สั่งซื้อสำหรับรายการสั่งซื้อเดียวกัน
+        if order.products.filter(product__pk=product.pk).exists():
+            order_product.quantity += 1
+            order_product.save()
+            messages.info(request, "This item quantity was updated.")
+            return redirect("order-summary")
+        else:
+            # ==(order ache, different-orderitem ache)
+            # สั่งซื้อสั่งซื้อที่แตกต่างกัน
+            order.products.add(order_product)
+            messages.info(request, "This item was added to your cart.")
+            return redirect("order-summary")
+
+    # if there is no order..first time order and first item
+    # หากไม่มีคำสั่งซื้อ.. สั่งครั้งแรกและสินค้าชิ้นแรก
     else:
-        form = CheckoutForm()
-    return render(request, 'api/checkout.html', {
-    'form': form,
-    # 'users':Users.objects.all(),
-    'product_type':product_type,
-    'cart_item_count':item_count,
-    # 'money_status': Money_Status.objects.all(),
-    'delivery_options': Delivery_Options.objects.all(),
-    'payment_options': Payment_Options.objects.all(),
+        ordered_date = timezone.now()
+        order = Order.objects.create(
+            user=request.user,
+            ordered_date=ordered_date,
+            # money_status =Money_Status.objects.get(pk=request.POST['money_status']),
+            # delivery_options =Delivery_Options.objects.get(pk=request.POST['delivery_options']),
+            # payment_options =Payment_Options.objects.get(pk=request.POST['payment_options']),
+            # address = request.POST['address']
+
+            )
+        order.products.add(order_product)
+
+        messages.info(request, "This item was added to your cart.")
+        return redirect("order-summary", pk=product.pk)
+
+def remove_from_cart(request, pk):
+    product = get_object_or_404(Product, id=pk)
+    order_qs = Order.objects.filter(
+        user=request.user,
+        ordered=False
+    )
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.products.filter(product__pk=product.pk).exists():
+            order_product = OrderItem.objects.filter(
+                product=product,
+                user=request.user,
+                ordered=False
+            )[0]
+            order_product.quantity = 1
+            order_product.save()
+            order.products.remove(order_product)
+            messages.info(request, "This item was removed from your cart.")
+            return redirect("order-summary")
+        else:
+            messages.info(request, "This item was not in your cart")
+            return redirect("product-detail", id=pk)
+    else:
+        messages.info(request, "You do not have an active order")
+        return redirect("product-detail", id=pk)
+
+
+def remove_single_item_from_cart(request, pk):
+    product = get_object_or_404(Product, id=pk)
+    order_qs = Order.objects.filter(
+        user=request.user,
+        ordered=False
+    )
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.products.filter(product__pk=product.pk).exists():
+            order_product = OrderItem.objects.filter(
+                product=product,
+                user=request.user,
+                ordered=False
+            )[0]
+            if order_product.quantity > 1:
+                order_product.quantity -= 1
+                order_product.save()
+            else:
+                order.products.remove(order_product)
+            messages.info(request, "The item quantity was updated")
+            return redirect("order-summary")
+        else:
+            messages.info(request, "This item was not in your cart")
+            return redirect("product-detail", id=pk)
+
+    else:
+        messages.info(request, "You do not have an active order")
+        return redirect("product-detail", id=pk)
+
+
+class CheckoutView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        try:
+            form = CheckoutForm()
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            context = {
+                'order': order,
+                'form': form,
+                
+            }
+            return render(self.request, 'api/checkout-page.html', context)
+
+        except ObjectDoesNotExist:
+            messages.info(self.request, "you don not have an active order")
+            return redirect("check-out")
+
+    def post(self, *args, **kwargs):
+        # form = CheckoutForm(self.request.POST or None)
+        try:
+            # order = Order.objects.get(user=self.request.user, ordered=False)
+            form = CheckoutForm(self.request.POST or None)
+            if form.is_valid():
+                order = Order.objects.get(user=self.request.user, ordered=False)
+                order.address = self.request.POST['address']
+                # order.money_status =Money_Status.objects.get(pk=self.request.POST['money_status'])
+                # order.delivery_options =Delivery_Options.objects.get(pk=self.request.POST['delivery_options'])
+                # order.payment_options =Payment_Options.objects.get(pk=self.request.POST['payment_options'])
+
+                order.save()
+
+                payment_option = form.cleaned_data.get('payment_option')
+
+                if payment_option == 'S':
+                    return redirect('payment', payment_option='stripe')
+                elif payment_option == 'P':
+                    return redirect('payment', payment_option='paypal')
+                else:
+                    messages.warning(
+                        self.request, "Invalid payment option selected")
+                    return redirect('check-out')
+        except ObjectDoesNotExist:
+            messages.warning(self.request, "You do not have an active order")
+            return redirect("order-summary")
+
+
+
+class PaymentMethod(View):
+    def get(self, *args, **kwargs):
+        # order
+        order = Order.objects.get(user=self.request.user, ordered=False)
+        print("Billing = ", order.user)
+        if order.user:
+            context = {
+                'order': order,
+                # 'DISPLAY_COUPON_FORM': False
+            }
+            return render(self.request, 'api/payment.html', context)
+        else:
+            messages.error(
+                self.request, "You have not added a billing address")
+            return redirect("check-out")
+
+    def post(self, *args, **kwargs):
+        order = Order.objects.get(user=self.request.user, ordered=False)
+
+        try:
+
+
+            payment = Payment()
+            payment.ppp = self.request.POST['ppp']
+            # payment.stripe_charge_id = charge['id']
+            payment.user = self.request.user
+            payment.amount = order.get_total()
+            payment.save()
+
+
+           
+
+            order_products = order.products.all()
+            # print(order_items)
+
+            order_products.update(ordered=True)
+            for item in order_products:
+                item.save()
+
+            # assign the payment
+
+            order.ordered = True
+            order.payment = payment
+            # order.ref_code = create_ref_code()
+            order.save()
+
+            messages.success(self.request, "Your order was successful!")
+            return redirect("/")
+
     
-    })
+        except Exception as e:
+            # send an email to ourselves
+            messages.warning(
+                self.request, "A serious error occurred. We have been notifed.")
+            return redirect("/")
+
+        messages.warning(self.request, "Invalid data received")
+        return redirect("payment/stripe")
+
+
+
+
+#สินค้าในตะกร้า
+# def show_cart(request):
+#     item_count = cart.item_count(request)  #จำนวนสินค้า
+#     product_type=Product_Type.objects.all() #หมวดหมู่สินค้า
+
+#     if request.method == 'POST':
+#         if request.POST.get('submit') == 'Update': #เพิ่ม
+#             cart.update_item(request)
+#         if request.POST.get('submit') == 'Remove': # ลบ
+#             cart.remove_item(request)
+#         # form.instance.store = store
+#         # form.save()
+
+#     cart_items = cart.get_all_cart_items(request)
+#     cart_subtotal = cart.subtotal(request)
+#     return render(request, 'api/cart.html', {
+#                                             'cart_items': cart_items,
+#                                             'cart_subtotal': cart_subtotal,
+#                                             'cart_item_count': item_count,
+#                                             # 'users':users,
+#                                             'product_type':product_type
+#                                             })
+
+# def checkout(request):
+#     print(request.user)
+#     product_type=Product_Type.objects.all()
+#     item_count = cart.item_count(request)
+#     if request.method == 'POST':
+#         print(request.POST)
+#         form = CheckoutForm(request.POST)
+#         if form.is_valid():
+#             order = Order() 
+#             order.user = request.user
+#             order.address = request.POST['address']
+#             # order.money_status =Money_Status.objects.get(pk=request.POST['money_status'])
+#             order.delivery_options =Delivery_Options.objects.get(pk=request.POST['delivery_options'])
+#             order.payment_options =Payment_Options.objects.get(pk=request.POST['payment_options'])
+#             # order.user = request.user
+#             # cleaned_data = form.cleaned_data
+#             # all_items = cart.get_all_cart_items(request)
+#             # for cart_item in all_items:
+#             # o = Order(
+#             #     # name = cleaned_data.get('name'),
+#             #     # user = cleaned_data.get('user'),
+#             #     lat = cleaned_data.get('lat'),
+#             #     lng = cleaned_data.get('lng'),
+#             #     money_status = cleaned_data.get('money_status'),
+#             #     delivery_options = cleaned_data.get('delivery_options'),
+#             #     payment_options = cleaned_data.get('payment_options'),
+#             #     # user = cart_item.user
+#             #     user = request.user
+                
+#             # )
+#             order.save()
+#             # print(order.user)
+#             all_items = cart.get_all_cart_items(request)
+#             for cart_item in all_items:
+#                 li = LineItem(          #รายการสินค้า
+#                     product_id = cart_item.product_id,
+#                     price = cart_item.price,
+#                     quantity = cart_item.quantity,
+#                     order_id = order.id,
+#                     user = cart_item.user
+#                 )
+#                 # print("____________LI____________",type(li))
+#                 li.save()
+
+#             cart.clear(request)
+            
+#             request.session['order_id'] = order.id
+#             # messages.info(request, "This item was not in your cart")
+          
+#            # messages.info(request, messages.INFO, 'Order Placed!')
+#             return redirect('/order')
+#     else:
+#         form = CheckoutForm()
+#     return render(request, 'api/checkout.html', {
+#     'form': form,
+#     # 'users':Users.objects.all(),
+#     'product_type':product_type,
+#     'cart_item_count':item_count,
+#     # 'money_status': Money_Status.objects.all(),
+#     'delivery_options': Delivery_Options.objects.all(),
+#     'payment_options': Payment_Options.objects.all(),
+    
+#     })
     
 
 
@@ -231,12 +470,12 @@ def addstore(request):
 
 # Searchสินค้า
 def search (request):
-    item_count = cart.item_count(request)
+    # item_count = cart.item_count(request)
     q=request.GET['q']
     data=Product.objects.filter(name__icontains=q).order_by('id')
     return render(request,'api/search.html',{
     'data':data,
-    'cart_item_count':item_count
+    # 'cart_item_count':item_count
     })
 
 
@@ -246,18 +485,18 @@ def profile(request):
     
     users = Users.objects.get(username=request.user.username)
     product_type=Product_Type.objects.all()
-    item_count = cart.item_count(request)
+    # item_count = cart.item_count(request)
     return render(request, 'api/profile.html', {
         'users': users,
         'product_type':product_type,
-        'cart_item_count': item_count
+        # 'cart_item_count': item_count
     })
 
 
 def editprofile(request, id=0):
     users = Users.objects.get(username=request.user.username)
     product_type=Product_Type.objects.all()
-    item_count = cart.item_count(request)
+    # item_count = cart.item_count(request)
     if request.method == 'POST':
         form = EditProfileForm(request.POST, request.FILES, instance=users)
         if form.is_valid():
@@ -271,7 +510,7 @@ def editprofile(request, id=0):
         'form': form,
         'users':users,
         'product_type':product_type,
-        'cart_item_count':item_count
+        # 'cart_item_count':item_count
     })
 
 
@@ -366,12 +605,12 @@ def product_type(request):
 def mechanicUser(request):
     mechanic= Mechanic.objects.all()
     product_type=Product_Type.objects.all()
-    item_count = cart.item_count(request)
+    # item_count = cart.item_count(request)
     # adminn = Adminn.objects.get(username=req.user.username)
     return render(request, 'api/mechanicUser.html',{
         'mechanic' :mechanic ,
         'product_type':product_type,
-        'cart_item_count':item_count,
+        # 'cart_item_count':item_count,
         # 'adminn': adminn
     })
 
@@ -379,12 +618,12 @@ def mechanicUser(request):
 def mechanicDetailUser(request,id=0):
     product_type=Product_Type.objects.all()
     mechanic= Mechanic.objects.get(pk=id)
-    item_count = cart.item_count(request)
+    # item_count = cart.item_count(request)
     # adminn = Adminn.objects.get(username=req.user.username)
     return render(request, 'api/mechanicDetailUser.html',{
         'mechanic' :mechanic,
         'product_type':product_type,
-        'cart_item_count':item_count
+        # 'cart_item_count':item_count
         # 'adminn' :adminn
     })
 
@@ -397,12 +636,12 @@ def register1(req):
 # หน้าข้อมูลร้าน
 def storeUser(request):
     product_type=Product_Type.objects.all()
-    item_count = cart.item_count(request)
+    # item_count = cart.item_count(request)
     store = Store.objects.get()
     return render(request, 'api/storeUser.html', {
         'store' :store,
         'product_type' :product_type,
-        'cart_item_count': item_count
+        # 'cart_item_count': item_count
     })
 # หมวดหมู่สินค้าบนแทป
 def producttype(req):
@@ -825,7 +1064,7 @@ def orderproductAll(req,id):
     #     payments = paginator.page(1)
     # except EmptyPage:
     #     payments = paginator.page(paginator.num_pages)
-    return render(request, 'api/payment.html', {'payments': payments,'users':users})
+    # return render(request, 'api/payment.html', {'payments': payments,'users':users})
 
 # class RoleViewSet(viewsets.ModelViewSet):
 #     queryset = Role.objects.all()
