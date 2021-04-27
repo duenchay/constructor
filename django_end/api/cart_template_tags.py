@@ -15,7 +15,4 @@ def cart_item_count(user):
         if qs.exists():
             return qs[0].products.count()
         # print(qs[0].products)
-        return 0    
-
-# import py_compile
-# py_compile.compile('pp.py')
+        return 0     

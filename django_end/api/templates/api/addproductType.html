@@ -33,7 +33,7 @@
       <div class="card mb-3">
           <div class="card-header">
               <i class="fas fa-table"></i>
-              เพิ่มหมวดหมู่
+              เพิ่มหมวดหมู่สินค้า
           </div>
           <div class="card-body">
             <form class="form-horizontal" action="/addproductType" method="POST"  enctype="multipart/form-data">
@@ -52,7 +52,8 @@
                   </div>
               </div>
   
-              <button class="btn btn-primary btn-block" type="submit">Submit &nbsp;&nbsp;&nbsp;<span></span></button>
+              <button class="btn btn-primary btn-block" type="submit">เพิ่มหมวดหมู่สินค้า
+                &nbsp;&nbsp;&nbsp;<span></span></button>
           </form>
           </div>
       </div>
@@ -86,7 +87,7 @@
                         </thead>
                         <tbody>
                           {% csrf_token %} 
-                        {% for i in producttype %}
+                        {% for i in product_type %}
                       
                             <tr>
                               <td>{{ i.id }}</td>

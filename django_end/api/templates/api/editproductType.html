@@ -49,8 +49,8 @@
       <div class="card mb-3">
           <div class="card-header">
               <i class="fas fa-table"></i>
-              แก้ไขสินค้า
-              <a  class="btn btn-sm btn-success" href="/productType" style="padding: 8px; float: right; background-color: rgb(53, 122, 155); color: white;">Back</a>
+              แก้ไขหมวดหมู่สินค้า
+              <a  class="btn btn-sm btn-success" href="/addproductType" style="padding: 8px; float: right; background-color: rgb(53, 122, 155); color: white;">Back</a>
           </div>
           <div class="card-body">
             {% for message in messages %}
@@ -64,7 +64,7 @@
                   <div class="form-row">
                       <div class="col-md-9">
                           <div class="form-label-group">
-                            <label for="product_type"><b>ชื่อสินค้า</b></label>
+                            <label for="product_type"><b>ชื่อหมวดหมู่สินค้า</b></label>
                             <input type="text" class="form-control" placeholder="กรุณากรอกชื่อสินค้า" name="product_type" value="{{ product_type.product_type }}"  required>
                           </div>
                       </div>
@@ -72,7 +72,7 @@
                   </div>
               </div>
               
-              <button class="btn btn-primary btn-block" type="submit">Submit &nbsp;&nbsp;&nbsp;<span></span></button>
+              <button class="btn btn-primary btn-block" type="submit">อัพเดท &nbsp;&nbsp;&nbsp;<span></span></button>
           </form>
           </div>
       </div>

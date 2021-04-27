@@ -42,11 +42,11 @@
           <nav class="navbar navbar-light bg-light justify-content-between">
             <a class="navbar-brand"></a>
   
-              <form class="form-inline" action="/product/" style="font:right;" method="POST">
+              <!-- <form class="form-inline" action="/product/" style="font:right;" method="POST">
               {% csrf_token %}
               <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="name" value="{{ search_name }}">
               <button class="btn btn-outline-success my-2 my-sm-0"name="search" type="submit">Search</button>
-            </form> 
+            </form>  -->
           </nav>
         
           <div class="card-body">
@@ -59,13 +59,15 @@
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" align="center">
                       <thead>
                       <tr>
-                        <th>id</th>
-                          <th>ชื่อ</th>
+                        <th>ID</th>
+                          <th>ชื่อสินค้า</th>
+                          <th>รูป</th>
+                          <th>รายละเอียด</th>
                           <th>ราคา</th>
                           <th>หมวดหมู่</th>
-                          <th>รายละเอียด</th>
-                          <th>รูป</th>
-                          <th>จำนวน</th>
+                        
+                          
+                          <th>จำนวนสินค้า</th>
                           <!-- <th>Created At</th> -->
                           <th>แก้ไข</th> 
                           <th>ลบ</th>
@@ -73,17 +75,19 @@
                       </thead>
                       <tbody>
                         {% csrf_token %} 
-                      {% for product in product %}
+                      {% for product in products %}
                     
                           <tr>
                             <td>{{ product.id }}</td>
                               <td>{{ product.name }}</td>
+                              <td><img src="/media/{{product.product_img}}" style="height: 45px;"></td>
+                              <td>{{ product.product_detail }}</td>
                               <td>{{ product.price }}</td>
                               <td>{{ product.product_type }}</td>
-                              <td>{{ product.product_detail }}</td>
-                              <td><img src="/media/{{product.product_img}}" style="height: 75px;"></td>
+                              
+                              
                               <td>{{ product.quantity }}</td>
-                              <td>{{product.product_status}}</td>
+                              <!-- <td>{{product.product_status}}</td> -->
                               <!-- <td>{{ i.created_at  |date:"d-m-Y H:i:s" }}</td> -->
                               <td>                                   
                                   <a class="btn btn-sm btn-warning" href="/editproduct/{{product.id}}"> <span class="fa fa-edit"></span> Edit</a>
@@ -96,11 +100,11 @@
                       </tbody>
                   
                     </table>
-                    {% if product.has_other_pages %}
+                    {% if products.has_other_pages %}
                     <ul class="pagination">
-                      {% if product.has_previous %}
-                        <li><a class="page-link" href="?page={{ product.previous_page_number }}">&laquo;  Previous</a></li>
-                        <li><a class="page-link" href="?page={{ product.previous_page_number }}">{{ product.previous_page_number }} </a></li>
+                      {% if products.has_previous %}
+                        <li><a class="page-link" href="?page={{ products.previous_page_number }}">&laquo;  Previous</a></li>
+                        <li><a class="page-link" href="?page={{ products.previous_page_number }}">{{ products.previous_page_number }} </a></li>
                       {% else %}
                         <li class="disabled page-link"><span>&laquo;Previous</span></li>
                       {% endif %}
@@ -108,15 +112,15 @@
                       <li class="page-item active">
                         <span class="page-link">
                             <span class="current" >
-                                {{ product.number }} 
+                                {{ products.number }} 
                               </span>
                          
                         </span>
                       </li>
                           <!-- หน้าถัดไป -->
-                      {% if product.has_next %}
+                      {% if products.has_next %}
                         
-                        <li><a class="page-link"  href="?page={{ product.next_page_number }}">Next &raquo; </a></li>
+                        <li><a class="page-link"  href="?page={{ products.next_page_number }}">Next &raquo; </a></li>
                       {% else %}
                         <li class="disabled page-link"><span>Next &raquo;</span></li>
                       {% endif %}

@@ -1,90 +1,22 @@
-# from .models import CartItem, Product
-# from django.shortcuts import get_object_or_404, get_list_or_404
-# from django.contrib import messages
-# #ไอดีตะกร้า
-# def _cart_id(request):
-#     if 'cart_id' not in request.session:
-#         request.session['cart_id'] = _generate_cart_id()
+from api.models import *
+from django.shortcuts import render
+from django import template
 
-#     return request.session['cart_id']
+register = template.Library()
+@register.filter
 
-
-# def _generate_cart_id():
-#     import string, random
-#     return ''.join([random.choice(string.ascii_letters + string.digits) for _ in range(50)])
-
-# # get สินค้าในตะกร้าทั้งหมด
-# def get_all_cart_items(request):
-#     return CartItem.objects.filter(cart_id = _cart_id(request))
-
-# #เพิ่มสินค้าเข้าตะกร้า
-# def add_item_to_cart(request):
-#     # cart_id = _cart_id(request)
-#     #get จาก form
-#     product_id = request.form_data['product_id']
-#     quantity = request.form_data['quantity']
-
-#     p = get_object_or_404(Product, id=product_id)
-#     price = p.price
-
-#     cart_items = get_all_cart_items(request)
-
-#     item_in_cart = False
-
-#     for cart_item in cart_items:
-#         if cart_item.product_id == product_id:
-#             cart_item.update_quantity(quantity) #update จำนวนสินค้า
-#             # cart_item.save()
-#             item_in_cart = True
-
-#     if not item_in_cart:
-#         item = CartItem(
-#             cart_id = _cart_id(request),
-#             price = price,
-#             quantity = quantity,
-#             product_id = product_id,
-#             user = request.user
-#         )
-
-#         # item.cart_id = cart_id
-#         messages.info(request, "เพิ่มสินค้าเข้าตะกร้าเรียบร้อยแล้ว")
-#         item.save()
-
-# #จำนวนสินค้ามีกี่อย่าง (ชนิด) 
-# def item_count(request):
-#     return get_all_cart_items(request).count()
-
-# #ราคารวม
-# def subtotal(request):
-#     cart_item = get_all_cart_items(request)
-#     sub_total = 0
-#     for item in cart_item:
-#         sub_total += item.total_cost()
-
-#     return sub_total
-
-
-# def remove_item(request):
-#     item_id = request.POST.get('item_id')
-#     ci = get_object_or_404(CartItem, id=item_id)
-#     messages.info(request, "ลบสินค้าในตะกร้าเรียบร้อยแล้ว")
-#     ci.delete()
-    
-
-
-# def update_item(request):
-#     item_id = request.POST.get('item_id')
-#     quantity = request.POST.get('quantity')
-#     ci = get_object_or_404(CartItem, id=item_id)
-#     if quantity.isdigit():
-#         quantity = int(quantity)
-#         ci.quantity = quantity
-#         messages.info(request, "เพิ่มสินค้าเข้าตะกร้าเรียบร้อยแล้ว")
-#         ci.save()
-
-
-# def clear(request):
-#     cart_items = get_all_cart_items(request)
-#     cart_items.delete()
-
-
+def productTypeUser(request,id=0): 
+    type=Product_Type.objects.get(pk=id)
+    product_type=Product_Type.objects.all()
+    # adminn = Adminn.objects.get(username=request.user.username)
+    product=Product.objects.filter(product_type=type).order_by('id')
+    # item_count = cart.item_count(request)
+    # mechanic= Mechanic.objects.all()
+    print(type)
+    return render(request,'api/productTypeUser.html',{
+        'product':product,
+        'type' :type,
+        'product_type':product_type,
+        # 'cart_item_count':item_count
+        # 'adminn' :adminn
+        })

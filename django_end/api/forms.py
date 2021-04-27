@@ -2,52 +2,53 @@ from django import forms
 from .models import *
   
 PAYMENT_CHOICES = (
-    ('S', 'Stripe'), 
-    ('P', 'PayPal')
+    ('โอนผ่านบัญชีธนาคาร', 'โอนผ่านบัญชีธนาคาร'), 
+    ('เงินสด', 'เงินสด')
 )
-class CartForm(forms.Form):
-    quantity = forms.IntegerField(initial='1')
-    product_id = forms.IntegerField(widget=forms.HiddenInput)
+# class CartForm(forms.Form):
+#     quantity = forms.IntegerField(initial='1')
+#     product_id = forms.IntegerField(widget=forms.HiddenInput)
 
-    def __init__(self, request, *args, **kwargs):
-        self.request = request
-        super(CartForm, self).__init__(*args, **kwargs)
+#     def __init__(self, request, *args, **kwargs):
+#         self.request = request
+#         super(CartForm, self).__init__(*args, **kwargs)
+
+
+
+
+# class CheckoutForm(forms.ModelForm):
+#     class Meta:
+#         model = Order
+#         fields = ['payment_option','delivery_options','address','phone']
+
+# class CheckoutForm(models.Model):
+#     # address = forms.CharField(required=False)
+#     # phone = forms.CharField(required=False)
+#     # delivery_options = forms.CharField(required=False)
+#     # same_billing_address = forms.BooleanField(required=False)
+#     # payment_options = forms.CharField(required=False)
+#     PAYMENT_CHOICES = (
+#     ('S', 'โอนผ่านบัญชีธนาคาร'), 
+#     ('เงินสด', 'เงินสด')
+# )
+#     payment_option = forms.CharField(max_length=1 ,
+#        widget=forms.Select(choices=PAYMENT_CHOICES))
 
 class CheckoutForm(forms.Form):
-    address = forms.CharField(required=False)
-    # money_status = forms. (Money_Status,on_delete=models.CASCADE,default=1,null=True,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
-    # delivery_options = forms.ForeignKey(Delivery_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการจัดส่ง',null=True)
-    # payment_options = forms.ForeignKey(Payment_Options,on_delete=models.CASCADE,verbose_name = 'ตัวเลือกการชำระเงิน',null=True)
-    # shipping_address2 = forms.CharField(required=False)
-    # shipping_country = CountryField(blank_label='(select country)').formfield(
-    #     required=False,
-    #     widget=CountrySelectWidget(attrs={
-    #         'class': 'custom-select d-block w-100',
-    #     }))
-    # shipping_zip = forms.CharField(required=False)
-
-    # billing_address = forms.CharField(required=False)
-    # billing_address2 = forms.CharField(required=False)
-    # billing_country = CountryField(blank_label='(select country)').formfield(
-    #     required=False,
-    #     widget=CountrySelectWidget(attrs={
-    #         'class': 'custom-select d-block w-100',
-    #     }))
-    # billing_zip = forms.CharField(required=False)
-
+    # address = forms.CharField(required=False)
+    # phone = forms.CharField(required=False)
+    # delivery_options = forms.CharField(required=False)
     # same_billing_address = forms.BooleanField(required=False)
-    # set_default_shipping = forms.BooleanField(required=False)
-    # use_default_shipping = forms.BooleanField(required=False)
-    # set_default_billing = forms.BooleanField(required=False)
-    # use_default_billing = forms.BooleanField(required=False)
-
+    # payment_options = forms.CharField(required=False)
     payment_option = forms.ChoiceField(
         widget=forms.RadioSelect, choices=PAYMENT_CHOICES)
 
 
-class PaymentForm(forms.Form):
+
+class PaymentForm(forms.Form): 
     stripeToken = forms.CharField(required=False)
     save = forms.BooleanField(required=False)
+    img = forms.ImageField(required=False)
     use_default = forms.BooleanField(required=False)
 # class CheckoutForm(forms.ModelForm):
 #     class Meta:
@@ -94,51 +95,34 @@ class Mechanic_TypeForm(forms.ModelForm):
         # fields = '__all__'
         fields = [  'mechanic_type']
 
-# class Order_ProductForm(forms.ModelForm):
-#     class Meta:
-#         model = Order_Product
-#         fields = '__all__'
-
-# class StorckForm(forms.ModelForm):
-#     class Meta:
-#         model = Storck
-#         fields = '__all__'
- 
-
-
 class UsersForm(forms.ModelForm):
 
     class Meta: 
         model = Users 
-        fields = [ 'first_name' ,'last_name', 'email', 'avatar','username','password', ]
+        fields = [ 'first_name' ,'last_name', 'email','phone', 'avatar','username','password', ]
     
 class EditProfileForm(forms.ModelForm):
 
     class Meta: 
         model = Users 
-        fields = [ 'first_name' ,'last_name', 'email', 'avatar',]
+        fields = [ 'first_name' ,'last_name',  'avatar','phone']
 
 class StoreForm(forms.ModelForm):
     class Meta:
         model = Store
         fields = '__all__'
 
-
-
 class AddStockForm(forms.ModelForm):
     class Meta:
         model = Product
         fields = ['received_quantity']    #เพิ่มจำนวนสินค้าในสต๊อก
-
-
 
 class SaleForm(forms.ModelForm):
     class Meta: 
         model = Sale
         fields = ["quantity"]
 
-
 class LineItemForm(forms.ModelForm):
     class Meta: 
         model = LineItem
-        fields = '__all__'
+        fields = '__all__' 

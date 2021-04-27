@@ -5,6 +5,7 @@ from django.urls import path, include
 # from django.contrib.auth.models import User
 from api.models import *
 from api import views
+from api import cart
 from api.views import CheckoutView, OrderSummaryView, PaymentMethod, remove_from_cart, remove_single_item_from_cart, router
 from django.conf import settings # new
 
@@ -50,7 +51,7 @@ urlpatterns = [
     path('editmechanicType/<int:id>/', views.editmechanicType),  
 
     path('orderAll',views.orderAll),
-    path('editOrder/<int:id>', views.editOrder), 
+    path('editOrder/<int:id>/', views.editOrder), 
     path('orderproductAll/<int:id>/',views.orderproductAll),
     
     path('stock',views.stock),
@@ -65,7 +66,7 @@ urlpatterns = [
     path('register1',views.register1),
     path('mechanicUser',views.mechanicUser),    
     path('product_type',views.product_type,name='product_type'),
-    path('productTypeUser/<int:id>',views.productTypeUser,name='productTypeUser'),
+    path('productTypeUser/<int:id>',cart.productTypeUser,name='productTypeUser'),
     path('productDetail/<int:pk>',views.productDetail,),
     # path('product/<int:pk>', ItemDetailView.as_view(), name='product-detail'),
     # path('test',views.test), 

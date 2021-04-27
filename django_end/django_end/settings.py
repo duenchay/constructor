@@ -87,6 +87,11 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+             'libraries':{
+            'cart_template_tags': 'api.cart_template_tags', 
+            'cart': 'api.cart', 
+
+            }
         },
     },
 ]
@@ -131,6 +136,7 @@ AUTH_PASSWORD_VALIDATORS = [
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
+# TIME_ZONE = 'GMT+7'
 
 USE_I18N = True
 

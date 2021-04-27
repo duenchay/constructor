@@ -29,7 +29,16 @@
 }
 </style>
 </head>
-
+{% if form.errors %}
+<div class="form-row">
+  กรุณาระบุข้อมูลต่อไปนี้<br/>
+  <ul>
+    {% for e in form.errors %}
+    <li style="color: red;"> {{ e }} </li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
 <body class="bg-gradient-primary">
 
     <div class="container">
@@ -54,6 +63,9 @@
                                     <div class="col-sm-6">
                                         <input type="text" class="form-control form-control-user" name="last_name"   placeholder="Last Name" required="required">
                                     </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control form-control-user" name="phone" placeholder="phone" required="required">
                                 </div>
                                 <div class="form-group">
                                     <input type="text" class="form-control form-control-user" name="username" placeholder="Username" required="required">

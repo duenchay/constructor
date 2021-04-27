@@ -5,15 +5,17 @@
     <div class="container">
 
     <div class="table-responsive text-nowrap">
-    <h2>Order Summary</h2>
+        <br>
+    <h2>ตระกร้าสินค้า</h2>
     <table class="table">
         <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Item title</th>
-            <th scope="col">Price</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Total Item Price</th>
+            <th scope="col">ชื่อสินค้า</th>
+            <th scope="col">ราคา</th>
+            <th scope="col">จำนวน</th>
+            <th scope="col">ราคาสินค้าทั้งหมด</th>
+            <th scope="col">ลบสินค้า</th>
         </tr>
         </thead>
         <tbody>
@@ -27,38 +29,47 @@
                 {{ order_product.quantity }}
                 <a href="{% url 'add-to-cart' order_product.product.id %}"><i class="fas fa-plus ml-2"></i></a>
             </td>
+            <td>     
+                    {{ order_product.get_total_product_price }} บาท
+                </td>
+            <!-- ลบสินค้า -->
             <td>
-                <a style='color: red;' href="{% url 'remove-from-cart' order_product.product.id  %}">
-                    <i class="fas fa-trash float-right"></i>
-                </a>
+
+                <a  class="btn btn-sm btn-danger" href="{% url 'remove-from-cart' order_product.product.id  %}"><span class="fa fa-trash" ></span> Delete</a>
             </td>
            
            
         </tr>
         {% empty %}
         <tr>
-            <td colspan='5'>Your cart is empty</td>
+            <!-- <td colspan='5'>Your cart is empty</td> -->
+            <td colspan='5'>คุณไม่มีสินค้าในตะกร้า</td>  
         </tr>
         <tr>
             <td colspan="5">
-            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+            <a class='btn btn-primary float-right' href='/showProductAll'>กลับไปหน้าสินค้า</a>
             </td>
+            <td></td>
         </tr>
 
         {% endfor %}
 
         
         {% if object.get_total %}
+        
         <tr>
-            <td colspan="4"><b>Order Total</b></td>
-            <td><b>${{ object.get_total }}</b></td>
+            <td colspan="4"><b>ราคารวม</b></td>
+            <td><b>{{ object.get_total }} บาท</b></td>
+            <td></td>
         </tr>
         <tr>
             <td colspan="5">
-            <a class='btn btn-warning float-right ml-2' href='/checkout/'>Proceed to checkout</a>
-            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
+            <a class='btn btn-warning float-right ml-2' href='/checkout/'>ดำเนินการชำระเงิน</a>
+            <a class='btn btn-primary float-right' href='/showProductAll'>กลับไปหน้าสินค้า</a>
             </td>
+            <td></td>
         </tr>
+        
         {% endif %}
         </tbody>
     </table>

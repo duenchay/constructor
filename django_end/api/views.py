@@ -12,96 +12,95 @@ from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, get_object_or_404
 from . import cart 
 from django.contrib import messages
-# from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 # หน้าแรก
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import ListView, DetailView, View
+from django.views.generic import  View #,ListView, DetailView,
 
-# def cart_item_count(user):
-#     if user.is_authenticated:
-#         qs = Order.objects.filter(user=user, ordered=False)
-#         if qs.exists():
-#             return qs[0].items.count()
-#     return 0
 
 def index(request):
+    products_list = Product.objects.all().order_by('name')
     product_type=Product_Type.objects.all()
-    # item_count = cart.item_count(request)
+    paginator = Paginator(products_list,8) #จำนวนรายการ/หน้า
+    page = request.GET.get('page')
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
     return render(request, 'api/index.html',{
          'product_type' :product_type,
-        #  'cart_item_count':cart_item_count
-    })
+         'products':products })
+
 
 #แสดงสินค้าทั้งหมด
 def showProductAll(request):
     product_type=Product_Type.objects.all() # แสดงประเภทช่างบน tap
     product=Product.objects.all()
-    # item_count = cart.item_count(request)
+ 
     return render(request,'api/showProductAll.html',{
         'product_type':product_type,
 		'product':product,
-        # 'cart_item_count':item_count
 })
 
 #ประวัติการซื้อ
 def order(request):
-    litem = LineItem.objects.all()
+  
     orders = Order.objects.filter(user =request.user, ordered=True)
-    # orders = Order.objects.filter(user =request.user)
-    # orders = Order.objects.all()s
-    # item_count = cart.item_count(request)
     product_type=Product_Type.objects.all()
 
     return render(request, 'api/order.html',{
         'orders':orders,
-        'litem':litem,
-        # 'cart_item_count':item_count,
         'product_type':product_type
     })
 
 # หน้ารายการสินค้า
 def orderproduct(request,id=0):
-    # litem = LineItem.objects.filter(order=id)
-    orders = Order.objects.filter(user =request.user)
+   
+    orders = Order.objects.filter(user =request.user,id=id)
+    litem = OrderItem.objects.filter(id=id)
+    # order = Order.objects.get(user=self.request.user, ordered=False)
+    print(id)
     # item_count = cart.item_count(request)
     product_type=Product_Type.objects.all()
     # print(litem)
-    print(id)
+    print(litem)
     print(orders)
     # users = Users.objects.get(username=request.user.username)
     return render(request, 'api/orderproduct.html',{
         'orders':orders,
-        # 'litem':litem,
+        'litem':litem,
         # 'cart_item_count':item_count,
         'product_type':product_type
         # 'users':users
     })
 
 # หน้าสินค้าแต่ละหมวดหมู่
-def productTypeUser(request,id=0): 
-    type=Product_Type.objects.get(pk=id)
-    product_type=Product_Type.objects.all()
-    # adminn = Adminn.objects.get(username=request.user.username)
-    product=Product.objects.filter(product_type=type).order_by('id')
-    # item_count = cart.item_count(request)
-    # mechanic= Mechanic.objects.all()
-    return render(request,'api/productTypeUser.html',{
-        'product':product,
-        # 'product_type' :product,
-        'product_type':product_type,
-        # 'cart_item_count':item_count
-        # 'adminn' :adminn
-        })
+# def productTypeUser(request,id=0): 
+#     type=Product_Type.objects.get(pk=id)
+#     product_type=Product_Type.objects.all()
+#     # adminn = Adminn.objects.get(username=request.user.username)
+#     product=Product.objects.filter(product_type=type).order_by('id')
+#     # item_count = cart.item_count(request)
+#     # mechanic= Mechanic.objects.all()
+#     return render(request,'api/productTypeUser.html',{
+#         'product':product,
+#         # 'product_type' :product,
+#         'product_type':product_type,
+#         # 'cart_item_count':item_count
+#         # 'adminn' :adminn
+#         })
 
     # รายละเอียดสินค้า 
 def productDetail(request,pk):
-    if request.user.is_anonymous:
-        return redirect('/login')
-    else: 
-        users= Users.objects.get(username=request.user.username)
+    # if request.user.is_anonymous:
+    #     return redirect('/login')
+    # else: 
+    #     users= Users.objects.get(username=request.user.username)
    
     # except: pass
    
@@ -109,20 +108,20 @@ def productDetail(request,pk):
     # item_count = cart.item_count(request) #ตัวเลขบนตะกร้าสินค้า
     product_type=Product_Type.objects.all()
 
-    if request.method == 'POST':
-        form = CartForm(request, request.POST)
-        if form.is_valid():
-            request.form_data = form.cleaned_data
-            cart.add_item_to_cart(request)   #เพิ่มสินค้าเข้าตะกร้า
-            return redirect('show_cart')
+    # if request.method == 'POST':
+    #     form = CartForm(request, request.POST)
+    #     if form.is_valid():
+    #         request.form_data = form.cleaned_data
+    #         cart.add_item_to_cart(request)   #เพิ่มสินค้าเข้าตะกร้า
+    #         return redirect('show_cart')
 
-    form = CartForm(request, initial={'pk': product.pk})
+    # form = CartForm(request, initial={'pk': product.pk})
     return render(request, 'api/productDetail.html', {
                                             'product': product,
-                                            'form': form,
+                                            # 'form': form,
                                             # 'cart_item_count': item_count,
                                             'product_type':product_type,
-                                            'users':users
+                                            # 'users':users
                                          
                                             })
 
@@ -132,6 +131,7 @@ def home(request):
     return render(request, "api/home.html", {
                                     'all_products': all_products,
                                  })
+# @login_required(login_url='/login')                        
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
@@ -143,14 +143,11 @@ class OrderSummaryView(LoginRequiredMixin, View):
             }
             return render(self.request, 'api/order_summary.html', context)
         except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
+            messages.warning(self.request, "คุณไม่มีสินค้าในตระกร้าสินค้า")
             return redirect("/")
 
+@login_required(login_url='/login') 
 def add_to_cart(request, pk):
-    if request.user.is_anonymous:
-        return redirect('/login')
-    else: 
-        users= Users.objects.get(username=request.user.username)
     product = get_object_or_404(Product, id=pk)
     order_product, created = OrderItem.objects.get_or_create(
         product=product, user=request.user, ordered=False)
@@ -159,22 +156,30 @@ def add_to_cart(request, pk):
     # หากมีการสั่งซื้อ
     if order_qs.exists():
         order = order_qs[0]
-
         # check if the order item is in the order ==(order ache,for same-orderitem
         # ตรวจสอบว่ารายการสั่งซื้ออยู่ในคำสั่งซื้อหรือไม่ == (สั่งซื้อสำหรับรายการสั่งซื้อเดียวกัน
         if order.products.filter(product__pk=product.pk).exists():
             order_product.quantity += 1
-            order_product.save()
-            messages.info(request, "This item quantity was updated.")
+            # product.quantity -=  order_product.quantity
+            if order_product.quantity  <= product.quantity:
+                messages.info(request, "เพิ่มสินค้าเข้าตระกร้าสำเร็จ")
+                # product.save()
+                order_product.save()
+                        # product.save()
+            else:
+                messages.warning(request, "สินค้าในสต๊อกไม่พอ")
+            # order_product.save()
+            print(product.quantity)
+            print( order_product.quantity)
+            print(order_product)
             return redirect("order-summary")
         else:
             # ==(order ache, different-orderitem ache)
             # สั่งซื้อสั่งซื้อที่แตกต่างกัน
             order.products.add(order_product)
-            messages.info(request, "This item was added to your cart.")
+            messages.info(request, "เพิ่มสินค้าเข้าตระกร้าสำเร็จ")
             return redirect("order-summary")
-
-    # if there is no order..first time order and first item
+    # if there is no ordequantityr..first time order and first item
     # หากไม่มีคำสั่งซื้อ.. สั่งครั้งแรกและสินค้าชิ้นแรก
     else:
         ordered_date = timezone.now()
@@ -189,8 +194,8 @@ def add_to_cart(request, pk):
             )
         order.products.add(order_product)
 
-        messages.info(request, "This item was added to your cart.")
-        return redirect("order-summary", pk=product.pk)
+        messages.info(request, "เพิ่มสินค้าเข้าตระกร้าสำเร็จ")
+        return redirect("order-summary")
 
 def remove_from_cart(request, pk):
     product = get_object_or_404(Product, id=pk)
@@ -210,13 +215,13 @@ def remove_from_cart(request, pk):
             order_product.quantity = 1
             order_product.save()
             order.products.remove(order_product)
-            messages.info(request, "This item was removed from your cart.")
+            messages.info(request, "ลบสินค้าออกจากตระสินค้าสำเร็จ")
             return redirect("order-summary")
         else:
-            messages.info(request, "This item was not in your cart")
+            messages.info(request, "สินค้านี้ไม่ได้อยู่ในรถเข็นของคุณ")
             return redirect("product-detail", id=pk)
     else:
-        messages.info(request, "You do not have an active order")
+        messages.info(request, "คุณไม่มีคำสั่งซื้อที่ใช้งานอยู่")
         return redirect("product-detail", id=pk)
 
 
@@ -237,65 +242,75 @@ def remove_single_item_from_cart(request, pk):
             )[0]
             if order_product.quantity > 1:
                 order_product.quantity -= 1
+                messages.info(request, "ลดจำนวนสินค้าสำเร็จ")
                 order_product.save()
             else:
                 order.products.remove(order_product)
-            messages.info(request, "The item quantity was updated")
+                messages.info(request, "ลบสินค้าสำเร็จ")
             return redirect("order-summary")
         else:
             messages.info(request, "This item was not in your cart")
             return redirect("product-detail", id=pk)
 
     else:
-        messages.info(request, "You do not have an active order")
+        messages.info(request, "คุณไม่มีคำสั่งซื้อที่ใช้งานอยู่")
         return redirect("product-detail", id=pk)
 
 
 class CheckoutView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
-        try:
-            form = CheckoutForm()
-            order = Order.objects.get(user=self.request.user, ordered=False)
-            context = {
-                'order': order,
-                'form': form,
-                
-            }
-            return render(self.request, 'api/checkout-page.html', context)
-
-        except ObjectDoesNotExist:
-            messages.info(self.request, "you don not have an active order")
-            return redirect("check-out")
-
+        # try:
+        form = CheckoutForm()
+        order = Order.objects.filter(user=self.request.user, ordered=False)
+        context = {
+            'order': order,
+            'form': form,
+            # 'payment_option': payment_option
+            'delivery_options': Delivery_Options.objects.all(),
+            # 'money_status': Money_Status.objects.all()
+           
+   }
+        return render(self.request, 'api/checkout-page.html', context)
     def post(self, *args, **kwargs):
         # form = CheckoutForm(self.request.POST or None)
-        try:
+        # try:
             # order = Order.objects.get(user=self.request.user, ordered=False)
-            form = CheckoutForm(self.request.POST or None)
-            if form.is_valid():
-                order = Order.objects.get(user=self.request.user, ordered=False)
-                order.address = self.request.POST['address']
-                # order.money_status =Money_Status.objects.get(pk=self.request.POST['money_status'])
-                # order.delivery_options =Delivery_Options.objects.get(pk=self.request.POST['delivery_options'])
-                # order.payment_options =Payment_Options.objects.get(pk=self.request.POST['payment_options'])
-
+        form = CheckoutForm(self.request.POST or None)
+        if form.is_valid():
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            order.address = self.request.POST['address']
+            order.phone = self.request.POST['phone']
+            # order.payment_option =Order.objects.get(pk=self.request.POST['payment_option'])
+            order.delivery_options =Delivery_Options.objects.get(pk=self.request.POST['delivery_options'])
+            # order.payment_options =Payment_Options.objects.get(pk=self.request.POST['payment_options'])
+            order.save()
+          
+            # order.payment_options =Payment_Options.objects.get(pk=self.request.POST['payment_options'])
+            payment_option = form.cleaned_data.get('payment_option')
+            if payment_option == 'โอนผ่านบัญชีธนาคาร':
+                order.payment_option = payment_option
                 order.save()
-
-                payment_option = form.cleaned_data.get('payment_option')
-
-                if payment_option == 'S':
-                    return redirect('payment', payment_option='stripe')
-                elif payment_option == 'P':
-                    return redirect('payment', payment_option='paypal')
-                else:
-                    messages.warning(
-                        self.request, "Invalid payment option selected")
-                    return redirect('check-out')
-        except ObjectDoesNotExist:
-            messages.warning(self.request, "You do not have an active order")
-            return redirect("order-summary")
-
-
+                
+                return redirect('payment', payment_option='stripe')
+        
+            elif payment_option == 'เงินสด':
+                order_products = order.products.all()
+                order_products.update(ordered=True)
+    
+                # form.save()
+                order.ordered = True
+                order.payment_option = payment_option
+                order.save()
+                
+                messages.success(self.request, "สั่งซื้อสินค้าสำเร็จ!")
+                return redirect('/', )
+            
+            else:
+                messages.warning(
+                    self.request, "Invalid payment option selected")
+                return redirect('check-out')
+        # form.save()
+    
 
 class PaymentMethod(View):
     def get(self, *args, **kwargs):
@@ -305,7 +320,6 @@ class PaymentMethod(View):
         if order.user:
             context = {
                 'order': order,
-                # 'DISPLAY_COUPON_FORM': False
             }
             return render(self.request, 'api/payment.html', context)
         else:
@@ -316,46 +330,57 @@ class PaymentMethod(View):
     def post(self, *args, **kwargs):
         order = Order.objects.get(user=self.request.user, ordered=False)
 
-        try:
+        payment_option = Payment()
+        payment_option.ppp = self.request.POST['ppp']
+        payment_option.img = self.request.POST['img']
+        # payment_option.stripe_charge_id = charge['id']
+        payment_option.user = self.request.user
+        payment_option.amount = order.get_total()
+        payment_option.save()
 
+        order_products = order.products.all()
+        # print(order_items)
+        order_products.update(ordered=True)
+        # product = Product.objects.filter(id=self.kwargs.get('pk'))
+        # print(product)
+        # order_product = OrderItem.objects.filter(user=self.request.user, ordered=False)
+        # # order_product = OrderItem.objects.filter(
+        # # product=product, user=self.request.user, ordered=False)
+        # # # # order.products.filter(product__pk=product.pk)
+        # print(order.products)
+        # print(order_product.quantity)
+        # print(order_products)
 
-            payment = Payment()
-            payment.ppp = self.request.POST['ppp']
-            # payment.stripe_charge_id = charge['id']
-            payment.user = self.request.user
-            payment.amount = order.get_total()
-            payment.save()
+        # product = get_object_or_404(Product, id=self.kwargs.get('pk'))
+        # order_product, created = OrderItem.objects.get_or_create(
+        # product=product, user=request.user, ordered=True)
+        # product =Product.objects.filter(id=self.kwargs.get('pk'))
+        
+        # quantity =self.request.POST['quantity']
+        # product.quantity -=  quantity
+        # if order_products.quantity  <= product.quantity:
+        #     # product.quantity -=  order_product.quantity
+        #     messages.info(request, "อัปเดตสินค้าสำเร็จ")
+        #     order_product.save()
+        #             # product.save()
 
+        # else:
+        #     messages.warning(request, "สินค้าในสต๊อกไม่พอ")
+      
+        # order_products.save()
+      
+        # for item in order_products:
 
-           
-
-            order_products = order.products.all()
-            # print(order_items)
-
-            order_products.update(ordered=True)
-            for item in order_products:
-                item.save()
-
-            # assign the payment
-
-            order.ordered = True
-            order.payment = payment
-            # order.ref_code = create_ref_code()
-            order.save()
-
-            messages.success(self.request, "Your order was successful!")
-            return redirect("/")
-
-    
-        except Exception as e:
-            # send an email to ourselves
-            messages.warning(
-                self.request, "A serious error occurred. We have been notifed.")
-            return redirect("/")
-
-        messages.warning(self.request, "Invalid data received")
-        return redirect("payment/stripe")
-
+            
+        #     item.save()
+        # print(order)
+        print(order_products)     
+        # assign the payment
+        order.ordered = True
+        # order.payment_option = payment_option
+        order.save()
+        messages.success(self.request, "สั่งซื้อสินค้าสำเร็จ!")
+        return redirect("/")
 
 
 
@@ -446,10 +471,6 @@ class PaymentMethod(View):
     
 #     })
     
-
-
-
-
 def addstore(request):
     form = StoreForm()
     # users = Users.objects.get(username=request.user.username)
@@ -470,15 +491,14 @@ def addstore(request):
 
 # Searchสินค้า
 def search (request):
-    # item_count = cart.item_count(request)
+   
     q=request.GET['q']
     data=Product.objects.filter(name__icontains=q).order_by('id')
+    product_type=Product_Type.objects.all()
     return render(request,'api/search.html',{
     'data':data,
-    # 'cart_item_count':item_count
+    'product_type':product_type
     })
-
-
 
 #หน้าโปรไฟล์
 def profile(request):
@@ -501,11 +521,13 @@ def editprofile(request, id=0):
         form = EditProfileForm(request.POST, request.FILES, instance=users)
         if form.is_valid():
             form.save()
+            return redirect('/profile')
         else:
             print("==== form.errors ====")
             print(form.errors)
     else:
         form = EditProfileForm(users)  
+
     return render(request, 'api/editprofile.html' ,{ 
         'form': form,
         'users':users,
@@ -522,13 +544,20 @@ def logout(req):
 
 def login(request):
     if request.method == 'POST':
-        print(request.POST)
+        # print(request.POST)
         users = authenticate(username=request.POST['username'], password=request.POST['password'])
-        print(users)
+        # print(users)
         if users is not None:
             print(users)
             auth_login(request, users)
-            return redirect('/')
+            messages.info(request, "เข้าสู่ระบบสำเร็จ")
+            if request.user.is_superuser :
+
+                return redirect('/store')
+            else:
+                  return redirect('/')
+        else: 
+            messages.warning(request, "เข้าสู่ระบบไม่สำเร็จ")
     else:
         print('ยังไม่ได้กรอก login/password')
     return render(request, 'api/login.html')
@@ -556,39 +585,6 @@ def register(request):
        
         })
 
-# def show_product(request, slug,product_id, ):
-#     product = get_object_or_404(Product, id=product_id)
-
-#     if request.method == 'POST':
-#         form = CartForm(request, request.POST)
-#         if form.is_valid():
-#             request.form_data = form.cleaned_data
-#             cart.add_item_to_cart(request)
-#             return redirect('show_cart')
-
-#     form = CartForm(request, initial={'product_id': product.id})
-#     return render(request, 'api/product_detail.html', {
-#                                             'product': product,
-#                                             'form': form,
-#                                             })
-
-# # รายละเอียดสินค้า
-# def productUser(request,slug,product_id):
-#     product = get_object_or_404(Product, id=product_id)
-
-#     if request.method == 'POST':
-#         form = CartForm(request, request.POST)
-#         if form.is_valid():
-#             request.form_data = form.cleaned_data
-#             cart.add_item_to_cart(request)
-#             return redirect('show_cart')
-
-#     form = CartForm(request, initial={'product_id': product.id})
-#     return render(request, 'api/productUser.html', {
-#                                             'product': product,
-#                                             'form': form,
-#                                             })
-
 # หน้าาเทสสสสสสสสสสสสหมวดหมู่
 def product_type(request):
     product_type=Product_Type.objects.all().order_by('id')
@@ -598,8 +594,6 @@ def product_type(request):
         'product_type':product_type,
         # 'adminn' :adminn
         })
-
-
 
 # หน้ารวมช่าง
 def mechanicUser(request):
@@ -650,22 +644,6 @@ def producttype(req):
         'producttype' :producttype
     })
 
-
- 
-# def product(request):
-#     products_list = Product.objects.all()
-#     paginator = Paginator(products_list,5) #1 หน้าแสดง 5รายการ
-#     page = request.GET.get('page')
-#     try:
-#         products = paginator.page(page)
-#     except PageNotAnInteger:
-#         products = paginator.page(1)
-#     except EmptyPage:
-#         products = paginator.page(paginator.num_pages)
-#     return render(request, 'api/product.html', {'products': products})
-
-
-
 ##############################Admin#########################################################################
 
 # ข้อมูลร้าน
@@ -696,15 +674,16 @@ def editstore(request,id):
         'form': form,
         'store': store,
         'users' : users
-    })
+    }) 
 
-# เพิ่มสินค้า
+# เพิ่มหมวดหมู่สินค้า
 def addproductType(request):
     users = Users.objects.get(username=request.user.username)
-    producttype = Product_Type.objects.all()
+    product_type = Product_Type.objects.all()
     if request.method == 'POST':
         form = Product_TypeForm(request.POST ,request.FILES)
         if form.is_valid():
+            messages.info(request, "เพิ่มหมวดหมู่สินค้าสำเร็จ")
             form.save()
             return redirect('/addproductType')
     else:
@@ -715,7 +694,7 @@ def addproductType(request):
                     #   'product_types': Product_Type.objects.all(),
                     #   'product_statuss': Product_Status.objects.all(),
                       'users':users,
-                      'producttype':producttype
+                      'product_type':product_type
 
                   }) 
 
@@ -739,21 +718,27 @@ def editproductType(request, id=0):
         'users':users
     })
 
+@login_required(login_url='/login') 
+def deleteproductType(req, id=0):
+    product_types = Product_Type.objects.get(pk=id)
+    product_types.delete()
+    messages.success(req, "ลบหมวดหมู่สินค้าสำเร็จ")
+    return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+
+@login_required(login_url='/login')    
 def deleteproduct(req, id=0):
     product = Product.objects.get(pk=id)
-    # product_types = Product_Type.objects.all()
-    # product_statuss = Product_Status.objects.all()
     product.delete()
+    messages.success(req, "ลบสินค้าสำเร็จ")
     return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
 # เพิ่มสินค้า
 def addproduct(request):
-    users = Users.objects.get(username=request.user.username)
     if request.method == 'POST':
         form = ProductForm(request.POST ,request.FILES)
         if form.is_valid():
+            messages.info(request, "เพิ่มสินค้าสำเร็จ")
             form.save()
-            # messages.info(request, "This item quantity was updated.")
             return redirect('/product')
     else:
         form = ProductForm()
@@ -761,16 +746,12 @@ def addproduct(request):
                   {
                       'form': form,
                       'product_types': Product_Type.objects.all(),
-                    #   'product_statuss': Product_Status.objects.all(),
-                      'users':users
-
                   }) 
 # แก้ไขสินค้า
 def editproduct(request, id=0):
     product = Product.objects.get(pk=id)
     product_types = Product_Type.objects.all()
     product_statuss = Product_Status.objects.all()
-    users = Users.objects.get(username=request.user.username)
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
@@ -787,62 +768,24 @@ def editproduct(request, id=0):
         'product': product,
         'product_types': product_types,
         'product_statuss': product_statuss,
-        'users':users
     })
 
 # ลบสินค้า
-def deleteproductType(req, id=0):
-    product_types = Product_Type.objects.get(pk=id)
-    # product_types = Product_Type.objects.all()
-    # product_statuss = Product_Status.objects.all()
-    product_types.delete()
-    return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
+
 
 # แสดงสินค้า //
-def productpage(request):
-    # list all users.
-    products = Product.objects.all()
-    page_number = request.GET.get('page', 1)
-    paginate_result = do_paginate(products, page_number)
-    product = paginate_result[0]
-    paginator = paginate_result[1]
-    base_url = '/api/product/?'
-    users = Users.objects.get(username=request.user.username)
-    return render(request, 'api/product.html',
-                      {'products': products, 'paginator' : paginator, 'base_url': base_url ,'users':users})
-#ค้นหาสินค้า
 def product(request):
-    name = request.POST.get('name', '').strip()
-    if len(name) == 0:
-        name = request.GET.get('name', '').strip()
-    product = Product.objects.filter(name__contains=name)
-    page_number = request.GET.get('page', 1)
-    paginate_result = do_paginate(product, page_number)
-    product = paginate_result[0]
-    paginator = paginate_result[1]
-    base_url = '/api/user_search/?name=' + name + "&"
-    users = Users.objects.get(username=request.user.username)
-    return render(request, 'api/product.html',
-                      {'product': product, 'paginator' : paginator, 'base_url': base_url, 'search_name': name,'users':users})
-
-def do_paginate(data_list, page_number):
-    ret_data_list = data_list
-    #  หน้า มี 5รายการ
-    result_per_page = 20
-    # build the paginator object.
-    paginator = Paginator(data_list, result_per_page)
+    products_list = Product.objects.all()
+    paginator = Paginator(products_list,4) #1 หน้าแสดง 5รายการ
+    page = request.GET.get('page')
     try:
-        # get data list for the specified page_number.
-        ret_data_list = paginator.page(page_number)
-    except EmptyPage:
-        # get the lat page data if the page_number is bigger than last page number.
-        ret_data_list = paginator.page(paginator.num_pages)
+        products = paginator.page(page)
     except PageNotAnInteger:
-        # if the page_number is not an integer then return the first page data.
-        ret_data_list = paginator.page(1)
-    return [ret_data_list, paginator]
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
+    return render(request, 'api/product.html', {'products': products})
 
-# หน้าคลังสินค้า
 
 # หน้าคลังสินค้า
 def stock(request):
@@ -860,12 +803,13 @@ def issue_item(request, pk):
     if request.method == 'POST':     
         if form.is_valid():
             new_sale = form.save(commit=False)
-            new_sale.item = product
-            # new_sale.unit_price = product.unit_price   
-            new_sale.save()
+            new_sale.product = product
+            # # new_sale.unit_price = product.unit_price   
+            # new_sale.save()
             #To keep track of the stock remaining after sales
-            issued_quantity = int(request.POST['quantity'])
-            product.quantity -= issued_quantity
+            # product =Product()
+            quantity =int(request.POST['quantity'])
+            product.quantity -=  quantity
             if product.quantity >= 0:
                 messages.success(request, "Issued success. " )
                 product.save()
@@ -948,12 +892,11 @@ def editmechanic(request, id=0):
         'mechanic': mechanic,
         'mechanic_types' : mechanic_types,
     })
-
+@login_required(login_url='/login')    
 def deletemechanic(req, id=0):
     mechanic = Mechanic.objects.get(pk=id)
-    # product_types = Product_Type.objects.all()
-    # product_statuss = Product_Status.objects.all()
     mechanic.delete()
+    messages.success(req, "ลบข้อมูลช่างสำเร็จ")
     return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
 def addmechanicType(request):
@@ -962,6 +905,7 @@ def addmechanicType(request):
     if request.method == 'POST':
         form = Mechanic_TypeForm(request.POST ,request.FILES)
         if form.is_valid():
+            messages.info(request, "เพิ่มประเภทช่างสำเร็จ")
             form.save()
             return redirect('/addmechanicType')
     else:
@@ -997,9 +941,8 @@ def editmechanicType(request, id=0):
 
 def deletemechanicType(req, id=0):
     mechanic_types = Mechanic_Type.objects.get(pk=id)
-    # product_types = Product_Type.objects.all()
-    # product_statuss = Product_Status.objects.all()
     mechanic_types.delete()
+    messages.success(req, "ลบประเภทช่างสำเร็จ")
     return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
 # หน้ารายการสั่งซื้อทั้งหมด
@@ -1036,51 +979,11 @@ def editOrder(request, id=0):
 # หน้ารายการสินค้า
 def orderproductAll(req,id):
     litem = LineItem.objects.filter(order=id)
-    # orders = Order.objects.filter(address = req.user)
-    
-    # print(litem)
-    print(id)
-    # print(orders)
-    # users = Users.objects.get(username=request.user.username)
     return render(req, 'api/orderproductAll.html',{
-        # 'orders':orders,
         'litem':litem
-        # 'users':users
     })
 
 
-# def payment(request):
-#     users = Users.objects.get(username=request.user.username)
-#     payments = Payment.objects.all()
-    # sortid= Order.objects.payment_by('id') 
-    
-    # context= {'sortedprice': sortid}
-   
-    # paginator = Paginator(payments_list, 100)
-    # page = request.GET.get('page')
-    # try:
-    #     payments = paginator.page(page)
-    # except PageNotAnInteger:
-    #     payments = paginator.page(1)
-    # except EmptyPage:
-    #     payments = paginator.page(paginator.num_pages)
-    # return render(request, 'api/payment.html', {'payments': payments,'users':users})
-
-# class RoleViewSet(viewsets.ModelViewSet):
-#     queryset = Role.objects.all()
-#     serializer_class = RoleSerializer
-
-# class UserViewSet(viewsets.ModelViewSet):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-
-# class CustomerViewSet(viewsets.ModelViewSet):
-#     queryset = Customer.objects.all()
-#     serializer_class = CustomerSerializer
-
-# class AdminViewSet(viewsets.ModelViewSet):
-#     queryset = Admin.objects.all()
-#     serializer_class = AdminSerializer
 
 class Mechanic_TypeViewSet(viewsets.ModelViewSet):
     queryset = Mechanic_Type.objects.all()
@@ -1122,33 +1025,10 @@ class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
 
-# class PaymentViewSet(viewsets.ModelViewSet):
-#     queryset = Payment.objects.all()
-#     serializer_class = PaymentSerializer
-
-# class Order_ProductViewSet(viewsets.ModelViewSet):
-#     queryset = Order_Product.objects.all()
-#     serializer_class = Order_ProductSerializer
-
-# class CartsViewSet(viewsets.ModelViewSet):
-#     queryset = Carts.objects.all()
-#     serializer_class = CartsSerializer
-
-# class ConversationsViewSet(viewsets.ModelViewSet):
-#     queryset = Conversations.objects.all()
-#     serializer_class = ConversationsSerializer
-
-# class StorckViewSet(viewsets.ModelViewSet):
-#     queryset = Storck.objects.all()
-#     serializer_class = StorckSerializer
 
 
-# # Routers provide an easy way of automatically determining the URL conf.
 router = routers.DefaultRouter()
-# router.register(r'role', RoleViewSet)
-# router.register(r'user', UserViewSet)
-# router.register(r'Customer', CustomerViewSet)
-# router.register(r'Admin', AdminViewSet)
+
 router.register(r'Mechanic_Type', Mechanic_TypeViewSet)
 router.register(r'Mechanic', MechanicViewSet)
 router.register(r'Store', StoreViewSet)
@@ -1159,10 +1039,6 @@ router.register(r'Money_Status', Money_StatusViewSet)
 router.register(r'Delivery_Options', Delivery_OptionsViewSet)
 router.register(r'Payment_Options', Payment_OptionsViewSet)
 router.register(r'Order', OrderViewSet)
-# router.register(r'Payment', PaymentViewSet)
-# router.register(r'Order_Product', Order_ProductViewSet)
-# router.register(r'Carts', CartsViewSet)
-# router.register(r'Conversations', ConversationsViewSet)
-# router.register(r'Storck', StorckViewSet)
+
 
 

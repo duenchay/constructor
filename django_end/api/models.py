@@ -10,6 +10,7 @@ class Users(AbstractUser):
     first_name = models.CharField(max_length=100,default=' ',verbose_name = 'ชื่อ')
     last_name = models.CharField(max_length=100,default=' ',verbose_name = 'นามสกุล')
     email = models.CharField(max_length=50,default=' ',verbose_name = 'อีเมล')
+    phone = models.CharField(max_length=100,default=' ',verbose_name = 'เบอร์โทรศัพท์')
     avatar = models.ImageField(upload_to='images/users/', default='images/users/no-img.png' ,verbose_name = 'รูปโปรไฟล์')
     password = models.CharField(max_length=500,default=' ')
     def __str__(self):
@@ -18,8 +19,8 @@ class Users(AbstractUser):
     # def name(self):
     #     return self.username    
    
-    class Meta:
-        verbose_name = 'แอดมิน2' 
+    # class Meta:
+    #     verbose_name = 'แอดมิน2' 
 
 class Mechanic_Type (models.Model):
     # mechanicCategory_id = models.AutoField(primary_key=True)
@@ -49,6 +50,7 @@ class Store (models.Model):
     store_img = models.ImageField(upload_to='images/store/', default='images/store/no-img.png', verbose_name = 'รูปร้าน',null=True)
     store_phone = models.CharField(max_length=100,default=' -',verbose_name = 'เบอร์โทรศัพท์ร้าน',null=True)
     store_address = models.CharField(max_length=100,default=' -',verbose_name = 'ที่อยู่ร้าน',null=True)
+    store_detail= models.CharField(max_length=100,default=' -',verbose_name = 'ที่อยู่ร้าน',null=True)
   
     def __str__(self):
         return f'{self.store_name} '
@@ -82,16 +84,15 @@ class Product(models.Model):
     product_type = models.ForeignKey(Product_Type,on_delete=models.CASCADE,verbose_name = 'หมวดหมู่สินค้า') #หมวดหมู่สินค้า
     product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า', default=1,null=True,)  #สถานะสินค้า
     quantity = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
-    received_quantity = models.IntegerField(default = 0, null = True, blank = True)
- 
+    received_quantity = models.IntegerField(default = 0, null = True, blank = True) #ตัวแปรเพิ่มจำนวนสินค้าในสต๊อก
+    quantityS = models.IntegerField(default = 0, null = True, blank = True)
+  
     def __str__(self):
         return f'{self.name}  '
     class Meta:
         verbose_name = 'สินค้า'
 
-class Sale(models.Model):
-    item = models.ForeignKey(Product, on_delete = models.CASCADE)
-    quantity = models.IntegerField(default = 0, null = True, blank = True)
+
 
 class CartItem(models.Model):
     user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
@@ -163,28 +164,29 @@ class OrderItem(models.Model):
     #     return self.get_total_product_price()
 
 
-
+PAYMENT_CHOICES = (
+    ('S', 'Stripe'), 
+    ('P', 'PayPal')
+)
 class Order(models.Model):
     # orderitem = models.ForeignKey(OrderItem, on_delete=models.CASCADE,null=True)
 
     user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,default=1,null=True,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
     delivery_options = models.ForeignKey(Delivery_Options,verbose_name = 'ตัวเลือกการจัดส่ง',on_delete=models.SET_NULL, blank=True, null=True)
-    payment_options = models.ForeignKey(Payment_Options,verbose_name = 'ตัวเลือกการชำระเงิน',on_delete=models.SET_NULL, blank=True, null=True)
+    # payment_option = models.CharField(max_length=191)
+    PAYMENT_CHOICES = (
+    ('โอนผ่านบัญชีธนาคาร', 'โอนผ่านบัญชีธนาคาร'), 
+    ('เงินสด', 'เงินสด')
+)
+    payment_option = models.CharField(max_length=1,choices=PAYMENT_CHOICES)
     address = models.CharField(max_length=191)
-    ordered_date = models.DateTimeField()
-    date = models.DateTimeField(auto_now_add=True)
+    phone = models.CharField(max_length=100)
+    ordered_date = models.DateTimeField(auto_now_add=True)
+    # date = models.DateTimeField(auto_now_add=True)
     products = models.ManyToManyField(OrderItem)
     ordered = models.BooleanField(default=False,null=True)
-    # paid = models.BooleanField(default=False)
-
-    # def __str__(self):
-    #     # return f'ID:{self.id} Status:{self.money_status} Delivery_options:{self.delivery_options}'  
-    #     # return "{}:{}".format(self.id, self.email)
-    #     return "{}".format(self.id)
-
-    # def total_cost(self):
-    #     return sum([ li.cost() for li in self.lineitem_set.all() ] )
+  
     def __str__(self):
         return self.user.username
    
@@ -196,17 +198,21 @@ class Order(models.Model):
         # if self.coupon:
         #     total -= self.coupon.amount
         return total
-    # def as_bootstrap_status(self):
-    #     if self.money_status.money_status =='ชำระเงินแล้ว':
-    #         return 'success'
-    #     elif self.money_status.money_status == 'ยังไม่ชำระ' :
-    #         return 'danger'
+    def as_bootstrap_status(self):
+        if self.money_status.money_status =='ชำระเงินแล้ว':
+            return 'success'
+        elif self.money_status.money_status == 'ยังไม่ชำระ' :
+            return 'danger'
  
-
+class Sale(models.Model):
+    # item = models.ForeignKey(Product, on_delete = models.CASCADE)
+    products = models.ManyToManyField(OrderItem)
+    quantity = models.IntegerField(default = 0, null = True, blank = True)
 
 class Payment(models.Model):
     ppp = models.CharField(max_length=100 ,null=True)
     # stripe_charge_id = models.CharField(max_length=50)
+    img = models.ImageField(upload_to='images/payment/', default='images/payment/no-img.png', verbose_name = 'รูป')
     user = models.ForeignKey(
         Users, on_delete=models.SET_NULL, blank=True, null=True)
     amount = models.FloatField()
