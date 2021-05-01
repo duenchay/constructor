@@ -6,7 +6,7 @@ from django.urls import path, include
 from api.models import *
 from api import views
 from api import cart
-from api.views import CheckoutView, OrderSummaryView, PaymentMethod, remove_from_cart, remove_single_item_from_cart, router
+from api.views import CheckoutView, OrderSummaryView, PaymentMethod, remove_from_cart, remove_single_item_from_cart, router ,ProfileDetailView,bankTransferlView
 from django.conf import settings # new
 
 from django.conf.urls.static import static
@@ -20,8 +20,11 @@ from django.urls import path, include
 
 
 urlpatterns = [  
+    path('users/<int:pk>/',views.ProfileDetailView.as_view(),name='profile_detail'),
+    path('bankTransfer/<int:pk>/',views.bankTransferlView.as_view() ,name='bankTransfer'),
     path('',views.index, name='index'), 
     path('index',views.index),
+     path('test/<int:id>/',views.test),
     # path('login',views.login),
     # path('register',views.register),
     path('login/',views.login),

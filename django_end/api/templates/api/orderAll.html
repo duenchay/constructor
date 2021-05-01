@@ -62,11 +62,11 @@
                     
                         
                       {% for i in orders %}
-                      
+                    
                           <tr>
                             <td>{{ i.id }}</td>
                             <!-- <td><img src="media/{{i.avatar}}" style="height: 75px;"></td> -->
-                              <td>{{ i.date }}</td>
+                              <td>{{ i.ordered_date }}</td>
 
                               <td class> <span class="badge badge-pill badge-{{i.as_bootstrap_status}}">{{ i.money_status }}</span>
                                 <a class="btn btn-sm btn" style="  background-color: rgb(63, 184, 184); color: white;" href="/editOrder/{{i.id}}"> <span></span>แก้ไขสถานะ</a>
@@ -76,15 +76,33 @@
                               
 
 
-                              
-                              <td> {{i.payment_options}}</td>
+                         
+                      
+                              <td>   
+                               
+                                
+                                {% if i.payment_option == 'โอนผ่านบัญชีธนาคาร' %}
+                                  
+                                  <a href="test/{{i.id}}">
+                                    {{i.payment_option}}</a>
+                                  {% else %}
+                                  {{ i.payment_option}}
+                                  {% endif %}
+                                  
+                                </td>   
+
                               <td>{{ i.delivery_options}}</td>
                               <td> {{i.address}}</td>
                              
-                              <td>{{ i.user }}</td>
+                              <!-- <td>{{ i.user }}</td> -->
+                              <td>
+                            
+                                <a href="users/{{i.user.id}}">{{ i.user }}</a>
+                                
+                                </td> 
                               <!-- <td>{{i.paid}}</td> -->
                              
-                             
+                             <td>{{i.get_total}}</td>
                              
 
                               <td>                                   
@@ -95,6 +113,7 @@
                           </tr>
                         
                          {% endfor %}
+                      
                        
                          
                         
@@ -102,6 +121,32 @@
                      
                       </tbody>
                   </table><s></s>
+                  {% if orders.has_other_pages %}
+                  <ul class="pagination">
+                    {% if orders.has_previous %}
+                      <li><a class="page-link" href="?page={{ orders.previous_page_number }}">&laquo;  Previous</a></li>
+                      <li><a class="page-link" href="?page={{ orders.previous_page_number }}">{{ orders.previous_page_number }} </a></li>
+                    {% else %}
+                      <li class="disabled page-link"><span>&laquo;Previous</span></li>
+                    {% endif %}
+                      <!--   หน้าปัจจุบัน -->
+                    <li class="page-item active">
+                      <span class="page-link">
+                          <span class="current" >
+                              {{ orders.number }} 
+                            </span>
+                       
+                      </span>
+                    </li>
+                        <!-- หน้าถัดไป -->
+                    {% if orders.has_next %}
+                      
+                      <li><a class="page-link"  href="?page={{ orders.next_page_number }}">Next &raquo; </a></li>
+                    {% else %}
+                      <li class="disabled page-link"><span>Next &raquo;</span></li>
+                    {% endif %}
+                  </ul>
+                {% endif %}
               </div>
           </div>
       </div>

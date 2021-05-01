@@ -46,28 +46,44 @@
                         <th>ชื่อสินค้า</th>
                           <th>ราคา</th>
                           <th>จำนวน</th>
+                           <th>ชื่อผู้ใช้</th> 
                       </tr>
                       </thead>
                       <tbody>
-                        {% csrf_token %} 
-
-                      {% for n in litem %}
-                          <tr>
-                            <td>{{ n.id }}</td>
-                              <td>{{ n.product }}</td>
-                              <td>{{ n.price }}</td>
-                              <td>{{ n.quantity }}</td>
-
-                              {% endfor %}
-                              {% for i in orders %}
-                              <td>{{ i.address }}</td>
-                              {% endfor %}  
-                            
-                     
-                            </tr>
-                          
                         
-                    
+                        {% for n in order %}
+                          <tr>
+                            <td>
+                                {% for i in n.products.all %}       
+                                 {{ i.id }} <br>          
+                                {% endfor %}            
+                            </td>
+
+                            <td>                                
+                            {% for i in n.products.all %}
+                           {{ i.product }}&nbsp; <br>       
+                            {% endfor %}      
+                           </td>
+                           <td>
+                            {% for i in n.products.all %}
+                             {{ i.price }} <br>          
+                            {% endfor %} 
+                        </td>
+
+                            <td>
+                                {% for i in n.products.all %}
+                                 {{ i.quantity }} <br>          
+                                {% endfor %} 
+                            </td>
+                       
+                            <td>
+                              {% for i in n.products.all %}
+                               {{ i.user }} <br>          
+                              {% endfor %} 
+                          </td>
+                          </tr>
+                         
+                          {% endfor %}
                       
                       </tbody>
                   </table><s></s>

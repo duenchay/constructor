@@ -51,43 +51,45 @@
                           <!-- <th>Created At</th> -->
                           
                           <th>จำนวน</th>
-                          <th>ชื่อผู้ใช้</th> 
+                          <!-- <th>ชื่อผู้ใช้</th>  -->
                       </tr>
                       </thead>
                       <tbody>
                         
-                        {% for n in orders %}
-                     
-                     
-                    
+                        {% for n in order %}
                           <tr>
-                            <td>{{ n.id }}</td>
+                            <td>
+                                {% for i in n.products.all %}       
+                                 {{ i.id }} <br>          
+                                {% endfor %}            
+                            </td>
+
+                            <td>                                
+                            {% for i in n.products.all %}
+                           {{ i.product }}&nbsp; <br>       
+                            {% endfor %}      
+                           </td>
+                           <td>
+                            {% for i in n.products.all %}
+                             {{ i.price }} <br>          
+                            {% endfor %} 
+                        </td>
+
                             <td>
                                 {% for i in n.products.all %}
-                               
-            
-                                 {{ i.quantity }} <br>
-            
+                                 {{ i.quantity }} <br>          
                                 {% endfor %} 
-            
-            
-                        </td>
-                        <td>
-                                   
-                            {% for i in n.products.all %}
-        
-                             {{ i.product }}&nbsp; <br>
-        
-                            {% endfor %} 
-        
-        
-                    </td>
+                            </td>
+                       
+                       
                           </tr>
                           
                           {% endfor %}
                       
                       </tbody>
                   </table><s></s>
+
+                 
               </div>
           </div>
       </div>

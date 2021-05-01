@@ -1,0 +1,47 @@
+{% extends 'api/base.html' %} 
+
+{% block content %}
+
+<div id="content-wrapper">
+
+  <div class="container-fluid">
+      <!-- Breadcrumbs-->
+      <!-- <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+              <a href="#">CRUD</a>
+          </li>
+          <li class="breadcrumb-item active">Add</li> -->
+      </ol>
+      <div class="card mb-3">
+          <div class="card-header">
+              <i class="fas fa-table"></i>
+              โปรไฟล์
+              {% comment %} <a  class="btn btn-sm btn-warning" href="/editProfile"" style="padding: 8px; float: right;  color: white;" > <span class="fa fa-edit"></span> Edit</a> {% endcomment %}
+          </div>
+          <div class="card-body">
+            <form class="form-horizontal" action="/profile" method="POST"  enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-group">
+                  <div class="form-row">
+                      <div class="col-md-12">
+                          <div class="form-label-group">
+                           <br>
+                           <center> <img src="{{ users.image.url }}" width="200" height="200"> </center> <br>
+                           <center><label for="profile"><b>ชื่อ-สกุล : </b>{{user.first_name}}</label> </center>
+                           <center><label for="profile"><b>ที่อยู่ : </b>{{farmer.address}}</label> </center>   
+                           <center><label for="profile"><b>phone : </b>{{farmer.phone}}</label> </center>
+                           <center><label for="profile"><b>email : </b>{{farmer.email}}</label> </center> 
+                           
+                                                
+                          </div>
+                      </div>
+                   
+                  </div>
+              </div>
+              
+          </form>
+          </div>
+      </div>
+  </div>
+</div>
+{% endblock %}

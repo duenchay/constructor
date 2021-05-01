@@ -143,14 +143,22 @@ class Payment_Options (models.Model):
 class OrderItem(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    price =  models.DecimalField(max_digits=7, decimal_places=2,default=1,null=True,)
     quantity = models.IntegerField(default=1)
     ordered = models.BooleanField(default=False)
+    
+    
 
     def __str__(self):
-        return f" {self.id }  // {self.quantity} of {self.product.name}"
+        # return f" {self.id }  // {self.quantity} of {self.product.name}"
+        return f"  {self.quantity} {self.product.quantity} "
 
     def get_total_product_price(self):
         return self.quantity * self.product.price
+
+    def get_quantity(self):
+        return self.product.quantity - self.quantity
+
 
     # def get_total_discount_product_price(self):
     #     return self.quantity * self.product.discount_price
@@ -164,12 +172,11 @@ class OrderItem(models.Model):
     #     return self.get_total_product_price()
 
 
-PAYMENT_CHOICES = (
-    ('S', 'Stripe'), 
-    ('P', 'PayPal')
-)
+
+
+
 class Order(models.Model):
-    # orderitem = models.ForeignKey(OrderItem, on_delete=models.CASCADE,null=True)
+    # payment = models.ForeignKey(Payment, on_delete=models.CASCADE,null=True,blank=True)
 
     user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,default=1,null=True,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
@@ -179,17 +186,24 @@ class Order(models.Model):
     ('โอนผ่านบัญชีธนาคาร', 'โอนผ่านบัญชีธนาคาร'), 
     ('เงินสด', 'เงินสด')
 )
-    payment_option = models.CharField(max_length=1,choices=PAYMENT_CHOICES)
+    payment_option = models.CharField(max_length=100,choices=PAYMENT_CHOICES)
     address = models.CharField(max_length=191)
-    phone = models.CharField(max_length=100)
+    # phone = models.CharField(max_length=100)
     ordered_date = models.DateTimeField(auto_now_add=True)
     # date = models.DateTimeField(auto_now_add=True)
     products = models.ManyToManyField(OrderItem)
+    # pp = models.ForeignKey(OrderItem, on_delete=models.CASCADE, null=True)
     ordered = models.BooleanField(default=False,null=True)
+    quantity = models.IntegerField(default=1)
   
     def __str__(self):
-        return self.user.username
-   
+        return f" {self.user.username}  {self.id} "
+
+    def get_pp(self):
+        # total = 0
+        for order_product in self.products.all():
+            total = order_product.get_quantity()
+
 
     def get_total(self):
         total = 0
@@ -204,12 +218,11 @@ class Order(models.Model):
         elif self.money_status.money_status == 'ยังไม่ชำระ' :
             return 'danger'
  
-class Sale(models.Model):
-    # item = models.ForeignKey(Product, on_delete = models.CASCADE)
-    products = models.ManyToManyField(OrderItem)
-    quantity = models.IntegerField(default = 0, null = True, blank = True)
+
 
 class Payment(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE ,blank=True, null=True)
+
     ppp = models.CharField(max_length=100 ,null=True)
     # stripe_charge_id = models.CharField(max_length=50)
     img = models.ImageField(upload_to='images/payment/', default='images/payment/no-img.png', verbose_name = 'รูป')
@@ -219,7 +232,19 @@ class Payment(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.user.username
+        return f" {self.id} {self.user.username} " 
+
+    # def get_order(self):
+    #     return self.order ==  self.order.id
+
+
+
+class Sale(models.Model):
+    # item = models.ForeignKey(Product, on_delete = models.CASCADE)
+    products = models.ManyToManyField(OrderItem)
+    quantity = models.IntegerField(default = 0, null = True, blank = True)
+
+
 
 
 

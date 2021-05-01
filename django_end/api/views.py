@@ -18,8 +18,17 @@ from django.utils import timezone
 # หน้าแรก
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.exceptions import ObjectDoesNotExist
-from django.views.generic import  View #,ListView, DetailView,
+from django.views.generic import  View 
+from django.views.generic import DetailView 
 
+
+
+class ProfileDetailView(DetailView): 
+    # pass 
+    model = Users
+class bankTransferlView(DetailView): 
+    # pass
+    model = Payment
 
 def index(request):
     products_list = Product.objects.all().order_by('name')
@@ -50,8 +59,17 @@ def showProductAll(request):
 #ประวัติการซื้อ
 def order(request):
   
-    orders = Order.objects.filter(user =request.user, ordered=True)
+    order = Order.objects.filter(user =request.user, ordered=True).order_by('-id')
     product_type=Product_Type.objects.all()
+   
+    paginator = Paginator(order,7) #จำนวนรายการ/หน้า
+    page = request.GET.get('page')
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(paginator.num_pages)
 
     return render(request, 'api/order.html',{
         'orders':orders,
@@ -60,23 +78,11 @@ def order(request):
 
 # หน้ารายการสินค้า
 def orderproduct(request,id=0):
-   
-    orders = Order.objects.filter(user =request.user,id=id)
-    litem = OrderItem.objects.filter(id=id)
-    # order = Order.objects.get(user=self.request.user, ordered=False)
-    print(id)
-    # item_count = cart.item_count(request)
+    order = Order.objects.filter(user =request.user, ordered=True,id=id)
     product_type=Product_Type.objects.all()
-    # print(litem)
-    print(litem)
-    print(orders)
-    # users = Users.objects.get(username=request.user.username)
     return render(request, 'api/orderproduct.html',{
-        'orders':orders,
-        'litem':litem,
-        # 'cart_item_count':item_count,
-        'product_type':product_type
-        # 'users':users
+        'order':order,
+        'product_type':product_type 
     })
 
 # หน้าสินค้าแต่ละหมวดหมู่
@@ -150,7 +156,7 @@ class OrderSummaryView(LoginRequiredMixin, View):
 def add_to_cart(request, pk):
     product = get_object_or_404(Product, id=pk)
     order_product, created = OrderItem.objects.get_or_create(
-        product=product, user=request.user, ordered=False)
+        product=product,user=request.user, ordered=False)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
     # if there is a order
     # หากมีการสั่งซื้อ
@@ -159,25 +165,36 @@ def add_to_cart(request, pk):
         # check if the order item is in the order ==(order ache,for same-orderitem
         # ตรวจสอบว่ารายการสั่งซื้ออยู่ในคำสั่งซื้อหรือไม่ == (สั่งซื้อสำหรับรายการสั่งซื้อเดียวกัน
         if order.products.filter(product__pk=product.pk).exists():
+            # order_product.price=product.price 
             order_product.quantity += 1
+            # order_product.price=order_product.get_total_product_price() 
             # product.quantity -=  order_product.quantity
             if order_product.quantity  <= product.quantity:
+                order_product.price=product.price 
+                # order_product.price=order_product.get_total_product_price() 
+                
                 messages.info(request, "เพิ่มสินค้าเข้าตระกร้าสำเร็จ")
-                # product.save()
-                order_product.save()
-                        # product.save()
+                order_product.save()  
+                print(order_product.get_total_product_price)
+                print( order_product.quantity)
+                print(product.price )
             else:
                 messages.warning(request, "สินค้าในสต๊อกไม่พอ")
             # order_product.save()
-            print(product.quantity)
+            # print(order_products)
+            print(order_product.get_total_product_price)
             print( order_product.quantity)
-            print(order_product)
+            print(product.price )
             return redirect("order-summary")
         else:
             # ==(order ache, different-orderitem ache)
             # สั่งซื้อสั่งซื้อที่แตกต่างกัน
+            order_product.price= order_product.get_total_product_price()  
+            order_product.save()
             order.products.add(order_product)
-            messages.info(request, "เพิ่มสินค้าเข้าตระกร้าสำเร็จ")
+           
+            messages.info(request, "เพิ่มสินค้าเข้าตระกร้าสำเร็จ1")
+           
             return redirect("order-summary")
     # if there is no ordequantityr..first time order and first item
     # หากไม่มีคำสั่งซื้อ.. สั่งครั้งแรกและสินค้าชิ้นแรก
@@ -275,33 +292,61 @@ class CheckoutView(LoginRequiredMixin, View):
         # form = CheckoutForm(self.request.POST or None)
         # try:
             # order = Order.objects.get(user=self.request.user, ordered=False)
+        
+    #     order_product = OrderItem.objects.filter( product=product,user=self.request.user,
+    #    ordered=False)
+        # products = OrderItem.objects.filter(product=product[0])
+        
+       
         form = CheckoutForm(self.request.POST or None)
         if form.is_valid():
+            # product = get_object_or_404(Product, id=kwargs['pk'])
+            # product = get_object_or_404(Product, id=self.kwargs.get('pk'))
+            # article = get_object_or_404(Article, id=kwargs['id'])
+            # order = Order.objects.get(user=self.request.user, ordered=False)
             order = Order.objects.get(user=self.request.user, ordered=False)
+            
             order.address = self.request.POST['address']
-            order.phone = self.request.POST['phone']
-            # order.payment_option =Order.objects.get(pk=self.request.POST['payment_option'])
             order.delivery_options =Delivery_Options.objects.get(pk=self.request.POST['delivery_options'])
-            # order.payment_options =Payment_Options.objects.get(pk=self.request.POST['payment_options'])
             order.save()
-          
-            # order.payment_options =Payment_Options.objects.get(pk=self.request.POST['payment_options'])
+         
             payment_option = form.cleaned_data.get('payment_option')
             if payment_option == 'โอนผ่านบัญชีธนาคาร':
                 order.payment_option = payment_option
                 order.save()
                 
-                return redirect('payment', payment_option='stripe')
+                return redirect('payment', payment_option='โอนผ่านบัญชีธนาคาร')
         
             elif payment_option == 'เงินสด':
+              
+                # product.quantity =  quantity
+                # order_product = order.products.all
                 order_products = order.products.all()
                 order_products.update(ordered=True)
     
                 # form.save()
                 order.ordered = True
                 order.payment_option = payment_option
-                order.save()
+                # product = Product.objects.filter(id=self.kwargs.get('pk'))
+               
+                for order_product in order_products:
+                    order_product.product.quantity -=order_product.quantity
+                    order_product.product.save()
+                # order_products.quantity =order.get_pp()
+                # order_products.save()
+                # order_products.get_quantity = order_products.quantity
+                # order_products.save()
+                # product.quantity -=  quantity
                 
+                order.save()
+               
+                # print(product.quantity)
+                # print( order_product )
+                print(order.products.all())
+                print(order_products)
+                # print(products)
+
+                # product.save
                 messages.success(self.request, "สั่งซื้อสินค้าสำเร็จ!")
                 return redirect('/', )
             
@@ -318,6 +363,7 @@ class PaymentMethod(View):
         order = Order.objects.get(user=self.request.user, ordered=False)
         print("Billing = ", order.user)
         if order.user:
+            
             context = {
                 'order': order,
             }
@@ -329,13 +375,14 @@ class PaymentMethod(View):
 
     def post(self, *args, **kwargs):
         order = Order.objects.get(user=self.request.user, ordered=False)
-
+        orders = Order.objects.filter(user=self.request.user,ordered=False)
         payment_option = Payment()
         payment_option.ppp = self.request.POST['ppp']
         payment_option.img = self.request.POST['img']
         # payment_option.stripe_charge_id = charge['id']
         payment_option.user = self.request.user
         payment_option.amount = order.get_total()
+        payment_option.order= order
         payment_option.save()
 
         order_products = order.products.all()
@@ -373,11 +420,13 @@ class PaymentMethod(View):
 
             
         #     item.save()
-        # print(order)
-        print(order_products)     
+        print( payment_option.amount)
+        print(order)     
         # assign the payment
         order.ordered = True
         # order.payment_option = payment_option
+        # order.id = payment_option.order
+
         order.save()
         messages.success(self.request, "สั่งซื้อสินค้าสำเร็จ!")
         return redirect("/")
@@ -946,17 +995,29 @@ def deletemechanicType(req, id=0):
     return HttpResponseRedirect(req.META.get('HTTP_REFERER'))
 
 # หน้ารายการสั่งซื้อทั้งหมด
-def orderAll(req):
-    orders = Order.objects.all().order_by('-id')
-    litem = LineItem.objects.all()
-    users = Users.objects.get(username=req.user.username)
+def orderAll(req,id=0):
+    order = Order.objects.filter(ordered=True,).order_by('-id')
+    payment = Payment.objects.filter(order=id)
+    # print(order.id)
+    paginator = Paginator(order,8) #จำนวนรายการ/หน้า
+    page = req.GET.get('page')
+    try:
+        orders = paginator.page(page)
+    except PageNotAnInteger:
+        orders = paginator.page(1)
+    except EmptyPage:
+        orders = paginator.page(paginator.num_pages)
     return render(req, 'api/orderAll.html',{
         'orders':orders,
-        'users':users,
-        'litem':litem,
+        'payment':payment,
         'money_status': Money_Status.objects.all()
     })
-
+def test(request,id=0):
+    payment = Payment.objects.filter(order=id)
+    return render(request, 'api/payment_detail.html',{
+        'payment':payment,
+       
+    })
 def editOrder(request, id=0):
     order = Order.objects.get(pk=id)
     money_statuss = Money_Status.objects.all()
@@ -978,9 +1039,9 @@ def editOrder(request, id=0):
 
 # หน้ารายการสินค้า
 def orderproductAll(req,id):
-    litem = LineItem.objects.filter(order=id)
+    order = Order.objects.filter( ordered=True,id=id)
     return render(req, 'api/orderproductAll.html',{
-        'litem':litem
+        'order':order
     })
 
 
