@@ -46,6 +46,26 @@
                 </div>
               </div>
               <hr>
+              {% for n in bankTransfer %}
+              <div class="form-group">
+                <div class="form-row">
+                    <div class="col-md-9">
+                        <div class="form-label-group">
+                          <center> <img src="/media/{{ n.qrcode }}" width="350" height="400"> </center> <br>
+                          <label for="exampleInputFile"><b>  {{n.bankName}} </b>  </label> <br>
+                          <label for="exampleInputFile"><b> ชื่อบัญชี : </b> {{n.accountName}} </label> <br>
+                          <label for="exampleInputFile"><b>เลขบัญชี :  </b> {{n.accountNo}}  </label> <br>
+                         
+            
+                          <!-- <input type="file" class="form-control-file" id="exampleInputFile" name="img" aria-describedby="fileHelp" required> -->
+                        </div>
+                    </div>
+                 
+                </div>
+              </div>
+              <hr>
+              {% endfor %}
+              <hr>
               <div class="form-group">
                 <div class="form-row">
                     <div class="col-md-9">
@@ -57,7 +77,7 @@
                  
                 </div>
               </div>
-              <div class="form-group">
+              <!-- <div class="form-group">
                   <div class="form-row">
                       <div class="col-md-9">
                           <div class="form-label-group">
@@ -68,11 +88,12 @@
                       </div>
                    
                   </div>
-              </div>
+              </div> -->
               <!-- <div class="form-group">
                 <div class="form-row">
                     <div class="col-md-9">
                         <div class="form-label-group">
+                          {{ form }}
                           <label for="ppp" class="">ราคา</label>
                           <input type='text' placeholder='1234 Main St' id='ppp' name='ppp' class='form-control' />
                           
@@ -81,8 +102,11 @@
                  
                 </div>
             </div> -->
-             
-               
+          
+            <table class="form form-table">
+              {{ form }}
+            
+            </table>
    
        
        

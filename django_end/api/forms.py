@@ -1,6 +1,15 @@
 from django import forms
+from django.forms.widgets import DateInput
 from .models import *
   
+
+class BankTransferForm(forms.ModelForm):
+    class Meta:
+        model = BankTransfer
+        fields = '__all__'
+        # fields = [  'name','price', 'product_detail', 'product_img','product_type','quantity' ]
+
+
 PAYMENT_CHOICES = (
     ('โอนผ่านบัญชีธนาคาร', 'โอนผ่านบัญชีธนาคาร'), 
     ('เงินสด', 'เงินสด')
@@ -45,11 +54,11 @@ class CheckoutForm(forms.Form):
 
 
 
-class PaymentForm(forms.Form): 
-    stripeToken = forms.CharField(required=False)
-    save = forms.BooleanField(required=False)
-    img = forms.ImageField(required=False)
-    use_default = forms.BooleanField(required=False)
+# class PaymentForm(forms.Form): 
+#     stripeToken = forms.CharField(required=False)
+#     save = forms.BooleanField(required=False)
+#     img = forms.ImageField(required=False)
+#     use_default = forms.BooleanField(required=False)
 # class CheckoutForm(forms.ModelForm):
 #     class Meta:
 #         model = Order

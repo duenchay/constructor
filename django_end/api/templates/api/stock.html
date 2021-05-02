@@ -89,7 +89,21 @@
                             <td>{{ product.name }}</td>
                             <td>{{ product.price }}</td>
                             <td>{{ product.product_type }}</td> 
-                            <td>{{ product.product_status}}</td> 
+
+
+                            <td>   
+                               
+                                
+                              {% if product.quantity > 0 %}
+                                
+                               
+                                 คงเหลือ
+                                {% else %}
+                                หมดแล้ว
+                                {% endif %}
+                                
+                              </td>  
+                            <!-- <td>{{ product.product_status}}</td>  -->
                             <td>{{ product.quantity}}</td>
                            
                               
@@ -103,7 +117,7 @@
                                   <a class="btn btn-sm btn-warning" href="/editstorcks/{{storcks.id}}"> <span class="fa fa-edit"></span> add stock</a>
                                   
                               </td> -->
-
+<!-- 
                               <td><a href="/issue_item/{{product.id}}"
                                 ><input
                                   type="submit"
@@ -111,7 +125,7 @@
                                   class="btn btn-secondary btn"
                                   type="button"
                               /></a></td>
-                        
+                         -->
 
                               <td><a href="/add_to_stock/{{product.id}}"
                                 ><input

@@ -53,6 +53,7 @@
                           <th>ตัวเลือกการจัดส่ง</th>
                         
                           <th>ที่อยู่</th> 
+                          <th>ราคารวม</th>
                           <th>ชื่อผู้ใช้</th>
                           <th>รายการสินค้า</th>
                       </tr>
@@ -93,7 +94,7 @@
 
                               <td>{{ i.delivery_options}}</td>
                               <td> {{i.address}}</td>
-                             
+                              <td>{{i.get_total}}</td>
                               <!-- <td>{{ i.user }}</td> -->
                               <td>
                             
@@ -102,7 +103,7 @@
                                 </td> 
                               <!-- <td>{{i.paid}}</td> -->
                              
-                             <td>{{i.get_total}}</td>
+                            
                              
 
                               <td>                                   

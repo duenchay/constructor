@@ -26,11 +26,13 @@
                       <div class="col-md-12">
                           <div class="form-label-group">
                            <br>
-                           <center> <img src="{{ users.image.url }}" width="200" height="200"> </center> <br>
-                           <center><label for="profile"><b>ชื่อ-สกุล : </b>{{user.first_name}}</label> </center>
-                           <center><label for="profile"><b>ที่อยู่ : </b>{{farmer.address}}</label> </center>   
-                           <center><label for="profile"><b>phone : </b>{{farmer.phone}}</label> </center>
-                           <center><label for="profile"><b>email : </b>{{farmer.email}}</label> </center> 
+                           <center> <img src="{{ user.avatar.url }}" width="250" height="200"> </center> <br>
+                           <center><label for="profile"><b>username : </b>{{user.username}}</label> </center>   
+                           <center><label for="profile"><b>อีเมล : </b>{{user.email}}</label> </center> 
+                           
+                           <center><label for="profile"><b>เบอร์โทรศัพท์ : </b>{{user.phone}}</label> </center>
+                           <center><label for="profile"><b>ชื่อ-สกุล : </b>{{user.first_name}} {{user.last_name}}</label> </center>
+                          
                            
                                                 
                           </div>

@@ -34,6 +34,7 @@
           <div class="card-header">
               <i class="fas fa-table"></i>
               ประวัติการสั่งซื้อ
+              <a  class="btn btn-sm btn-success" href="/orderAll" style="padding: 8px; float: right; background-color: rgb(53, 122, 155); color: white;">Back</a>
               <!-- <a  class="btn btn-sm btn-success" href="/order" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a> -->
           </div>
           <div class="card-body">
@@ -42,7 +43,7 @@
                       <thead>
                       <tr>
                         <th>ID</th>
-                        <th>วันที่สั่งซื้อ</th>
+                        <!-- <th>วันที่สั่งซื้อ</th> -->
                           <!-- <th>ชื่อผู้สั่ง</th> -->
                           <!-- <th>ชื่อผู้รับออเดอร์</th>
                           <th>ราคา</th> -->
@@ -66,19 +67,10 @@
                     
                           <tr>
                             <td>{{ i.id }}</td>
-                            <td>{{ i.ppp }}</td>
-                             <td>{{i.amount}}</td>
+                            <td><img src="/media/{{i.img}}" style="height: 300px;"></td>
+                             <!-- <td>{{i.amount}}</td> -->
                             <!-- <td><img src="media/{{i.avatar}}" style="height: 75px;"></td> -->
-                            <td>   
-                               
-                                
-                              
-                                  
-                                  <a href="test/{{i.id}}">
-                                    {{i.ppp}}</a>
-                            
-                                 
-                                </td>   
+                          
 
                           </tr>
                         

@@ -44,7 +44,7 @@
                       <tr>
                         <th>รหัสสินค้า</th>
                         <th>ชื่อสินค้า</th>
-                          <th>ราคา</th>
+                          <!-- <th>ราคา</th> -->
             
                           <!-- <th>รูปงานช่าง</th>
                           <th>ประเภทช่าง</th> -->
@@ -69,11 +69,7 @@
                            {{ i.product }}&nbsp; <br>       
                             {% endfor %}      
                            </td>
-                           <td>
-                            {% for i in n.products.all %}
-                             {{ i.price }} <br>          
-                            {% endfor %} 
-                        </td>
+                         
 
                             <td>
                                 {% for i in n.products.all %}

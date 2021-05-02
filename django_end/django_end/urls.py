@@ -21,7 +21,7 @@ from django.urls import path, include
 
 urlpatterns = [  
     path('users/<int:pk>/',views.ProfileDetailView.as_view(),name='profile_detail'),
-    path('bankTransfer/<int:pk>/',views.bankTransferlView.as_view() ,name='bankTransfer'),
+    # path('bankTransfer/<int:pk>/',views.bankTransferlView.as_view() ,name='bankTransfer'),
     path('',views.index, name='index'), 
     path('index',views.index),
      path('test/<int:id>/',views.test),
@@ -58,6 +58,10 @@ urlpatterns = [
     path('orderproductAll/<int:id>/',views.orderproductAll),
     
     path('stock',views.stock),
+    path('addbank',views.addbank),
+    path('bank',views.bank),
+    path('deletebank/<int:id>/', views.deletebank), 
+    path('editbank/<int:id>/', views.editbank),  
     # path('payment',views.payment),  
 
     # path('home2',views.home2),  

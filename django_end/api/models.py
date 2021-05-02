@@ -143,15 +143,15 @@ class Payment_Options (models.Model):
 class OrderItem(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price =  models.DecimalField(max_digits=7, decimal_places=2,default=1,null=True,)
+    # price =  models.DecimalField(max_digits=7, decimal_places=2,default=1,null=True,)
     quantity = models.IntegerField(default=1)
     ordered = models.BooleanField(default=False)
     
     
 
     def __str__(self):
-        # return f" {self.id }  // {self.quantity} of {self.product.name}"
-        return f"  {self.quantity} {self.product.quantity} "
+        return f" {self.id }  // {self.quantity} of {self.product.name}"
+        # return f"  {self.quantity} {self.product.quantity} "
 
     def get_total_product_price(self):
         return self.quantity * self.product.price
@@ -194,7 +194,7 @@ class Order(models.Model):
     products = models.ManyToManyField(OrderItem)
     # pp = models.ForeignKey(OrderItem, on_delete=models.CASCADE, null=True)
     ordered = models.BooleanField(default=False,null=True)
-    quantity = models.IntegerField(default=1)
+    # quantity = models.IntegerField(default=1)
   
     def __str__(self):
         return f" {self.user.username}  {self.id} "
@@ -223,20 +223,28 @@ class Order(models.Model):
 class Payment(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE ,blank=True, null=True)
 
-    ppp = models.CharField(max_length=100 ,null=True)
+    # ppp = models.CharField(max_length=100 ,null=True)
     # stripe_charge_id = models.CharField(max_length=50)
     img = models.ImageField(upload_to='images/payment/', default='images/payment/no-img.png', verbose_name = 'รูป')
     user = models.ForeignKey(
         Users, on_delete=models.SET_NULL, blank=True, null=True)
     amount = models.FloatField()
-    timestamp = models.DateTimeField(auto_now_add=True)
+    # datetime = models.DateTimeField(null=True, blank=True)
+    # timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+
         return f" {self.id} {self.user.username} " 
 
     # def get_order(self):
     #     return self.order ==  self.order.id
 
+
+class BankTransfer(models.Model):
+    accountNo = models.CharField(max_length=100 ,null=True)
+    accountName = models.CharField(max_length=100 ,null=True)
+    bankName = models.CharField(max_length=100 ,null=True)
+    qrcode = models.ImageField(upload_to='images/bankTransfer/', default='images/bankTransfer/no-img.png', verbose_name = 'qrcode',null=True)
 
 
 class Sale(models.Model):
@@ -267,26 +275,7 @@ class LineItem(models.Model):
         return self.price * self.quantity
 
 
-# class Payment (models.Model):
-#     date =  models.DateTimeField(auto_now=False,  verbose_name='วันที่ชำระเงิน') 
-#     order= models.ForeignKey(Order,on_delete=models.CASCADE,verbose_name = 'รหัสการสั่งซื้อสินค้า') #รหัสการสั่งซื้อ
-#     payment_img = models.ImageField(upload_to='media/', verbose_name = 'รูปสลิปโอนเงิน',null=True ,blank=True)
-#     def __str__(self):
-#         return f'{self.user} {self.order} {self.payment_options} '
-#     class Meta:
-#         verbose_name = 'การชำระเงิน'
 
-
-#รายการสินค้า
-# class Order_Product (models.Model):
-#     order= models.ForeignKey(Order,on_delete=models.CASCADE,verbose_name = 'รหัสการสั่งซื้อ') #รหัสการสั่งซื้อ
-#     product = models.ForeignKey(Product,on_delete=models.CASCADE,verbose_name = 'รหัสสินค้า')
-#     amount = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
-    
-#     def __str__(self):
-#         return f' {self.order} {self.product} '
-#     class Meta:
-#         verbose_name = 'รายการสินค้า'
 
 
 
