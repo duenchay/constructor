@@ -39,8 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'api',
     # 'rest_framework',
-    # 'django_dbml',
-    # 'django_extensions',
+    'django_dbml',
+    'django_extensions',
     'crispy_forms',
    
     
