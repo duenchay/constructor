@@ -632,37 +632,37 @@ def stock(request):
     # 'users':users
     })
 
-def issue_item(request, pk):
-    product = Product.objects.get(id = pk)
-    form = SaleForm(request.POST)  
+# def issue_item(request, pk):
+#     product = Product.objects.get(id = pk)
+#     form = SaleForm(request.POST)  
       
-    if request.method == 'POST':     
-        if form.is_valid():
-            new_sale = form.save(commit=False)
-            new_sale.product = product
-            # # new_sale.unit_price = product.unit_price   
-            # new_sale.save()
-            #To keep track of the stock remaining after sales
-            # product =Product()
-            quantity =int(request.POST['quantity'])
-            product.quantity -=  quantity
-            if product.quantity >= 0:
-                messages.success(request, "Issued success. " )
-                product.save()
-            else:
-                messages.warning(request, "สินค้าในสต๊อกไม่พอ")
-            # product.save()
+#     if request.method == 'POST':     
+#         if form.is_valid():
+#             new_sale = form.save(commit=False)
+#             new_sale.product = product
+#             # # new_sale.unit_price = product.unit_price   
+#             # new_sale.save()
+#             #To keep track of the stock remaining after sales
+#             # product =Product()
+#             quantity =int(request.POST['quantity'])
+#             product.quantity -=  quantity
+#             if product.quantity >= 0:
+#                 messages.success(request, "Issued success. " )
+#                 product.save()
+#             else:
+#                 messages.warning(request, "สินค้าในสต๊อกไม่พอ")
+#             # product.save()
 
-            print(product.name) #ชื่อ
-            print(request.POST['quantity']) #จำนวน
-            # print(product.total_quantity)
+#             print(product.name) #ชื่อ
+#             print(request.POST['quantity']) #จำนวน
+#             # print(product.total_quantity)
 
-            return redirect('/stock') 
+#             return redirect('/stock') 
 
-    return render (request, 'api/issue_item.html',
-     {
-    'form': form,
-    })
+#     return render (request, 'api/issue_item.html',
+#      {
+#     'form': form,
+#     })
 
 #เพิ่มจำนวนสินค้าในสต๊อก
 def add_to_stock(request, pk):
@@ -870,60 +870,57 @@ def editbank(request, id=0):
     })
 
 
-class Mechanic_TypeViewSet(viewsets.ModelViewSet):
-    queryset = Mechanic_Type.objects.all()
-    serializer_class = Mechanic_TypeSerializer
+# class Mechanic_TypeViewSet(viewsets.ModelViewSet):
+#     queryset = Mechanic_Type.objects.all()
+#     serializer_class = Mechanic_TypeSerializer
 
-class MechanicViewSet(viewsets.ModelViewSet):
-    queryset = Mechanic.objects.all()
-    serializer_class = MechanicSerializer
+# class MechanicViewSet(viewsets.ModelViewSet):
+#     queryset = Mechanic.objects.all()
+#     serializer_class = MechanicSerializer
 
-class StoreViewSet(viewsets.ModelViewSet):
-    queryset = Store.objects.all()
-    serializer_class = StoreSerializer
+# class StoreViewSet(viewsets.ModelViewSet):
+#     queryset = Store.objects.all()
+#     serializer_class = StoreSerializer
 
-class Product_TypeViewSet(viewsets.ModelViewSet):
-    queryset = Product_Type.objects.all()
-    serializer_class = Product_TypeSerializer
+# class Product_TypeViewSet(viewsets.ModelViewSet):
+#     queryset = Product_Type.objects.all()
+#     serializer_class = Product_TypeSerializer
 
-class Product_StatusViewSet(viewsets.ModelViewSet):
-    queryset = Product_Status.objects.all()
-    serializer_class = Product_StatusSerializer
+# class Product_StatusViewSet(viewsets.ModelViewSet):
+#     queryset = Product_Status.objects.all()
+#     serializer_class = Product_StatusSerializer
 
-class ProductViewSet(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
+# class ProductViewSet(viewsets.ModelViewSet):
+#     queryset = Product.objects.all()
+#     serializer_class = ProductSerializer
 
-class Money_StatusViewSet(viewsets.ModelViewSet):
-    queryset = Money_Status.objects.all()
-    serializer_class = Money_StatusSerializer
+# class Money_StatusViewSet(viewsets.ModelViewSet):
+#     queryset = Money_Status.objects.all()
+#     serializer_class = Money_StatusSerializer
 
-class Delivery_OptionsViewSet(viewsets.ModelViewSet):
-    queryset = Delivery_Options.objects.all()
-    serializer_class = Delivery_OptionsSerializer
+# class Delivery_OptionsViewSet(viewsets.ModelViewSet):
+#     queryset = Delivery_Options.objects.all()
+#     serializer_class = Delivery_OptionsSerializer
 
-class Payment_OptionsViewSet(viewsets.ModelViewSet):
-    queryset = Payment_Options.objects.all()
-    serializer_class = Payment_OptionsSerializer
 
-class OrderViewSet(viewsets.ModelViewSet):
-    queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+# class OrderViewSet(viewsets.ModelViewSet):
+#     queryset = Order.objects.all()
+#     serializer_class = OrderSerializer
 
 
 
-router = routers.DefaultRouter()
+# router = routers.DefaultRouter()
 
-router.register(r'Mechanic_Type', Mechanic_TypeViewSet)
-router.register(r'Mechanic', MechanicViewSet)
-router.register(r'Store', StoreViewSet)
-router.register(r'Product_Type', Product_TypeViewSet)
-router.register(r'Product_Status', Product_StatusViewSet)
-router.register(r'Product', ProductViewSet)
-router.register(r'Money_Status', Money_StatusViewSet)
-router.register(r'Delivery_Options', Delivery_OptionsViewSet)
-router.register(r'Payment_Options', Payment_OptionsViewSet)
-router.register(r'Order', OrderViewSet)
+# router.register(r'Mechanic_Type', Mechanic_TypeViewSet)
+# router.register(r'Mechanic', MechanicViewSet)
+# router.register(r'Store', StoreViewSet)
+# router.register(r'Product_Type', Product_TypeViewSet)
+# router.register(r'Product_Status', Product_StatusViewSet)
+# router.register(r'Product', ProductViewSet)
+# router.register(r'Money_Status', Money_StatusViewSet)
+# router.register(r'Delivery_Options', Delivery_OptionsViewSet)
+# # router.register(r'Payment_Options', Payment_OptionsViewSet)
+# # router.register(r'Order', OrderViewSet)
 
 
 

@@ -6,7 +6,7 @@ from django.urls import path, include
 from api.models import *
 from api import views
 from api import cart
-from api.views import CheckoutView, OrderSummaryView, PaymentMethod, remove_from_cart, remove_single_item_from_cart, router ,ProfileDetailView,bankTransferlView
+from api.views import CheckoutView, OrderSummaryView, PaymentMethod, remove_from_cart, remove_single_item_from_cart
 from django.conf import settings # new
 
 from django.conf.urls.static import static
@@ -94,7 +94,7 @@ urlpatterns = [
     path('addstore',views.addstore,name='addstore'),
     path('showProductAll',views.showProductAll,name='showProductAll'),
     path('add_to_stock/<str:pk>/', views.add_to_stock, name='add_to_stock'),
-    path('issue_item/<str:pk>/', views.issue_item, name='issue_item'),  
+    # path('issue_item/<str:pk>/', views.issue_item, name='issue_item'),  
      
     # path('cart/', views.show_cart, name='show_cart'),
     path('home', views.home,),
@@ -112,8 +112,8 @@ urlpatterns = [
    
 
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
-    path('api-auth/', include('rest_framework.urls'))
+    # path('api/', include(router.urls)),
+    # path('api-auth/', include('rest_framework.urls'))
 ]
 
 

@@ -126,12 +126,12 @@ class AddStockForm(forms.ModelForm):
         model = Product
         fields = ['received_quantity']    #เพิ่มจำนวนสินค้าในสต๊อก
 
-class SaleForm(forms.ModelForm):
-    class Meta: 
-        model = Sale
-        fields = ["quantity"]
+# class SaleForm(forms.ModelForm):
+#     class Meta: 
+#         model = Sale
+#         fields = ["quantity"]
 
-class LineItemForm(forms.ModelForm):
-    class Meta: 
-        model = LineItem
-        fields = '__all__' 
+# class LineItemForm(forms.ModelForm):
+#     class Meta: 
+#         model = LineItem
+#         fields = '__all__' 

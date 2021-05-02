@@ -94,23 +94,23 @@ class Product(models.Model):
 
 
 
-class CartItem(models.Model):
-    user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
-    cart_id = models.CharField(max_length=50)
-    price = models.DecimalField(max_digits=7, decimal_places=2)
-    quantity = models.IntegerField()
-    date_added = models.DateTimeField(auto_now_add=True)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+# class CartItem(models.Model):
+#     user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
+#     cart_id = models.CharField(max_length=50)
+#     price = models.DecimalField(max_digits=7, decimal_places=2)
+#     quantity = models.IntegerField()
+#     date_added = models.DateTimeField(auto_now_add=True)
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return "{}:{}".format(self.product.name, self.id)
+#     def __str__(self):
+#         return "{}:{}".format(self.product.name, self.id)
 
-    def update_quantity(self, quantity):
-        self.quantity = self.quantity + quantity
-        self.save()
+#     def update_quantity(self, quantity):
+#         self.quantity = self.quantity + quantity
+#         self.save()
 
-    def total_cost(self):
-        return self.quantity * self.price
+#     def total_cost(self):
+#         return self.quantity * self.price
 
 #สถานะการชำระเงิน
 class Money_Status(models.Model):
@@ -131,13 +131,13 @@ class Delivery_Options (models.Model):
         verbose_name = 'ตัวเลือกการจัดส่ง'
     
 
-# ตัวเลือกการชำระเงิน
-class Payment_Options (models.Model):
-    payment_options =  models.CharField(max_length=100,verbose_name = 'ตัวเลือกการชำระเงิน') 
-    def __str__(self):
-        return f'{self.payment_options} '
-    class Meta:
-        verbose_name = 'ตัวเลือกการชำระเงิน'
+# # ตัวเลือกการชำระเงิน
+# class Payment_Options (models.Model):
+#     payment_options =  models.CharField(max_length=100,verbose_name = 'ตัวเลือกการชำระเงิน') 
+#     def __str__(self):
+#         return f'{self.payment_options} '
+#     class Meta:
+#         verbose_name = 'ตัวเลือกการชำระเงิน'
 
 
 class OrderItem(models.Model):
@@ -245,34 +245,37 @@ class BankTransfer(models.Model):
     accountName = models.CharField(max_length=100 ,null=True)
     bankName = models.CharField(max_length=100 ,null=True)
     qrcode = models.ImageField(upload_to='images/bankTransfer/', default='images/bankTransfer/no-img.png', verbose_name = 'qrcode',null=True)
-
-
-class Sale(models.Model):
-    # item = models.ForeignKey(Product, on_delete = models.CASCADE)
-    products = models.ManyToManyField(OrderItem)
-    quantity = models.IntegerField(default = 0, null = True, blank = True)
-
-
-
-
-
-
-
-
-#รายการสินค้า
-class LineItem(models.Model):
-    user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=7, decimal_places=2)
-    quantity = models.IntegerField()
-    date_added = models.DateTimeField(auto_now_add=True)
-
     def __str__(self):
-        return "{}:{}".format(self.product.name, self.id)
+        return f'{self.bankName} '
+    class Meta:
+        verbose_name = 'ข้อมูลบัญชีธนาคาร'
 
-    def cost(self):
-        return self.price * self.quantity
+# class Sale(models.Model):
+#     # item = models.ForeignKey(Product, on_delete = models.CASCADE)
+#     products = models.ManyToManyField(OrderItem)
+#     quantity = models.IntegerField(default = 0, null = True, blank = True)
+
+
+
+
+
+
+
+
+# #รายการสินค้า
+# class LineItem(models.Model):
+#     user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
+#     order = models.ForeignKey(Order, on_delete=models.CASCADE)
+#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+#     price = models.DecimalField(max_digits=7, decimal_places=2)
+#     quantity = models.IntegerField()
+#     date_added = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return "{}:{}".format(self.product.name, self.id)
+
+#     def cost(self):
+#         return self.price * self.quantity
 
 
 
