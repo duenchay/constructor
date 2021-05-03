@@ -68,12 +68,12 @@ class Product_Type (models.Model):
         verbose_name = 'หมวดหมู่สินค้า'
 
 # สถานะสินค้า
-class Product_Status (models.Model):
-    product_status= models.CharField(max_length=100,default=' ',verbose_name = 'สถานะสินค้า') #สถานะสินค้า หมดแล้ว /ยังคงเหลือ
-    def __str__(self):
-        return f'{self.product_status} '
-    class Meta:
-        verbose_name = 'สถานะสินค้า'
+# class Product_Status (models.Model):
+#     product_status= models.CharField(max_length=100,default=' ',verbose_name = 'สถานะสินค้า') #สถานะสินค้า หมดแล้ว /ยังคงเหลือ
+#     def __str__(self):
+#         return f'{self.product_status} '
+#     class Meta:
+#         verbose_name = 'สถานะสินค้า'
 
 #สินค้า
 class Product(models.Model): 
@@ -82,7 +82,7 @@ class Product(models.Model):
     product_detail = models.TextField(max_length=10000,default=' ',verbose_name = 'รายละเอียดสินค้า')
     product_img = models.ImageField(upload_to='images/product/', default='images/product/no-img.png' ,verbose_name = 'รูปสินค้า')
     product_type = models.ForeignKey(Product_Type,on_delete=models.CASCADE,verbose_name = 'หมวดหมู่สินค้า') #หมวดหมู่สินค้า
-    product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า', default=1,null=True,)  #สถานะสินค้า
+    # product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า', default=1,null=True,)  #สถานะสินค้า
     quantity = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
     received_quantity = models.IntegerField(default = 0, null = True, blank = True) #ตัวแปรเพิ่มจำนวนสินค้าในสต๊อก
     quantityS = models.IntegerField(default = 0, null = True, blank = True)

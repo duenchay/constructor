@@ -587,7 +587,7 @@ def addproduct(request):
 def editproduct(request, id=0):
     product = Product.objects.get(pk=id)
     product_types = Product_Type.objects.all()
-    product_statuss = Product_Status.objects.all()
+    # product_statuss = Product_Status.objects.all()
     if request.method == 'POST':
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
@@ -603,7 +603,7 @@ def editproduct(request, id=0):
         'form': form,
         'product': product,
         'product_types': product_types,
-        'product_statuss': product_statuss,
+        # 'product_statuss': product_statuss,
     })
 
 # ลบสินค้า
@@ -793,12 +793,12 @@ def orderAll(req,id=0):
         'payment':payment,
         'money_status': Money_Status.objects.all()
     })
-# def test(request,id=0):
-#     payment = Payment.objects.filter(order=id)
-#     return render(request, 'api/payment_detail.html',{
-#         'payment':payment,
+def test(request,id=0):
+    payment = Payment.objects.filter(order=id)
+    return render(request, 'api/payment_detail.html',{
+        'payment':payment,
        
-#     })
+    })
 def editOrder(request, id=0):
     order = Order.objects.get(pk=id)
     money_statuss = Money_Status.objects.all()

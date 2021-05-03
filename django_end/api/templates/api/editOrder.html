@@ -49,8 +49,8 @@
       <div class="card mb-3">
           <div class="card-header">
               <i class="fas fa-table"></i>
-              แก้ไขข้อมูลช่าง
-              <a  class="btn btn-sm btn-success" href="/mechanic" style="padding: 8px; float: right; background-color: rgb(53, 122, 155); color: white;">Back</a>
+              แก้ไขสถานะการชำระเงิน
+              <a  class="btn btn-sm btn-success" href="/orderAll" style="padding: 8px; float: right; background-color: rgb(53, 122, 155); color: white;">Back</a>
           </div>
           <div class="card-body">
             {% for message in messages %}
@@ -65,7 +65,8 @@
           <div class="form-row">
               <div class="col-md-9">
                   <div class="form-label-group">
-                    <label for="exampleSelect1"><b>ประเภทช่าง</b></label>
+                    <label for="exampleSelect1"><b> สถานะการชำระเงิน
+                    </b></label>
                     <select class="form-control" id="Select" name="money_status" required>
         
                       {% for c in money_statuss %}
