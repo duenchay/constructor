@@ -24,7 +24,7 @@ urlpatterns = [
     # path('bankTransfer/<int:pk>/',views.bankTransferlView.as_view() ,name='bankTransfer'),
     path('',views.index, name='index'), 
     path('index',views.index),
-     path('test/<int:id>/',views.test),
+    #  path('test/<int:id>/',views.test),
     # path('login',views.login),
     # path('register',views.register),
     path('login/',views.login),

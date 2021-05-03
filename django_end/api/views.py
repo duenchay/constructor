@@ -666,17 +666,17 @@ def stock(request):
 
 #เพิ่มจำนวนสินค้าในสต๊อก
 def add_to_stock(request, pk):
-    issued_item = Product.objects.get(id = pk)
+    product = Product.objects.get(id = pk)
     form = AddStockForm(request.POST)  #จำนวนสินค้าในสต๊อก
     if request.method == 'POST':
         if form.is_valid():
             added_quantity = int(request.POST['received_quantity'])
-            issued_item.quantity += added_quantity
-            issued_item.save()
+            product.quantity += added_quantity
+            product.save()
             #To add to the remaining stock quantity is reducing
             print(added_quantity)
-            print (issued_item.quantity)
-            return redirect('/stock')
+            print (product.quantity)
+            return redirect('/product')
     return render (request, 'api/add_to_stock.html', {'form': form})
 
 #ข้อมูลช่าง
@@ -793,12 +793,12 @@ def orderAll(req,id=0):
         'payment':payment,
         'money_status': Money_Status.objects.all()
     })
-def test(request,id=0):
-    payment = Payment.objects.filter(order=id)
-    return render(request, 'api/payment_detail.html',{
-        'payment':payment,
+# def test(request,id=0):
+#     payment = Payment.objects.filter(order=id)
+#     return render(request, 'api/payment_detail.html',{
+#         'payment':payment,
        
-    })
+#     })
 def editOrder(request, id=0):
     order = Order.objects.get(pk=id)
     money_statuss = Money_Status.objects.all()
