@@ -19,7 +19,7 @@
 
      {% csrf_token %} 
      <!-- <div class="row"> -->
-     {% for mechanic in mechanic %}
+     {% for mechanic in mechanics %}
 
         <div class="col-md-6 col-lg-4 col-xl-3">
           <div class="card text-center card-product">
@@ -43,6 +43,34 @@
 
         {% endfor %}
     <!-- </div> -->
+    <div class="table-responsive">
+    {% if mechanics.has_other_pages %}
+                  <ul class="pagination">
+                    {% if mechanics.has_previous %}
+                      <li><a class="page-link" href="?page={{ mechanics.previous_page_number }}">&laquo;  Previous</a></li>
+                      <li><a class="page-link" href="?page={{ mechanics.previous_page_number }}">{{ mechanics.previous_page_number }} </a></li>
+                    {% else %}
+                      <li class="disabled page-link"><span>&laquo;Previous</span></li>
+                    {% endif %}
+                      <!--   หน้าปัจจุบัน -->
+                    <li class="page-item active">
+                      <span class="page-link">
+                          <span class="current" >
+                              {{ mechanics.number }} 
+                            </span>
+                       
+                      </span>
+                    </li>
+                        <!-- หน้าถัดไป -->
+                    {% if mechanics.has_next %}
+                      
+                      <li><a class="page-link"  href="?page={{ mechanics.next_page_number }}">Next &raquo; </a></li>
+                    {% else %}
+                      <li class="disabled page-link"><span>Next &raquo;</span></li>
+                    {% endif %}
+                  </ul>
+                {% endif %}
+              </div>
     
       </div>
     </div>

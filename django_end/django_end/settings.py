@@ -89,7 +89,7 @@ TEMPLATES = [
             ],
              'libraries':{
             'cart_template_tags': 'api.cart_template_tags', 
-            'cart': 'api.cart', 
+            # 'cart': 'api.cart', 
 
             }
         },

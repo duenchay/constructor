@@ -116,9 +116,10 @@ Table Users {
   first_name char [note:""]
   last_name char [note:""]
   email char [note:""]
+  phone char [note:""]
   avatar image [note:""]
   password char [note:""]
-  Note: '''Users(id, last_login, is_superuser, username, is_staff, is_active, date_joined, first_name, last_name, email, avatar, password)'''
+  Note: '''Users(id, last_login, is_superuser, username, is_staff, is_active, date_joined, first_name, last_name, email, phone, avatar, password)'''
 }
 
 
@@ -166,7 +167,8 @@ Table Store {
   store_img image [note:"", null]
   store_phone char [note:"", null]
   store_address char [note:"", null]
-  Note: '''Store(id, store_name, store_img, store_phone, store_address)'''
+  store_detail char [note:"", null]
+  Note: '''Store(id, store_name, store_img, store_phone, store_address, store_detail)'''
 }
 
 
@@ -177,13 +179,6 @@ Table Product_Type {
 }
 
 
-Table Product_Status {
-  id auto [note:"", pk, unique]
-  product_status char [note:""]
-  Note: '''Product_Status(id, product_status)'''
-}
-
-
 Table Product {
   id auto [note:"", pk, unique]
   name char [note:""]
@@ -191,27 +186,12 @@ Table Product {
   product_detail text [note:""]
   product_img image [note:""]
   product_type foreign_key [note:""]
-  product_status foreign_key [note:"", null]
   quantity integer [note:""]
   received_quantity integer [note:"", null]
-  Note: '''Product(id, name, price, product_detail, product_img, product_type, product_status, quantity, received_quantity)'''
+  quantityS integer [note:"", null]
+  Note: '''Product(id, name, price, product_detail, product_img, product_type, quantity, received_quantity, quantityS)'''
 }
 ref: Product.product_type > Product_Type.id
-ref: Product.product_status > Product_Status.id
-
-
-Table CartItem {
-  id auto [note:"", pk, unique]
-  user foreign_key [note:"", null]
-  cart_id char [note:""]
-  price decimal [note:""]
-  quantity integer [note:""]
-  date_added date_time [note:""]
-  product foreign_key [note:""]
-  Note: '''CartItem(id, user, cart_id, price, quantity, date_added, product)'''
-}
-ref: CartItem.user > Users.id
-ref: CartItem.product > Product.id
 
 
 Table Money_Status {
@@ -228,41 +208,61 @@ Table Delivery_Options {
 }
 
 
-Table Payment_Options {
+Table OrderItem {
   id auto [note:"", pk, unique]
-  payment_options char [note:""]
-  Note: '''Payment_Options(id, payment_options)'''
+  user foreign_key [note:""]
+  product foreign_key [note:""]
+  quantity integer [note:""]
+  ordered boolean [note:""]
+  Note: '''OrderItem(id, user, product, quantity, ordered)'''
 }
+ref: OrderItem.user > Users.id
+ref: OrderItem.product > Product.id
 
 
 Table Order {
   id auto [note:"", pk, unique]
   user foreign_key [note:"", null]
-  money_status foreign_key [note:""]
-  delivery_options foreign_key [note:""]
-  payment_options foreign_key [note:""]
+  money_status foreign_key [note:"", null]
+  delivery_options foreign_key [note:"", null]
+  payment_option char [note:""]
   address char [note:""]
-  date date_time [note:""]
-  Note: '''Order(id, user, money_status, delivery_options, payment_options, address, date)'''
+  ordered_date date_time [note:""]
+  ordered boolean [note:"", null]
+  Note: '''Order(id, user, money_status, delivery_options, payment_option, address, ordered_date, ordered)'''
 }
 ref: Order.user > Users.id
 ref: Order.money_status > Money_Status.id
 ref: Order.delivery_options > Delivery_Options.id
-ref: Order.payment_options > Payment_Options.id
 
 
-Table LineItem {
-  id auto [note:"", pk, unique]
-  user foreign_key [note:"", null]
-  order foreign_key [note:""]
-  product foreign_key [note:""]
-  price decimal [note:""]
-  quantity integer [note:""]
-  date_added date_time [note:""]
-  Note: '''LineItem(id, user, order, product, price, quantity, date_added)'''
+Table api_order_products {
+  orderitem_id auto [pk]
+  order_id auto [pk]
 }
-ref: LineItem.user > Users.id
-ref: LineItem.order > Order.id
-ref: LineItem.product > Product.id
+ref: Order.id > api_order_products.order_id
+ref: OrderItem.id > api_order_products.orderitem_id
+
+
+Table Payment {
+  id auto [note:"", pk, unique]
+  order foreign_key [note:"", null]
+  img image [note:""]
+  user foreign_key [note:"", null]
+  amount float [note:""]
+  Note: '''Payment(id, order, img, user, amount)'''
+}
+ref: Payment.order > Order.id
+ref: Payment.user > Users.id
+
+
+Table BankTransfer {
+  id auto [note:"", pk, unique]
+  accountNo char [note:"", null]
+  accountName char [note:"", null]
+  bankName char [note:"", null]
+  qrcode image [note:"", null]
+  Note: '''BankTransfer(id, accountNo, accountName, bankName, qrcode)'''
+}
 
 

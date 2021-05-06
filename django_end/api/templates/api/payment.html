@@ -31,7 +31,8 @@
               ยืนยันการชำระเงิน 
           </div>
           <div class="card-body">
-            <form class="form-horizontal"  method="POST">
+            <!-- <form class="form-horizontal"  method="POST"> -->
+              <form class="form-horizontal" action="/payment/โอนผ่านบัญชีธนาคาร" method="POST"  enctype="multipart/form-data">
               {% csrf_token %}
 
               <div class="form-group">
@@ -103,11 +104,11 @@
                 </div>
             </div> -->
           
-            <table class="form form-table">
+            <!-- <table class="form form-table">
               {{ form }}
             
             </table>
-   
+    -->
        
        
      

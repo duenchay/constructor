@@ -33,14 +33,18 @@
       <div class="card mb-3">
           <div class="card-header">
               <i class="fas fa-table"></i>
-              โอนผ่านบัญชีธนาคาร
+              หลักฐานการชำระเงิน
               <a  class="btn btn-sm btn-success" href="/orderAll" style="padding: 8px; float: right; background-color: rgb(53, 122, 155); color: white;">Back</a>
               <!-- <a  class="btn btn-sm btn-success" href="/order" style="padding: 8px; float: right; background-color: green; color: white;">ADD</a> -->
           </div>
           <div class="card-body">
               <div class="table-responsive">
+                
                   <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0" align="center" id="sortTable">
                       <thead>
+                        <br>
+                        <h5>    <b>ชื่อ-สกุล :</b>    {{user.first_name}}  {{user.last_name}}</h5>
+                        <br> 
                       <tr>
                         <th>ID</th>
                         <!-- <th>วันที่สั่งซื้อ</th> -->
@@ -68,7 +72,7 @@
                           <tr>
                             <td>{{ i.id }}</td>
                             <td><img src="/media/{{i.img}}" style="height: 300px;"></td>
-                             <!-- <td>{{i.amount}}</td> -->
+                             <!-- <td>{{i.user.first_name}}  {{i.user.last_name}}</td> -->
                             <!-- <td><img src="media/{{i.avatar}}" style="height: 75px;"></td> -->
                           
 

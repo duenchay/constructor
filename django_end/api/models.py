@@ -50,7 +50,7 @@ class Store (models.Model):
     store_img = models.ImageField(upload_to='images/store/', default='images/store/no-img.png', verbose_name = 'รูปร้าน',null=True)
     store_phone = models.CharField(max_length=100,default=' -',verbose_name = 'เบอร์โทรศัพท์ร้าน',null=True)
     store_address = models.CharField(max_length=100,default=' -',verbose_name = 'ที่อยู่ร้าน',null=True)
-    store_detail= models.CharField(max_length=100,default=' -',verbose_name = 'ที่อยู่ร้าน',null=True)
+    store_detail= models.CharField(max_length=100,default=' -',verbose_name = 'อื่น ๆ',null=True)
   
     def __str__(self):
         return f'{self.store_name} '
@@ -92,26 +92,6 @@ class Product(models.Model):
     class Meta:
         verbose_name = 'สินค้า'
 
-
-
-# class CartItem(models.Model):
-#     user = models.ForeignKey(Users,on_delete=models.CASCADE , null=True)
-#     cart_id = models.CharField(max_length=50)
-#     price = models.DecimalField(max_digits=7, decimal_places=2)
-#     quantity = models.IntegerField()
-#     date_added = models.DateTimeField(auto_now_add=True)
-#     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-
-#     def __str__(self):
-#         return "{}:{}".format(self.product.name, self.id)
-
-#     def update_quantity(self, quantity):
-#         self.quantity = self.quantity + quantity
-#         self.save()
-
-#     def total_cost(self):
-#         return self.quantity * self.price
-
 #สถานะการชำระเงิน
 class Money_Status(models.Model):
     money_status =  models.CharField(max_length=100,default=' ',verbose_name = 'สถานะการชำระเงิน') 
@@ -129,25 +109,13 @@ class Delivery_Options (models.Model):
         return f'{self.delivery_options} '
     class Meta:
         verbose_name = 'ตัวเลือกการจัดส่ง'
-    
-
-# # ตัวเลือกการชำระเงิน
-# class Payment_Options (models.Model):
-#     payment_options =  models.CharField(max_length=100,verbose_name = 'ตัวเลือกการชำระเงิน') 
-#     def __str__(self):
-#         return f'{self.payment_options} '
-#     class Meta:
-#         verbose_name = 'ตัวเลือกการชำระเงิน'
-
 
 class OrderItem(models.Model):
     user = models.ForeignKey(Users, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     # price =  models.DecimalField(max_digits=7, decimal_places=2,default=1,null=True,)
     quantity = models.IntegerField(default=1)
-    ordered = models.BooleanField(default=False)
-    
-    
+    ordered = models.BooleanField(default=False)  
 
     def __str__(self):
         return f" {self.id }  // {self.quantity} of {self.product.name}"
@@ -172,11 +140,11 @@ class OrderItem(models.Model):
     #     return self.get_total_product_price()
 
 
-
-
-
 class Order(models.Model):
-    # payment = models.ForeignKey(Payment, on_delete=models.CASCADE,null=True,blank=True)
+    
+    # def get_final_price(self):
+    #     if self.product.discount_price:
+    #         return self.get_total_discount_product_pri# payment = models.ForeignKey(Payment, on_delete=models.CASCADE,null=True,blank=True)
 
     user = models.ForeignKey(Users, on_delete=models.CASCADE, null=True)
     money_status = models.ForeignKey(Money_Status,on_delete=models.CASCADE,default=1,null=True,verbose_name = 'สถานะการชำระเงิน') #สถานะการชำระเงิน
@@ -198,12 +166,6 @@ class Order(models.Model):
   
     def __str__(self):
         return f" {self.user.username}  {self.id} "
-
-    def get_pp(self):
-        # total = 0
-        for order_product in self.products.all():
-            total = order_product.get_quantity()
-
 
     def get_total(self):
         total = 0
@@ -241,9 +203,9 @@ class Payment(models.Model):
 
 
 class BankTransfer(models.Model):
-    accountNo = models.CharField(max_length=100 ,null=True)
-    accountName = models.CharField(max_length=100 ,null=True)
-    bankName = models.CharField(max_length=100 ,null=True)
+    accountNo = models.CharField(max_length=100 ,null=True,verbose_name = 'เลขบัญชีธนาคาร')
+    accountName = models.CharField(max_length=100 ,null=True,verbose_name = 'ชื่อบัญชีธนาคาร')
+    bankName = models.CharField(max_length=100 ,null=True,verbose_name = 'ชื่อธนาคาร')
     qrcode = models.ImageField(upload_to='images/bankTransfer/', default='images/bankTransfer/no-img.png', verbose_name = 'qrcode',null=True)
     def __str__(self):
         return f'{self.bankName} '

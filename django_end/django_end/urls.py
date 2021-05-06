@@ -72,8 +72,8 @@ urlpatterns = [
     path('storeUser',views.storeUser),  
     path('register1',views.register1),
     path('mechanicUser',views.mechanicUser),    
-    path('product_type',views.product_type,name='product_type'),
-    path('productTypeUser/<int:id>',cart.productTypeUser,name='productTypeUser'),
+    # path('product_type',views.product_type,name='product_type'),
+    path('productTypeUser/<int:id>',views.productTypeUser,name='productTypeUser'),
     path('productDetail/<int:pk>',views.productDetail,),
     # path('product/<int:pk>', ItemDetailView.as_view(), name='product-detail'),
     # path('test',views.test), 
@@ -91,7 +91,7 @@ urlpatterns = [
  
 
     path('search',views.search,name='search'),
-    path('addstore',views.addstore,name='addstore'),
+    # path('addstore',views.addstore,name='addstore'),
     path('showProductAll',views.showProductAll,name='showProductAll'),
     path('add_to_stock/<str:pk>/', views.add_to_stock, name='add_to_stock'),
     # path('issue_item/<str:pk>/', views.issue_item, name='issue_item'),  
