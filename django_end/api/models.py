@@ -84,8 +84,8 @@ class Product(models.Model):
     product_type = models.ForeignKey(Product_Type,on_delete=models.CASCADE,verbose_name = 'หมวดหมู่สินค้า') #หมวดหมู่สินค้า
     # product_status =  models.ForeignKey(Product_Status,on_delete=models.CASCADE,verbose_name = 'สถานะสินค้า', default=1,null=True,)  #สถานะสินค้า
     quantity = models.IntegerField(verbose_name = 'จำนวนสินค้า') #จำนวนสินค้า
-    received_quantity = models.IntegerField(default = 0, null = True, blank = True) #ตัวแปรเพิ่มจำนวนสินค้าในสต๊อก
-    quantityS = models.IntegerField(default = 0, null = True, blank = True)
+    # received_quantity = models.IntegerField(default = 0, null = True, blank = True) #ตัวแปรเพิ่มจำนวนสินค้าในสต๊อก
+    # quantityS = models.IntegerField(default = 0, null = True, blank = True)
   
     def __str__(self):
         return f'{self.name}  '
@@ -188,8 +188,8 @@ class Payment(models.Model):
     # ppp = models.CharField(max_length=100 ,null=True)
     # stripe_charge_id = models.CharField(max_length=50)
     img = models.ImageField(upload_to='images/payment/', default='images/payment/no-img.png', verbose_name = 'รูป')
-    user = models.ForeignKey(
-        Users, on_delete=models.SET_NULL, blank=True, null=True)
+    # user = models.ForeignKey(
+    #     Users, on_delete=models.SET_NULL, blank=True, null=True)
     amount = models.FloatField()
     # datetime = models.DateTimeField(null=True, blank=True)
     # timestamp = models.DateTimeField(auto_now_add=True)

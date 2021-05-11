@@ -121,10 +121,10 @@ class StoreForm(forms.ModelForm):
         model = Store
         fields = '__all__'
 
-class AddStockForm(forms.ModelForm):
-    class Meta:
-        model = Product
-        fields = ['received_quantity']    #เพิ่มจำนวนสินค้าในสต๊อก
+# class AddStockForm(forms.ModelForm):
+#     class Meta:
+#         model = Product
+#         fields = ['received_quantity']    #เพิ่มจำนวนสินค้าในสต๊อก
 
 # class SaleForm(forms.ModelForm):
 #     class Meta: 

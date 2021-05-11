@@ -187,9 +187,7 @@ Table Product {
   product_img image [note:""]
   product_type foreign_key [note:""]
   quantity integer [note:""]
-  received_quantity integer [note:"", null]
-  quantityS integer [note:"", null]
-  Note: '''Product(id, name, price, product_detail, product_img, product_type, quantity, received_quantity, quantityS)'''
+  Note: '''Product(id, name, price, product_detail, product_img, product_type, quantity)'''
 }
 ref: Product.product_type > Product_Type.id
 
@@ -248,12 +246,10 @@ Table Payment {
   id auto [note:"", pk, unique]
   order foreign_key [note:"", null]
   img image [note:""]
-  user foreign_key [note:"", null]
   amount float [note:""]
-  Note: '''Payment(id, order, img, user, amount)'''
+  Note: '''Payment(id, order, img, amount)'''
 }
 ref: Payment.order > Order.id
-ref: Payment.user > Users.id
 
 
 Table BankTransfer {

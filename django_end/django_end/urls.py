@@ -6,10 +6,10 @@ from django.urls import path, include
 from api.models import *
 from api import views
 from api import cart
-from api.views import CheckoutView, OrderSummaryView, PaymentMethod, remove_from_cart, remove_single_item_from_cart
+from api.views import CheckoutView, OrderSummaryView, PaymentView, remove_from_cart, remove_single_item_from_cart
 from django.conf import settings # new
 
-from django.conf.urls.static import static
+from django.conf.urls.static import static 
 # from django.conf.urls import urls
 
 from django.urls import path, include
@@ -24,7 +24,7 @@ urlpatterns = [
     # path('bankTransfer/<int:pk>/',views.bankTransferlView.as_view() ,name='bankTransfer'),
     path('',views.index, name='index'), 
     path('index',views.index),
-     path('test/<int:id>/',views.test),
+     path('payment_detail/<int:id>/',views.payment_detail),
     # path('login',views.login),
     # path('register',views.register),
     path('login/',views.login),
@@ -57,8 +57,8 @@ urlpatterns = [
     path('editOrder/<int:id>/', views.editOrder), 
     path('orderproductAll/<int:id>/',views.orderproductAll),
     
-    path('stock',views.stock),
-    path('addbank',views.addbank),
+    # path('stock',views.stock),
+    path('addbank',views.addbank), 
     path('bank',views.bank),
     path('deletebank/<int:id>/', views.deletebank), 
     path('editbank/<int:id>/', views.editbank),  
@@ -74,26 +74,26 @@ urlpatterns = [
     path('mechanicUser',views.mechanicUser),    
     # path('product_type',views.product_type,name='product_type'),
     path('productTypeUser/<int:id>',views.productTypeUser,name='productTypeUser'),
-    path('productDetail/<int:pk>',views.productDetail,),
+    path('productDetail/<int:id>',views.productDetail,),
     # path('product/<int:pk>', ItemDetailView.as_view(), name='product-detail'),
     # path('test',views.test), 
     # path('cart',views.cart), 
     # path('checkout',views.checkout),  
 
-    path('add-to-cart/<int:pk>', views.add_to_cart, name='add-to-cart'),
+    path('add-to-cart/<int:id>', views.add_to_cart, name='add-to-cart'),
     path('checkout/', CheckoutView.as_view(), name='check-out'),
     path('order-summary/', OrderSummaryView.as_view(), name='order-summary'),
-    path('remove-from-cart/<int:pk>', remove_from_cart, name='remove-from-cart'),
-    path('remove-single-item-from-cart/<int:pk>', remove_single_item_from_cart, name='remove-single-item-from-cart'),
-    path('payment/<payment_option>', PaymentMethod.as_view(), name='payment'),
-    path('payment/<payment_option>', PaymentMethod.as_view(), name='payment'),
+    path('remove-from-cart/<int:id>', remove_from_cart, name='remove-from-cart'),
+    path('remove-single-item-from-cart/<int:id>', remove_single_item_from_cart, name='remove-single-item-from-cart'),
+    path('payment/<payment_option>', PaymentView.as_view(), name='payment'),
+    # path('payment/<payment_option>', PaymentMethod.as_view(), name='payment'),
     
  
 
     path('search',views.search,name='search'),
     # path('addstore',views.addstore,name='addstore'),
     path('showProductAll',views.showProductAll,name='showProductAll'),
-    path('add_to_stock/<str:pk>/', views.add_to_stock, name='add_to_stock'),
+    # path('add_to_stock/<str:pk>/', views.add_to_stock, name='add_to_stock'),
     # path('issue_item/<str:pk>/', views.issue_item, name='issue_item'),  
      
     # path('cart/', views.show_cart, name='show_cart'),

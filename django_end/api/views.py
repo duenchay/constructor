@@ -11,7 +11,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.hashers import make_password
 from django.shortcuts import render, get_object_or_404
 from . import cart 
-from django.contrib import messages
+from django.contrib import messages 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
@@ -26,21 +26,23 @@ from django.views.generic import DetailView
 class ProfileDetailView(DetailView): 
     # pass 
     model = Users
-class bankTransferlView(DetailView): 
-    # pass
-    model = Payment
+# class bankTransferlView(DetailView): 
+#     # pass
+#     model = Payment
 
 def index(request):
     products_list = Product.objects.all().order_by('name')
     product_type=Product_Type.objects.all()
     paginator = Paginator(products_list,8) #จำนวนรายการ/หน้า
     page = request.GET.get('page')
+    print(page)
     try:
         products = paginator.page(page)
     except PageNotAnInteger:
         products = paginator.page(1)
     except EmptyPage:
         products = paginator.page(paginator.num_pages)
+    print(products)
     return render(request, 'api/index.html',{
          'product_type' :product_type,
          'products':products })
@@ -89,7 +91,7 @@ def orderproduct(request,id=0):
 def productTypeUser(request,id=0): 
     type=Product_Type.objects.get(pk=id)
     product_type=Product_Type.objects.all()
-    product=Product.objects.filter(product_type=type).order_by('id')
+    product=Product.objects.filter(product_type=id).order_by('id')
     print(type)
     return render(request,'api/productTypeUser.html',{
         'product':product,
@@ -98,7 +100,7 @@ def productTypeUser(request,id=0):
         })
 
     # รายละเอียดสินค้า 
-def productDetail(request,pk):
+def productDetail(request,id):
     # if request.user.is_anonymous:
     #     return redirect('/login')
     # else: 
@@ -106,7 +108,7 @@ def productDetail(request,pk):
    
     # except: pass
    
-    product = get_object_or_404(Product, id=pk)
+    product = Product.objects.get(pk=id)
     # item_count = cart.item_count(request) #ตัวเลขบนตะกร้าสินค้า
     product_type=Product_Type.objects.all()
     return render(request, 'api/productDetail.html', {
@@ -142,8 +144,8 @@ class OrderSummaryView(LoginRequiredMixin, View):
             return redirect("/")
 
 @login_required(login_url='/login') 
-def add_to_cart(request, pk):
-    product = get_object_or_404(Product, id=pk)
+def add_to_cart(request, id):
+    product = get_object_or_404(Product, id=id)
     order_product, created = OrderItem.objects.get_or_create(
         product=product,user=request.user, ordered=False)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
@@ -153,7 +155,7 @@ def add_to_cart(request, pk):
         order = order_qs[0]
         # check if the order item is in the order ==(order ache,for same-orderitem
         # ตรวจสอบว่ารายการสั่งซื้ออยู่ในคำสั่งซื้อหรือไม่ == (สั่งซื้อสำหรับรายการสั่งซื้อเดียวกัน
-        if order.products.filter(product__pk=product.pk).exists():
+        if order.products.filter(product__id=product.id).exists():
             order_product.quantity += 1
             if order_product.quantity  <= product.quantity:
                 # order_product.price=product.price 
@@ -179,8 +181,8 @@ def add_to_cart(request, pk):
     # หากไม่มีคำสั่งซื้อ.. สั่งครั้งแรกและสินค้าชิ้นแรก
     else:
         if order_product.quantity  <= product.quantity and product.quantity >0:
-            ordered_date = timezone.now()
-            order = Order.objects.create(user=request.user,ordered_date=ordered_date, )
+            # ordered_date = timezone.now()
+            order = Order.objects.create(user=request.user, )
             order.products.add(order_product)
 
             messages.info(request, "เพิ่มสินค้าเข้าตระกร้าสำเร็จ")
@@ -188,8 +190,8 @@ def add_to_cart(request, pk):
              messages.warning(request, "สินค้าในสต๊อกไม่พอ")
         return redirect("order-summary")
 
-def remove_from_cart(request, pk):
-    product = get_object_or_404(Product, id=pk)
+def remove_from_cart(request, id):
+    product = get_object_or_404(Product, id=id)
     order_qs = Order.objects.filter(
         user=request.user,
         ordered=False
@@ -197,7 +199,7 @@ def remove_from_cart(request, pk):
     if order_qs.exists():
         order = order_qs[0]
         # check if the order item is in the order
-        if order.products.filter(product__pk=product.pk).exists():
+        if order.products.filter(product__id=product.id).exists():
             order_product = OrderItem.objects.filter(
                 product=product,
                 user=request.user,
@@ -210,14 +212,14 @@ def remove_from_cart(request, pk):
             return redirect("order-summary")
         else:
             messages.info(request, "สินค้านี้ไม่ได้อยู่ในรถเข็นของคุณ")
-            return redirect("product-detail", id=pk)
+            return redirect("product-detail", id=id)
     else:
         messages.info(request, "คุณไม่มีคำสั่งซื้อที่ใช้งานอยู่")
-        return redirect("product-detail", id=pk)
+        return redirect("product-detail", id=id)
 
 
-def remove_single_item_from_cart(request, pk):
-    product = get_object_or_404(Product, id=pk)
+def remove_single_item_from_cart(request, id):
+    product = get_object_or_404(Product, id=id)
     order_qs = Order.objects.filter(
         user=request.user,
         ordered=False
@@ -225,7 +227,7 @@ def remove_single_item_from_cart(request, pk):
     if order_qs.exists():
         order = order_qs[0]
         # check if the order item is in the order
-        if order.products.filter(product__pk=product.pk).exists():
+        if order.products.filter(product__id=product.id).exists():
             order_product = OrderItem.objects.filter(
                 product=product,
                 user=request.user,
@@ -241,11 +243,11 @@ def remove_single_item_from_cart(request, pk):
             return redirect("order-summary")
         else:
             messages.info(request, "สินค้านี้ไม่ได้อยู่ในรถเข็นของคุณ")
-            return redirect("product-detail", id=pk)
+            return redirect("product-detail", id=id)
 
     else:
         messages.info(request, "คุณไม่มีคำสั่งซื้อที่ใช้งานอยู่")
-        return redirect("product-detail", id=pk)
+        return redirect("product-detail", id=id)
 
 
 class CheckoutView(LoginRequiredMixin, View):
@@ -279,7 +281,8 @@ class CheckoutView(LoginRequiredMixin, View):
             elif payment_option == 'เงินสด':
                 order_products = order.products.all()
                 order_products.update(ordered=True)
-
+                order.ordered_date = timezone.now()
+ 
                 order.ordered = True
                 order.payment_option = payment_option
                
@@ -296,7 +299,7 @@ class CheckoutView(LoginRequiredMixin, View):
             #         self.request, "ตัวเลือกการชำระเงินไม่ถูกต้อง")
             #     return redirect('check-out')  
 
-class PaymentMethod(View):
+class PaymentView(View):
     def get(self, *args, **kwargs):
         bankTransfer = BankTransfer.objects.all()
         product_type=Product_Type.objects.all()
@@ -322,6 +325,8 @@ class PaymentMethod(View):
         order_products = order.products.all()
         order_products.update(ordered=True)    
         # assign the payment
+        order.ordered_date = timezone.now()
+ 
         order.ordered = True
         order.save()
         for order_product in order_products:
@@ -517,6 +522,7 @@ def editproductType(request, id=0):
         form = Product_TypeForm(request.POST, request.FILES, instance=product_type)
         if form.is_valid():
             form.save()
+            messages.success(request, 'แก้ไขหมวดหมู่สินค้าสำเร็จ')
             return redirect('/addproductType')
         else:
             print("==== form.errors ====")
@@ -566,7 +572,7 @@ def editproduct(request, id=0):
         form = ProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             form.save()
-            messages.success(request, 'แก้ไขสำเร็จ')
+            messages.success(request, 'แก้ไขสินค้าสำเร็จ')
             return redirect('/product')
         else:
             print("==== form.errors ====")
@@ -592,20 +598,22 @@ def product(request):
     try:
         products = paginator.page(page)
     except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
         products = paginator.page(1)
     except EmptyPage:
+        # # If page is out of range (e.g. 9999), deliver last page of results.
         products = paginator.page(paginator.num_pages)
     return render(request, 'api/product.html', {'products': products})
 
 
-# หน้าคลังสินค้า
-def stock(request):
-    products = Product.objects.all()
-    # comment = get_object_or_404(Comment, pk=comment_id)
-    # users = get_object_or_404(Users,username=request.user.username)
-    return render(request, 'api/stock.html', {'products': products,
-    # 'users':users
-    })
+# หน้าคลังสินค้า 
+# def stock(request):
+#     products = Product.objects.all()
+#     # comment = get_object_or_404(Comment, pk=comment_id)
+#     # users = get_object_or_404(Users,username=request.user.username)
+#     return render(request, 'api/stock.html', {'products': products,
+#     # 'users':users
+#     })
 
 # def issue_item(request, pk):
 #     product = Product.objects.get(id = pk)
@@ -640,19 +648,19 @@ def stock(request):
 #     })
 
 #เพิ่มจำนวนสินค้าในสต๊อก
-def add_to_stock(request, pk):
-    product = Product.objects.get(id = pk)
-    form = AddStockForm(request.POST)  #จำนวนสินค้าในสต๊อก
-    if request.method == 'POST':
-        if form.is_valid():
-            added_quantity = int(request.POST['received_quantity'])
-            product.quantity += added_quantity
-            product.save()
-            #To add to the remaining stock quantity is reducing
-            print(added_quantity)
-            print (product.quantity)
-            return redirect('/product')
-    return render (request, 'api/add_to_stock.html', {'form': form})
+# def add_to_stock(request, pk):
+#     product = Product.objects.get(id = pk)
+#     form = AddStockForm(request.POST)  #จำนวนสินค้าในสต๊อก
+#     if request.method == 'POST':
+#         if form.is_valid():
+#             added_quantity = int(request.POST['received_quantity'])
+#             product.quantity += added_quantity
+#             product.save()
+#             #To add to the remaining stock quantity is reducing
+#             print(added_quantity)
+#             print (product.quantity)
+#             return redirect('/product')
+#     return render (request, 'api/add_to_stock.html', {'form': form})
 
 #ข้อมูลช่าง
 def mechanic(request):
@@ -693,6 +701,7 @@ def editmechanic(request, id=0):
     if request.method == 'POST':
         form = MechanicForm(request.POST, request.FILES, instance=mechanic)
         if form.is_valid():
+            messages.success(request, 'แก้ไขข้อมูลช่างสำเร็จ')
             form.save()
             return redirect('/mechanic')
         else:
@@ -739,6 +748,7 @@ def editmechanicType(request, id=0):
         form = Mechanic_TypeForm(request.POST, request.FILES, instance=mechanic_type)
         if form.is_valid():
             form.save()
+            messages.success(request, 'แก้ไขประเภทช่างสำเร็จ')
             return redirect('/addmechanicType')
         else:
             print("==== form.errors ====")
@@ -776,18 +786,20 @@ def orderAll(req,id=0):
         # 'payment':payment,
         'money_status': Money_Status.objects.all()
     })
-def test(request,id=0):
+def payment_detail(request,id=0):
     payment = Payment.objects.filter(order=id)
     return render(request, 'api/payment_detail.html',{
         'payment':payment,
        
     })
+    #แก้ไขสถานะการชำระเงิน
 def editOrder(request, id=0):
     order = Order.objects.get(pk=id)
     money_statuss = Money_Status.objects.all()
     if request.method == 'POST':
         form = EditOrderForm(request.POST, request.FILES, instance=order)
         if form.is_valid():
+            messages.success(request, 'แก้ไขสถานะการชำระเงินสำเร็จ')
             form.save()
             return redirect('/orderAll')
         else:
@@ -841,6 +853,7 @@ def editbank(request, id=0):
         form = BankTransferForm(request.POST, request.FILES, instance=bankTransfer)
         if form.is_valid():
             form.save()
+            messages.success(request, 'แก้ไขข้อมูลบัญชีธนาคารสำเร็จ')
             return redirect('/bank')
         else:
             print("==== form.errors ====")
