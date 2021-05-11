@@ -827,7 +827,7 @@ def addbank(request):
         if form.is_valid():
             messages.info(request, "เพิ่มข้อมูลบัญชีธนาคารสำเร็จ")
             form.save()
-            return redirect('/addbank')
+            return redirect('/bank')
     else:
         form = BankTransferForm()
     return render(request, 'api/addbank.html',
