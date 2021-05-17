@@ -404,16 +404,18 @@ def register(request):
     print(request)
     if request.method == 'POST':
         form = UsersForm(request.POST, request.FILES)
-        print("request.POST")
-        print(request.POST)
+        # print("request.POST")
+        # print(request.POST)
         if form.is_valid():
-            print('form valid')
+            # print('form valid')
             form.instance.password = make_password(request.POST['password'])
             form.save()
+            messages.info(request, "สมัครสมาชิกสำเร็จ")
             return redirect('/login')
         else:            
             print("==== form.errors ====")
             print(form.errors)
+            # messages.warning(request, "เข้าสู่ระบบไม่สำเร็จ " )
     return render(request, 'api/register.html', { 
         'form': form,
        

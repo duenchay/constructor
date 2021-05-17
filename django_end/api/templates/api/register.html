@@ -29,16 +29,34 @@
 }
 </style>
 </head>
-{% if form.errors %}
-<div class="form-row">
-  กรุณาระบุข้อมูลต่อไปนี้<br/>
-  <ul>
-    {% for e in form.errors %}
-    <li style="color: red;"> {{ e }} </li>
+<div class="mt-2 pt-2">
+    {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+            <div class="alert alert-danger">
+                <strong>{{ error|escape }}</strong>
+            </div>
+        {% endfor %}
     {% endfor %}
-  </ul>
-</div>
+    {% for error in form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>{{ error|escape }}</strong>
+        </div>
+    {% endfor %}
 {% endif %}
+</div>
+<div class="mt-2 pt-2">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+    </div>
 <body class="bg-gradient-primary">
 
     <div class="container">
@@ -53,6 +71,7 @@
                             <div class="text-center">
                                 <h1 class="h4 text-gray-900 mb-4">Create an Account!</h1>
                             </div>
+                            
                             <form class="user" action="/register/" enctype="multipart/form-data" method="post">
                                 {% csrf_token %}
 		 
