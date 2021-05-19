@@ -140,7 +140,7 @@ class OrderSummaryView(LoginRequiredMixin, View):
             }
             return render(self.request, 'api/order_summary.html', context)
         except ObjectDoesNotExist:
-            messages.warning(self.request, "คุณไม่มีสินค้าในตระกร้าสินค้า")
+            messages.warning(self.request, "คุณไม่มีสินค้าในตะกร้าสินค้า")
             return redirect("/")
 
 @login_required(login_url='/login') 
@@ -160,7 +160,7 @@ def add_to_cart(request, id):
             if order_product.quantity  <= product.quantity:
                 # order_product.price=product.price 
                 # order_product.price=order_product.get_total_product_price()  
-                messages.info(request, "เพิ่มสินค้าเข้าตระกร้าสำเร็จ")
+                messages.info(request, "เพิ่มสินค้าเข้าตะกร้าสำเร็จ")
                 order_product.save()  
             else:
                 messages.warning(request, "สินค้าในสต๊อกไม่พอ")
@@ -173,7 +173,7 @@ def add_to_cart(request, id):
             if order_product.quantity  <= product.quantity and product.quantity >0:
                 order.products.add(order_product)
             
-                messages.info(request, "เพิ่มสินค้าเข้าตระกร้าสำเร็จ")
+                messages.info(request, "เพิ่มสินค้าเข้าตะกร้าสำเร็จ")
             else:
                 messages.warning(request, "สินค้าในสต๊อกไม่พอ")
             return redirect("order-summary")
@@ -185,7 +185,7 @@ def add_to_cart(request, id):
             order = Order.objects.create(user=request.user, )
             order.products.add(order_product)
 
-            messages.info(request, "เพิ่มสินค้าเข้าตระกร้าสำเร็จ")
+            messages.info(request, "เพิ่มสินค้าเข้าตะกร้าสำเร็จ")
         else:
              messages.warning(request, "สินค้าในสต๊อกไม่พอ")
         return redirect("order-summary")
