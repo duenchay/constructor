@@ -772,7 +772,7 @@ def deletemechanicType(req, id=0):
 
 # หน้ารายการสั่งซื้อทั้งหมด
 def orderAll(req,id=0):
-    order = Order.objects.filter(ordered=True,).order_by('-id')
+    order = Order.objects.filter(ordered=True,).order_by('-ordered_date')
     # payment = Payment.objects.filter(order=id)
     # print(order.id)
     paginator = Paginator(order,8) #จำนวนรายการ/หน้า
